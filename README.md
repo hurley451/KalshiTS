@@ -11,7 +11,8 @@ market API, built for Node.js 20+ with ESM exports and TypeScript declarations.
 
 KalshiTS renders [KalshiCore](https://github.com/hurley451/KalshiCore) contracts
 into a Node.js SDK. It is a community project, not an official Kalshi SDK.
-The npm package is `@hurley451/kalshi-ts` and is not yet published.
+The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
+[release gates and setup](https://github.com/hurley451/KalshiTS/blob/main/docs/RELEASES.md).
 
 ## Contents
 
@@ -91,12 +92,14 @@ npm pack
 From your application directory, install the produced tarball:
 
 ```bash
-npm install /path/to/KalshiTS/hurley451-kalshi-ts-0.1.0.tgz
+npm install /path/to/KalshiTS/hurley451-kalshi-ts-0.1.0-alpha.1.tgz
 ```
 
 The tarball contains runtime code, declarations, license, README, and linked
 support/coverage documentation. It excludes compiled tests and tooling.
-After publication, installation will be `npm install @hurley451/kalshi-ts`.
+After the initial prerelease is published, installation will be
+`npm install @hurley451/kalshi-ts@next`. Check registry availability before using
+that command.
 
 ## Quick Start
 

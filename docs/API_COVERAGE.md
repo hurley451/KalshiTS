@@ -42,3 +42,9 @@ not validate all 118 endpoint request/response contracts or live exchange behavi
 
 Track SDK implementation gaps in this repository. File shared contract or fixture
 gaps in KalshiCore with evidence and a link to the affected SDK issue.
+
+Deferred follow-up issues:
+
+- [Typed REST helper expansion](https://github.com/hurley451/KalshiTS/issues/6).
+- [WebSocket transport and recovery](https://github.com/hurley451/KalshiTS/issues/7).
+- [Cancellation and transport resilience](https://github.com/hurley451/KalshiTS/issues/8).
