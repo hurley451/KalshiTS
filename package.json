@@ -22,7 +22,9 @@
     "dist/src",
     "README.md",
     "LICENSE",
-    "docs/API_COVERAGE.md"
+    "CONTRIBUTING.md",
+    "docs/API_COVERAGE.md",
+    "docs/VISIBILITY.md"
   ],
   "scripts": {
     "generate:operations": "node scripts/generate-operations.mjs",
