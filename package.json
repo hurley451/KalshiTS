@@ -2,17 +2,32 @@
   "name": "@hurley451/kalshi-ts",
   "version": "0.1.0",
   "private": false,
-  "description": "TypeScript SDK target for KalshiCore conformance.",
+  "description": "TypeScript and JavaScript SDK for the Kalshi prediction market API with REST requests, RSA-PSS signing, and typed portfolio fills.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hurley451/KalshiTS.git"
+  },
+  "homepage": "https://github.com/hurley451/KalshiTS#readme",
+  "bugs": {
+    "url": "https://github.com/hurley451/KalshiTS/issues"
+  },
+  "keywords": [
+    "kalshi", "kalshi-api", "prediction-markets", "trading-api",
+    "fintech", "sdk", "typescript", "javascript", "nodejs", "rest", "rsa-pss"
+  ],
   "type": "module",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "files": [
-    "dist",
-    "README.md"
+    "dist/src",
+    "README.md",
+    "LICENSE",
+    "docs/API_COVERAGE.md"
   ],
   "scripts": {
     "generate:operations": "node scripts/generate-operations.mjs",
     "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build",
     "conformance": "node dist/scripts/conformance.js",
     "test": "npm run build && node --test dist/test/*.test.js"
   },
