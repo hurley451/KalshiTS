@@ -9,11 +9,10 @@ export interface OperationRequestParts {
 }
 
 export function getOperation(operationId: OperationId | string): KalshiOperation {
-  const operation = operationsById[operationId as OperationId];
-  if (!operation) {
+  if (!Object.hasOwn(operationsById, operationId)) {
     throw new KalshiOperationError(`Unknown Kalshi operation: ${operationId}`);
   }
-  return operation;
+  return operationsById[operationId as OperationId];
 }
 
 export function buildOperationPath(
@@ -22,7 +21,7 @@ export function buildOperationPath(
   query: QueryParameters = {}
 ): string {
   const replaced = operation.path.replace(/\{([^}]+)}/g, (_match, name: string) => {
-    if (!(name in pathParameters)) {
+    if (!Object.hasOwn(pathParameters, name)) {
       throw new KalshiOperationError(`Missing path parameter "${name}" for ${operation.operationId}`);
     }
     return encodeURIComponent(String(pathParameters[name]));
@@ -33,7 +32,7 @@ export function buildOperationPath(
     throw new KalshiOperationError(`Unused path parameter(s) for ${operation.operationId}: ${unused.join(", ")}`);
   }
 
-  const queryString = serializeQuery(query);
+  const queryString = serializeQuery(query, operation.repeatedQueryParameters);
   return `${replaced}${queryString ? `?${queryString}` : ""}`;
 }
 
@@ -42,15 +41,15 @@ export function buildTradeApiPath(pathAndQuery: string): string {
   return normalized.startsWith("/trade-api/v2/") ? normalized : `/trade-api/v2${normalized}`;
 }
 
-export function serializeQuery(query: QueryParameters): string {
+export function serializeQuery(query: QueryParameters, repeatedParameters: readonly string[] = []): string {
   const params = new URLSearchParams();
   for (const [name, value] of Object.entries(query)) {
-    appendQueryValue(params, name, value);
+    appendQueryValue(params, name, value, repeatedParameters.includes(name));
   }
   return params.toString();
 }
 
-function appendQueryValue(params: URLSearchParams, name: string, value: QueryParameterValue): void {
+function appendQueryValue(params: URLSearchParams, name: string, value: QueryParameterValue, repeated: boolean): void {
   if (value === undefined || value === null) {
     return;
   }
@@ -58,7 +57,11 @@ function appendQueryValue(params: URLSearchParams, name: string, value: QueryPar
     if (value.length === 0) {
       return;
     }
-    params.append(name, value.map((entry) => String(entry)).join(","));
+    if (repeated) {
+      for (const entry of value) params.append(name, String(entry));
+    } else {
+      params.append(name, value.map((entry) => String(entry)).join(","));
+    }
     return;
   }
   params.append(name, String(value));

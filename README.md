@@ -73,7 +73,7 @@ required even when a particular request is public.
 
 - Node.js 20 or newer and an ESM consumer (`.mjs` or `"type": "module"`).
 - npm for dependency installation and local packaging.
-- TypeScript when compiling TypeScript consumers.
+- TypeScript and `@types/node` when compiling TypeScript consumers.
 - Kalshi API credentials for private endpoints, separately issued for demo/production.
 - A KalshiCore checkout only when regenerating operations or running conformance.
 
@@ -218,9 +218,11 @@ Lists accept at most 100 entries and reject blank entries. Optional filters incl
 `orderId`, `subaccount`, `exchangeIndex`, `minTs`, and `maxTs`.
 The helper sends a comma-separated `ticker` query parameter.
 
-The current parser requires `side` and `created_time`, although those fields are
-optional in the official schema. A valid response omitting them cannot currently
-be parsed by the helper; use `client.request("GetFills", ...)` for generic access.
+The parser checks required fill fields and directional enums. Deprecated `side`
+and `action`, `createdTime`, and `ts` are optional; `subaccountNumber` can also be
+null. Fixed-point amounts remain strings. Pages require a string `cursor`;
+an empty cursor marks the final page. Known numeric filter constraints are
+checked before sending the request.
 
 ### Balance, Positions, and Historical Data
 

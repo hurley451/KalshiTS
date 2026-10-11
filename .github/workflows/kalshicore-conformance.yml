@@ -15,6 +15,10 @@ jobs:
   conformance:
     name: Run KalshiCore fixtures
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
     permissions:
       contents: read
 
@@ -36,7 +40,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ matrix.node }}
           cache: npm
           cache-dependency-path: KalshiTS/package-lock.json
 
@@ -52,6 +56,10 @@ jobs:
         working-directory: KalshiTS
         run: node --test dist/test/*.test.js
 
+      - name: Test packed consumer
+        working-directory: KalshiTS
+        run: npm run test:package
+
       - name: Run conformance adapter
         id: conformance
         working-directory: KalshiTS
@@ -64,12 +72,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: kalshicore-conformance-report
+          name: kalshicore-conformance-report-node-${{ matrix.node }}
           path: ${{ env.CONFORMANCE_REPORT }}
           if-no-files-found: warn
 
       - name: File KalshiCore contract gap
-        if: always() && github.event_name == 'schedule' && steps.conformance.outcome == 'failure'
+        if: always() && matrix.node == 24 && github.event_name == 'schedule' && steps.conformance.outcome == 'failure'
         env:
           GH_TOKEN: ${{ secrets.KALSHICORE_ISSUE_TOKEN }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

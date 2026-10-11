@@ -1,10 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { createHash, constants, generateKeyPairSync, verify } from "node:crypto";
 import {
   buildPortfolioFillsPath,
   buildSigningPreimage,
   parseFillsPage,
   parseWebSocketMessage,
+  KalshiClient,
   type OrderBookDeltaMessage
 } from "../src/index.js";
 
@@ -18,6 +20,7 @@ interface Report {
   targetId: string;
   kalshiCoreRoot: string;
   generatedAtUtc: string;
+  suiteDigest: string;
   checks: CheckResult[];
 }
 
@@ -29,17 +32,27 @@ if (!kalshiCoreRoot) {
 const resolvedKalshiCoreRoot = path.resolve(kalshiCoreRoot);
 const targetManifest = await readJson(path.join(resolvedKalshiCoreRoot, "targets", "typescript", "KalshiTS.json"));
 const fixtureIds = readFixtureIds(targetManifest);
+if (fixtureIds.length === 0 || new Set(fixtureIds).size !== fixtureIds.length) {
+  throw new Error("Conformance requires a nonempty unique fixture list.");
+}
 const checks: CheckResult[] = [];
+const digest = createHash("sha256").update(JSON.stringify(targetManifest));
 
 for (const fixtureId of fixtureIds) {
-  const fixture = await readFixture(resolvedKalshiCoreRoot, fixtureId);
-  checks.push(runFixture(fixtureId, fixture));
+  try {
+    const fixture = await readFixture(resolvedKalshiCoreRoot, fixtureId);
+    digest.update(JSON.stringify(fixture));
+    checks.push(await runFixture(fixtureId, fixture));
+  } catch (error) {
+    checks.push(fail(fixtureId, error instanceof Error ? error.message : String(error)));
+  }
 }
 
 const report: Report = {
   targetId: readString(targetManifest, "id", "typescript.KalshiTS"),
   kalshiCoreRoot: resolvedKalshiCoreRoot,
   generatedAtUtc: new Date().toISOString(),
+  suiteDigest: digest.digest("hex"),
   checks
 };
 
@@ -56,13 +69,13 @@ if (checks.some((check) => !check.passed)) {
   process.exitCode = 1;
 }
 
-function runFixture(fixtureId: string, fixture: Record<string, unknown>): CheckResult {
+async function runFixture(fixtureId: string, fixture: Record<string, unknown>): Promise<CheckResult> {
   try {
     switch (readString(fixture, "kind")) {
       case "auth-signing":
         return runAuthSigningFixture(fixtureId, fixture);
       case "rest-request-serialization":
-        return runRestRequestFixture(fixtureId, fixture);
+        return await runRestRequestFixture(fixtureId, fixture);
       case "rest-response-shape":
         return runRestResponseFixture(fixtureId, fixture);
       case "websocket-replay":
@@ -88,7 +101,7 @@ function runAuthSigningFixture(fixtureId: string, fixture: Record<string, unknow
   return pass(fixtureId, "Signing canonical message matched.");
 }
 
-function runRestRequestFixture(fixtureId: string, fixture: Record<string, unknown>): CheckResult {
+async function runRestRequestFixture(fixtureId: string, fixture: Record<string, unknown>): Promise<CheckResult> {
   const input = readRecord(fixture, "input");
   const query = readRecord(input, "query");
   const expected = readRecord(fixture, "expected");
@@ -97,9 +110,33 @@ function runRestRequestFixture(fixtureId: string, fixture: Record<string, unknow
     limit: readOptionalNumber(query, "limit"),
     cursor: readOptionalString(query, "cursor")
   });
-  expectEqual(readString(expected, "method"), readString(input, "method"), "HTTP method");
   expectEqual(readString(expected, "pathAndQuery"), pathAndQuery, "path and query");
-  return pass(fixtureId, "Portfolio fills request serialization matched.");
+  const { privateKey, publicKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
+  const timestamp = "1790000000000";
+  let requests = 0;
+  const client = new KalshiClient({ environment: "demo", auth: {
+    apiKeyId: "conformance-key", privateKeyPem: privateKey, timestampProvider: () => timestamp
+  }, fetch: async (url, init) => {
+    requests++;
+    const requestUrl = new URL(url);
+    expectEqual(readString(input, "method"), init?.method, "input HTTP method");
+    expectEqual(readString(input, "path"), requestUrl.pathname, "input path");
+    expectEqual(readString(expected, "method"), init?.method, "emitted HTTP method");
+    expectEqual(readString(expected, "pathAndQuery"), `${requestUrl.pathname}${requestUrl.search}`, "emitted path and query");
+    expectEqual(expected.body, init?.body === undefined ? null : JSON.parse(String(init.body)), "emitted body");
+    const headers = new Headers(init?.headers);
+    expectEqual("conformance-key", headers.get("KALSHI-ACCESS-KEY"), "emitted API key");
+    expectEqual(timestamp, headers.get("KALSHI-ACCESS-TIMESTAMP"), "emitted timestamp");
+    const signature = Buffer.from(headers.get("KALSHI-ACCESS-SIGNATURE") ?? "", "base64");
+    expectEqual(true, verify("sha256", Buffer.from(`${timestamp}${readString(expected, "method")}${requestUrl.pathname}`), {
+      key: publicKey, padding: constants.RSA_PKCS1_PSS_PADDING, saltLength: constants.RSA_PSS_SALTLEN_DIGEST
+    }, signature), "emitted RSA-PSS signature");
+    return new Response(JSON.stringify({ fills: [], cursor: "" }), { headers: { "content-type": "application/json" } });
+  }});
+  await client.portfolio.getFills({ tickers: readStringArray(query, "tickers"),
+    limit: readOptionalNumber(query, "limit"), cursor: readOptionalString(query, "cursor") });
+  expectEqual(1, requests, "emitted request count");
+  return pass(fixtureId, "Portfolio fills emitted method, URL, headers and RSA-PSS signature matched.");
 }
 
 function runRestResponseFixture(fixtureId: string, fixture: Record<string, unknown>): CheckResult {

@@ -8,7 +8,7 @@ of complete live API compatibility.
 
 | Surface | Current support |
 |---------|-----------------|
-| REST inventory | Generated operation IDs, HTTP methods, paths, summaries, and tags; no parameter/body schemas |
+| REST inventory | Generated operation IDs, HTTP methods, paths, summaries, tags, and repeated-array query encoding; no full parameter/body schemas |
 | REST execution | Generic operation-ID requests with path/query/body values |
 | Authentication | RSA-PSS signing, API-key headers, canonical signing paths |
 | Environments | Production and demo |
@@ -19,7 +19,7 @@ of complete live API compatibility.
 `portfolio.getFills` returns typed fills; other operation responses default to `unknown`.
 A generic TypeScript type argument is a caller assertion, not runtime schema validation.
 
-## Validated Contracts
+## Offline Fixture Checks
 
 The target manifest registers these fixtures:
 
