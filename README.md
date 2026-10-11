@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-green.svg)](https://nodejs.org)
 [![Status: prerelease](https://img.shields.io/badge/status-prerelease-yellow.svg)](https://github.com/hurley451/KalshiTS/releases)
-[![GitHub stars](https://img.shields.io/github/stars/hurley451/KalshiTS.svg?style=social&cacheSeconds=300)](https://github.com/hurley451/KalshiTS/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/hurley451/KalshiTS.svg?style=social)](https://github.com/hurley451/KalshiTS/stargazers)
 
 A TypeScript and JavaScript SDK for the [Kalshi](https://kalshi.com) prediction
 market API, built for Node.js 20+ with ESM exports and TypeScript declarations.
@@ -217,6 +217,10 @@ Use either a single `ticker` or a populated `tickers` list, not both.
 Lists accept at most 100 entries and reject blank entries. Optional filters include
 `orderId`, `subaccount`, `exchangeIndex`, `minTs`, and `maxTs`.
 The helper sends a comma-separated `ticker` query parameter.
+
+The current parser requires `side` and `created_time`, although those fields are
+optional in the official schema. A valid response omitting them cannot currently
+be parsed by the helper; use `client.request("GetFills", ...)` for generic access.
 
 ### Balance, Positions, and Historical Data
 
