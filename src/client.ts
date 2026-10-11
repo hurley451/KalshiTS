@@ -2,7 +2,7 @@ import { signKalshiRequest, type KalshiAuthOptions } from "./auth.js";
 import { resolveEnvironment, type KalshiEnvironment, type KalshiEnvironmentName } from "./environment.js";
 import { KalshiApiError } from "./errors.js";
 import { buildOperationPath, buildTradeApiPath, getOperation } from "./operation.js";
-import { parseFillsPage, type FillQuery, type FillsPage } from "./portfolio.js";
+import { portfolioFillsQuery, parseFillsPage, type FillQuery, type FillsPage } from "./portfolio.js";
 import type { OperationId } from "./generated/operations.js";
 import type { JsonValue, PathParameters, QueryParameters } from "./types.js";
 
@@ -72,15 +72,14 @@ export class KalshiClient {
   ): Promise<KalshiRawResponse<TBody>> {
     const tradeApiPath = buildTradeApiPath(operationPathAndQuery);
     const url = new URL(`${this.environment.restBaseUrl.replace(/\/$/, "")}${this.stripTradeApiPrefix(tradeApiPath)}`);
-    const headers: Record<string, string> = {
-      Accept: "application/json",
-      ...this.defaultHeaders,
-      ...options.headers
-    };
+    const headers = new Headers({ Accept: "application/json" });
+    for (const source of [this.defaultHeaders, options.headers ?? {}]) {
+      for (const [name, value] of Object.entries(source)) headers.set(name, value);
+    }
 
     const init: RequestInit = { method, headers };
     if (options.body !== undefined) {
-      headers["Content-Type"] = headers["Content-Type"] ?? "application/json";
+      if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
       init.body = JSON.stringify(options.body);
     }
 
@@ -88,7 +87,9 @@ export class KalshiClient {
       if (!this.auth) {
         throw new Error("Authenticated Kalshi request requires auth options.");
       }
-      Object.assign(headers, signKalshiRequest(this.auth, method, tradeApiPath).headers);
+      for (const [name, value] of Object.entries(signKalshiRequest(this.auth, method, tradeApiPath).headers)) {
+        headers.set(name, value);
+      }
     }
 
     const response = await this.fetchImplementation(url, init);
@@ -104,29 +105,6 @@ export class KalshiClient {
   }
 }
 
-function portfolioFillsQuery(query: FillQuery): QueryParameters {
-  if (query.ticker && query.tickers && query.tickers.length > 0) {
-    throw new Error("Specify either ticker or tickers, not both.");
-  }
-  if (query.tickers && query.tickers.length > 100) {
-    throw new Error("At most 100 market tickers can be supplied.");
-  }
-  if (query.tickers?.some((value) => value.trim().length === 0)) {
-    throw new Error("Market tickers cannot contain empty values.");
-  }
-
-  return {
-    limit: query.limit,
-    cursor: query.cursor,
-    ticker: query.tickers && query.tickers.length > 0 ? query.tickers : query.ticker,
-    order_id: query.orderId,
-    subaccount: query.subaccount,
-    exchange_index: query.exchangeIndex,
-    min_ts: query.minTs,
-    max_ts: query.maxTs
-  };
-}
-
 async function readResponseBody(response: Response): Promise<unknown> {
   if (response.status === 204) {
     return undefined;
@@ -137,7 +115,12 @@ async function readResponseBody(response: Response): Promise<unknown> {
   }
   const contentType = response.headers.get("content-type") ?? "";
   if (contentType.includes("application/json")) {
-    return JSON.parse(text);
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      if (response.ok) throw error;
+      return text;
+    }
   }
   return text;
 }

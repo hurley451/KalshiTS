@@ -20,6 +20,9 @@ const operations = inventory.operations.map((operation) => ({
   operationId: readString(operation, "operationId"),
   method: readMethod(operation),
   path: readString(operation, "path"),
+  ...(Array.isArray(operation.repeatedQueryParameters)
+    ? { repeatedQueryParameters: operation.repeatedQueryParameters.map((name) => readString({ name }, "name")) }
+    : {}),
   ...(typeof operation.summary === "string" ? { summary: operation.summary } : {}),
   ...(Array.isArray(operation.tags) ? { tags: operation.tags.filter((tag) => typeof tag === "string") } : {})
 }));
@@ -51,6 +54,7 @@ export interface KalshiOperation {
   readonly path: string;
   readonly summary?: string | undefined;
   readonly tags: readonly string[];
+  readonly repeatedQueryParameters?: readonly string[] | undefined;
 }
 
 export const officialOperationSource = {

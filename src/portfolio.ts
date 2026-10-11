@@ -1,4 +1,5 @@
 import { serializeQuery } from "./operation.js";
+import type { QueryParameters } from "./types.js";
 
 export interface FillQuery {
   ticker?: string | undefined;
@@ -13,33 +14,43 @@ export interface FillQuery {
 }
 
 export interface Fill {
-  fillId?: string | undefined;
-  exchangeIndex?: number | undefined;
+  fillId: string;
+  exchangeIndex: number;
   tradeId: string;
   orderId: string;
   ticker: string;
-  marketTicker?: string | undefined;
-  outcomeSide?: string | undefined;
-  bookSide?: string | undefined;
-  countFp?: string | undefined;
-  yesPriceDollars?: string | undefined;
-  noPriceDollars?: string | undefined;
-  feeCost?: string | undefined;
-  side: string;
-  action?: string | undefined;
+  marketTicker: string;
+  outcomeSide: "yes" | "no";
+  bookSide: "bid" | "ask";
+  countFp: string;
+  yesPriceDollars: string;
+  noPriceDollars: string;
+  feeCost: string;
+  side?: "yes" | "no" | undefined;
+  action?: "buy" | "sell" | undefined;
   isTaker: boolean;
-  createdTime: string;
-  subaccountNumber?: number | undefined;
+  createdTime?: string | undefined;
+  subaccountNumber?: number | null | undefined;
   ts?: number | undefined;
 }
 
 export interface FillsPage {
   fills: Fill[];
-  cursor?: string | null | undefined;
+  cursor: string;
 }
 
 export function buildPortfolioFillsPath(query: FillQuery = {}): string {
-  const params = {
+  const serialized = serializeQuery(portfolioFillsQuery(query));
+  return `/trade-api/v2/portfolio/fills${serialized ? `?${serialized}` : ""}`;
+}
+
+export function portfolioFillsQuery(query: FillQuery = {}): QueryParameters {
+  validateInteger(query.limit, "limit", 1, 1000);
+  validateInteger(query.subaccount, "subaccount", 0, 63);
+  validateInteger(query.exchangeIndex, "exchangeIndex", 0);
+  validateInteger(query.minTs, "minTs");
+  validateInteger(query.maxTs, "maxTs");
+  return {
     limit: query.limit,
     cursor: query.cursor,
     ticker: resolveTickerFilter(query.ticker, query.tickers),
@@ -50,8 +61,6 @@ export function buildPortfolioFillsPath(query: FillQuery = {}): string {
     max_ts: query.maxTs
   };
 
-  const serialized = serializeQuery(params);
-  return `/trade-api/v2/portfolio/fills${serialized ? `?${serialized}` : ""}`;
 }
 
 export function parseFillsPage(payload: unknown): FillsPage {
@@ -63,39 +72,41 @@ export function parseFillsPage(payload: unknown): FillsPage {
 
   return {
     fills: rawFills.map(parseFill),
-    cursor: typeof body.cursor === "string" || body.cursor === null ? body.cursor : undefined
+    cursor: readRequiredString(body, "cursor")
   };
 }
 
 function parseFill(payload: unknown): Fill {
   const body = assertRecord(payload, "fill");
   return {
-    fillId: readOptionalString(body, "fill_id"),
-    exchangeIndex: readOptionalNumber(body, "exchange_index"),
+    fillId: readRequiredString(body, "fill_id"),
+    exchangeIndex: readInteger(body, "exchange_index"),
     tradeId: readRequiredString(body, "trade_id"),
     orderId: readRequiredString(body, "order_id"),
     ticker: readRequiredString(body, "ticker"),
-    marketTicker: readOptionalString(body, "market_ticker"),
-    outcomeSide: readOptionalString(body, "outcome_side"),
-    bookSide: readOptionalString(body, "book_side"),
-    countFp: readOptionalString(body, "count_fp"),
-    yesPriceDollars: readOptionalString(body, "yes_price_dollars"),
-    noPriceDollars: readOptionalString(body, "no_price_dollars"),
-    feeCost: readOptionalString(body, "fee_cost"),
-    side: readRequiredString(body, "side"),
-    action: readOptionalString(body, "action"),
+    marketTicker: readRequiredString(body, "market_ticker"),
+    outcomeSide: readEnum(body, "outcome_side", ["yes", "no"]),
+    bookSide: readEnum(body, "book_side", ["bid", "ask"]),
+    countFp: readRequiredString(body, "count_fp"),
+    yesPriceDollars: readRequiredString(body, "yes_price_dollars"),
+    noPriceDollars: readRequiredString(body, "no_price_dollars"),
+    feeCost: readRequiredString(body, "fee_cost"),
+    side: body.side === undefined ? undefined : readEnum(body, "side", ["yes", "no"]),
+    action: body.action === undefined ? undefined : readEnum(body, "action", ["buy", "sell"]),
     isTaker: readRequiredBoolean(body, "is_taker"),
-    createdTime: readRequiredString(body, "created_time"),
-    subaccountNumber: readOptionalNumber(body, "subaccount_number"),
+    createdTime: readOptionalString(body, "created_time"),
+    subaccountNumber: body.subaccount_number === null ? null : readOptionalNumber(body, "subaccount_number"),
     ts: readOptionalNumber(body, "ts")
   };
 }
 
 function resolveTickerFilter(ticker?: string, tickers?: readonly string[]): string | readonly string[] | undefined {
-  if (ticker && tickers && tickers.length > 0) {
+  if (ticker !== undefined && tickers !== undefined) {
     throw new Error("Specify either ticker or tickers, not both.");
   }
-  if (tickers && tickers.length > 0) {
+  if (ticker !== undefined && ticker.trim().length === 0) throw new Error("Market ticker cannot be empty.");
+  if (tickers !== undefined) {
+    if (tickers.length === 0) throw new Error("Market tickers cannot be empty.");
     if (tickers.length > 100) {
       throw new Error("At most 100 market tickers can be supplied.");
     }
@@ -123,8 +134,7 @@ function readRequiredString(body: Record<string, unknown>, name: string): string
 }
 
 function readOptionalString(body: Record<string, unknown>, name: string): string | undefined {
-  const value = body[name];
-  return typeof value === "string" ? value : undefined;
+  return body[name] === undefined ? undefined : readRequiredString(body, name);
 }
 
 function readRequiredBoolean(body: Record<string, unknown>, name: string): boolean {
@@ -136,6 +146,24 @@ function readRequiredBoolean(body: Record<string, unknown>, name: string): boole
 }
 
 function readOptionalNumber(body: Record<string, unknown>, name: string): number | undefined {
+  return body[name] === undefined ? undefined : readInteger(body, name);
+}
+
+function readInteger(body: Record<string, unknown>, name: string): number {
   const value = body[name];
-  return typeof value === "number" ? value : undefined;
+  if (typeof value !== "number" || !Number.isSafeInteger(value)) throw new Error(`${name} must be a safe integer`);
+  return value;
+}
+
+function readEnum<const T extends string>(body: Record<string, unknown>, name: string, values: readonly T[]): T {
+  const value = readRequiredString(body, name);
+  if (!values.includes(value as T)) throw new Error(`${name} must be one of ${values.join(", ")}`);
+  return value as T;
+}
+
+function validateInteger(value: number | undefined, name: string, minimum?: number, maximum?: number): void {
+  if (value === undefined) return;
+  if (!Number.isSafeInteger(value) || (minimum !== undefined && value < minimum) || (maximum !== undefined && value > maximum)) {
+    throw new Error(`${name} must be a safe integer${minimum === undefined ? "" : ` >= ${minimum}`}${maximum === undefined ? "" : ` <= ${maximum}`}`);
+  }
 }

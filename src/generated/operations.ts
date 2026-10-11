@@ -11,6 +11,7 @@ export interface KalshiOperation {
   readonly path: string;
   readonly summary?: string | undefined;
   readonly tags: readonly string[];
+  readonly repeatedQueryParameters?: readonly string[] | undefined;
 }
 
 export const officialOperationSource = {
@@ -521,6 +522,9 @@ export const operations = [
     "operationId": "GetLiveDatas",
     "method": "GET",
     "path": "/live_data/batch",
+    "repeatedQueryParameters": [
+      "milestone_ids"
+    ],
     "summary": "Get Multiple Live Data",
     "tags": [
       "live-data"
@@ -611,6 +615,9 @@ export const operations = [
     "operationId": "GetMarketOrderbooks",
     "method": "GET",
     "path": "/markets/orderbooks",
+    "repeatedQueryParameters": [
+      "tickers"
+    ],
     "summary": "Get Multiple Market Orderbooks",
     "tags": [
       "market"
@@ -1043,6 +1050,9 @@ export const operations = [
     "operationId": "GetEventForecastPercentilesHistory",
     "method": "GET",
     "path": "/series/{series_ticker}/events/{ticker}/forecast_percentile_history",
+    "repeatedQueryParameters": [
+      "percentiles"
+    ],
     "summary": "Get Event Forecast Percentile History",
     "tags": [
       "events"
@@ -1070,6 +1080,9 @@ export const operations = [
     "operationId": "GetStructuredTargets",
     "method": "GET",
     "path": "/structured_targets",
+    "repeatedQueryParameters": [
+      "ids"
+    ],
     "summary": "Get Structured Targets",
     "tags": [
       "structured-targets"
