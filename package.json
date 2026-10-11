@@ -11,9 +11,10 @@
     "README.md"
   ],
   "scripts": {
+    "generate:operations": "node scripts/generate-operations.mjs",
     "build": "tsc -p tsconfig.json",
     "conformance": "node dist/scripts/conformance.js",
-    "test": "npm run build"
+    "test": "npm run build && node --test dist/test/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^24.7.2",
