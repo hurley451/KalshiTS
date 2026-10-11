@@ -14,6 +14,11 @@ remains a Node.js ESM prerelease with the coverage exclusions documented in
 - Intended runtime/declaration/docs/license tarball contents.
 - npm package ownership and configured trusted publisher or initial authenticated bootstrap.
 
+The initial prerelease pins KalshiCore
+[`v0.1.0`](https://github.com/hurley451/KalshiCore/releases/tag/v0.1.0), commit
+`ba5d98ed0ec3a1a7a37f0d005eaf36fb23be36b7`. Scheduled drift monitoring remains
+separate from this immutable release input.
+
 Published versions are immutable. A failed post-publication check does not
 authorize unpublishing or overwriting the version; diagnose and issue a reviewed
 follow-up version when needed.

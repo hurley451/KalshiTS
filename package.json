@@ -2,7 +2,7 @@
   "name": "@hurley451/kalshi-ts",
   "version": "0.1.0-alpha.1",
   "private": false,
-  "kalshiCoreRef": "a00dd3fc8a40ef23b5502ba3a1c84aa1a2fb450b",
+  "kalshiCoreRef": "ba5d98ed0ec3a1a7a37f0d005eaf36fb23be36b7",
   "description": "TypeScript and JavaScript SDK for the Kalshi prediction market API with REST requests, RSA-PSS signing, and typed portfolio fills.",
   "repository": {
     "type": "git",
