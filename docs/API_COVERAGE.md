@@ -8,7 +8,7 @@ of complete live API compatibility.
 
 | Surface | Current support |
 |---------|-----------------|
-| REST inventory | Generated operation IDs, HTTP methods, paths, and parameter metadata |
+| REST inventory | Generated operation IDs, HTTP methods, paths, summaries, and tags; no parameter/body schemas |
 | REST execution | Generic operation-ID requests with path/query/body values |
 | Authentication | RSA-PSS signing, API-key headers, canonical signing paths |
 | Environments | Production and demo |
