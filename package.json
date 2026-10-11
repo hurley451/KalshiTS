@@ -1,7 +1,8 @@
 {
   "name": "@hurley451/kalshi-ts",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "private": false,
+  "kalshiCoreRef": "a00dd3fc8a40ef23b5502ba3a1c84aa1a2fb450b",
   "description": "TypeScript and JavaScript SDK for the Kalshi prediction market API with REST requests, RSA-PSS signing, and typed portfolio fills.",
   "repository": {
     "type": "git",
@@ -12,8 +13,17 @@
     "url": "https://github.com/hurley451/KalshiTS/issues"
   },
   "keywords": [
-    "kalshi", "kalshi-api", "prediction-markets", "trading-api",
-    "fintech", "sdk", "typescript", "javascript", "nodejs", "rest", "rsa-pss"
+    "kalshi",
+    "kalshi-api",
+    "prediction-markets",
+    "trading-api",
+    "fintech",
+    "sdk",
+    "typescript",
+    "javascript",
+    "nodejs",
+    "rest",
+    "rsa-pss"
   ],
   "type": "module",
   "main": "dist/src/index.js",
@@ -24,6 +34,7 @@
     "LICENSE",
     "CONTRIBUTING.md",
     "docs/API_COVERAGE.md",
+    "docs/RELEASES.md",
     "docs/VISIBILITY.md"
   ],
   "scripts": {
@@ -32,11 +43,12 @@
     "prepack": "npm run build",
     "conformance": "node dist/scripts/conformance.js",
     "test:package": "node scripts/package-smoke.mjs",
-    "test": "npm run build && node --test dist/test/*.test.js"
+    "test": "npm run build && node --test dist/test/*.test.js test/*.test.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.7.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "yaml": "^2.9.1"
   },
   "engines": {
     "node": ">=20"

@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish.
+        required: true
+        type: string
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Validate tag and suite pin
+        id: release
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+        run: |
+          [[ "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$ ]] || { echo "Invalid release tag"; exit 1; }
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          test "${RELEASE_TAG#v}" = "$(node -p 'require("./package.json").version')"
+          core_ref="$(node -p 'require("./package.json").kalshiCoreRef')"
+          [[ "$core_ref" =~ ^[a-f0-9]{40}$ ]] || { echo "Core must be pinned to a full commit SHA"; exit 1; }
+          echo "core-ref=$core_ref" >> "$GITHUB_OUTPUT"
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+          if [[ "$RELEASE_TAG" == *-* ]]; then
+            echo "dist-tag=next" >> "$GITHUB_OUTPUT"
+          else
+            echo "dist-tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check out pinned KalshiCore
+        uses: actions/checkout@v4
+        with:
+          repository: hurley451/KalshiCore
+          ref: ${{ steps.release.outputs.core-ref }}
+          path: KalshiCore
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install publication CLI
+        run: npm install --global npm@11
+
+      - name: Install and verify
+        run: |
+          npm ci
+          npm test
+          npm run test:package
+          npm --prefix KalshiCore ci
+          npm --prefix KalshiCore test
+          npm --prefix KalshiCore run validate
+          npm run generate:operations -- --kalshicore-root KalshiCore --out "$RUNNER_TEMP/operations.ts"
+          cmp src/generated/operations.ts "$RUNNER_TEMP/operations.ts"
+          npm run conformance -- --kalshicore-root KalshiCore --report artifacts/kalshicore-conformance/report.json
+
+      - name: Pack exact artifact
+        id: pack
+        run: |
+          npm pack --json > "$RUNNER_TEMP/package.json"
+          archive="$(node -p 'JSON.parse(require("fs").readFileSync(process.env.RUNNER_TEMP+"/package.json","utf8"))[0].filename')"
+          echo "archive=$archive" >> "$GITHUB_OUTPUT"
+          sha256sum "$archive" > "${archive}.sha256"
+          node scripts/release-artifacts.mjs manifest "$RUNNER_TEMP/package.json" release-manifest.json
+          npm run test:package -- "$GITHUB_WORKSPACE/$archive"
+          cp "$RUNNER_TEMP/package.json" release-pack.json
+
+      - name: Persist prepared release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: prepared-npm-release
+          path: |
+            *.tgz
+            *.tgz.sha256
+            release-manifest.json
+            release-pack.json
+            artifacts/kalshicore-conformance/report.json
+          if-no-files-found: error
+
+      - name: Inspect existing npm artifact
+        id: registry
+        run: node scripts/release-artifacts.mjs inspect-npm "$RUNNER_TEMP/package.json"
+
+      - name: Publish to npm
+        if: steps.registry.outputs.needs-publish == 'true'
+        env:
+          ARCHIVE: ${{ steps.pack.outputs.archive }}
+          DIST_TAG: ${{ steps.release.outputs.dist-tag }}
+        run: npm publish "$ARCHIVE" --access public --tag "$DIST_TAG"
+
+      - name: Verify published consumer
+        env:
+          DIST_TAG: ${{ steps.release.outputs.dist-tag }}
+        run: |
+          node scripts/release-artifacts.mjs verify-dist-tag "$RUNNER_TEMP/package.json" "$DIST_TAG"
+          version="$(node -p 'require("./package.json").version')"
+          npm run test:package -- "@hurley451/kalshi-ts@$version"
+
+      - name: Create matching GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          ARCHIVE: ${{ steps.pack.outputs.archive }}
+        run: |
+          node scripts/github-release.mjs "$RELEASE_TAG" "$ARCHIVE" "${ARCHIVE}.sha256" release-manifest.json artifacts/kalshicore-conformance/report.json

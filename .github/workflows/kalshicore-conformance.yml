@@ -36,6 +36,7 @@ jobs:
         with:
           repository: hurley451/KalshiCore
           path: KalshiCore
+          ref: ${{ github.event_name == 'schedule' && 'main' || 'a00dd3fc8a40ef23b5502ba3a1c84aa1a2fb450b' }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -54,7 +55,7 @@ jobs:
 
       - name: Test
         working-directory: KalshiTS
-        run: node --test dist/test/*.test.js
+        run: node --test dist/test/*.test.js test/*.test.mjs
 
       - name: Test packed consumer
         working-directory: KalshiTS
