@@ -48,6 +48,10 @@ jobs:
         working-directory: KalshiTS
         run: npm run build
 
+      - name: Test
+        working-directory: KalshiTS
+        run: node --test dist/test/*.test.js
+
       - name: Run conformance adapter
         id: conformance
         working-directory: KalshiTS
