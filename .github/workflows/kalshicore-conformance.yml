@@ -36,7 +36,7 @@ jobs:
         with:
           repository: hurley451/KalshiCore
           path: KalshiCore
-          ref: ${{ github.event_name == 'schedule' && 'main' || 'a00dd3fc8a40ef23b5502ba3a1c84aa1a2fb450b' }}
+          ref: ${{ github.event_name == 'schedule' && 'main' || 'ba5d98ed0ec3a1a7a37f0d005eaf36fb23be36b7' }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
