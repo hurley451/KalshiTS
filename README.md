@@ -9,10 +9,9 @@
 A TypeScript and JavaScript SDK for the [Kalshi](https://kalshi.com) prediction
 market API, built for Node.js 20+ with ESM exports and TypeScript declarations.
 
-KalshiTS renders [KalshiCore](https://github.com/hurley451/KalshiCore) contracts
-into a Node.js SDK. It is a community project, not an official Kalshi SDK.
+This is a community client, not an official Kalshi SDK.
 The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
-[release gates and setup](https://github.com/hurley451/KalshiTS/blob/main/docs/RELEASES.md).
+[release status](docs/RELEASES.md).
 
 ## Contents
 
@@ -24,13 +23,14 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - [WebSocket message parsing](#websocket-message-parsing)
 - [Error handling](#error-handling)
 - [Configuration](#configuration)
-- [Generated operations and conformance](#generated-operations-and-conformance)
+- [Operation lookup](#operation-lookup)
 - [Running examples](#running-examples)
 - [SDK family and support](#sdk-family-and-support)
 
 ## Features
 
-- Generated REST operation registry with IDs, methods, paths, summaries, and tags.
+- 118 named REST methods across 17 domain facades, with typed inputs and responses.
+- 209 schema-derived models and runtime request/response contract validation.
 - Promise-based HTTP requests using Node.js fetch, with production and demo environments.
 - Automatic RSA-PSS request signing using Node.js crypto.
 - Path substitution, query encoding, JSON bodies, and API error details.
@@ -39,31 +39,33 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - Custom fetch implementations, request headers, and access to raw HTTP responses.
 
 Generic requests return `unknown` unless the caller supplies a type argument.
-That type argument does not validate the response at runtime. The generated
-registry does not contain parameter, request-body, or response schemas.
+That type argument does not validate the response at runtime. Named methods
+validate official parameter, request-body, and response schemas. Where the source
+omits a response schema, its body remains `unknown` and requires application-level
+narrowing. HTTP 204 responses return `undefined`.
 
 ### API Coverage
 
 | API family | Selected generated operation IDs | Support |
 |------------|----------------------------------|---------|
-| Exchange | `GetExchangeStatus`, `GetExchangeSchedule` | Generic REST |
-| Account | `GetAccountApiLimits`, `GetAccountEndpointCosts` | Generic REST |
-| Markets | `GetMarkets`, `GetMarket`, `GetMarketOrderbook`, `GetTrades` | Generic REST |
-| Events and series | `GetEvents`, `GetEvent`, `GetSeriesList`, `GetSeries` | Generic REST |
-| Discovery | `GetStructuredTargets`, `GetMilestones`, `GetMultivariateEventCollections` | Generic REST |
-| V2 orders | `CreateOrderV2`, `CancelOrderV2`, `AmendOrderV2`, `BatchCreateOrdersV2` | Generic REST |
-| Order groups | `GetOrderGroups`, `CreateOrderGroup`, `TriggerOrderGroup` | Generic REST |
-| Portfolio | `GetBalance`, `GetPositions`, `GetSettlements`, `GetFills` | Generic REST; typed fills helper |
-| Subaccounts | `GetSubaccountBalances`, `ApplySubaccountTransfer`, `GetSubaccountTransfers` | Generic REST |
-| Historical | `GetHistoricalCutoff`, `GetHistoricalMarkets`, `GetFillsHistorical` | Generic REST |
-| Incentives and allocation | `GetIncentivePrograms`, `GetTargetBalanceAllocation` | Generic REST |
-| Live data | `GetEventLiveData`, `GetWeatherIndex`, `GetWeatherIndexCalibrations` | Generic REST |
-| API keys | `GetApiKeys`, `CreateApiKey`, `DeleteApiKey` | Generic REST |
-| Communications | `GetCommunicationsID`, `GetRFQs`, `GetQuotes` | Generic REST |
+| Exchange | `getExchangeStatus`, `getExchangeSchedule` | Typed REST |
+| Account | `getAccountApiLimits`, `getAccountEndpointCosts` | Typed REST |
+| Markets | `getMarkets`, `getMarket`, `getMarketOrderbook`, `getTrades` | Typed REST |
+| Events and series | `getEvents`, `getEvent`, `getSeriesList`, `getSeries` | Typed REST |
+| Discovery | `getStructuredTargets`, `getMilestones`, `getMultivariateEventCollections` | Typed REST |
+| V2 orders | `createOrderV2`, `cancelOrderV2`, `amendOrderV2`, `batchCreateOrdersV2` | Typed REST |
+| Order groups | `getOrderGroups`, `createOrderGroup`, `triggerOrderGroup` | Typed REST |
+| Portfolio | `getBalance`, `getPositions`, `getSettlements`, `getFills` | Typed REST; camelCase fills helper |
+| Subaccounts | `getSubaccountBalances`, `applySubaccountTransfer`, `getSubaccountTransfers` | Typed REST |
+| Historical | `getHistoricalCutoff`, `getHistoricalMarkets`, `getFillsHistorical` | Typed REST |
+| Incentives and allocation | `getIncentivePrograms`, `getTargetBalanceAllocation` | Typed REST |
+| Live data | `getEventLiveData`, `getWeatherIndex`, `getWeatherIndexCalibrations` | Typed REST |
+| API keys | `getApiKeys`, `createApiKey`, `deleteApiKey` | Typed REST |
+| Communications and FCM | `getCommunicationsID`, `getRFQs`, `getQuotes`, `getFCMOrders` | Typed REST |
 | WebSocket | `parseWebSocketMessage` | Parsing only; no transport or subscriptions |
 
-The checked-in OpenAPI inventory contains 118 REST operations. Inventory access
-is broader than typed models and contract-tested coverage. See
+The checked-in OpenAPI snapshot contains 118 REST operations. Named methods and
+contract tests cover each operation; this is not live exchange verification. See
 [API coverage and gaps](docs/API_COVERAGE.md) and [official API docs](https://docs.kalshi.com).
 
 Automatic retries, rate limiting, a public cancellation/timeout option, WebSocket
@@ -109,12 +111,13 @@ Put this in `quickstart.mjs` in your application and run `node quickstart.mjs`:
 import { KalshiClient } from "@hurley451/kalshi-ts";
 
 const client = new KalshiClient({ environment: "demo" });
-const status = await client.request("GetExchangeStatus", { authenticated: false });
+const status = await client.exchange.getExchangeStatus();
 console.log(status);
 ```
 
-Public calls without credentials must pass `authenticated: false`.
-The client defaults to production, and requests default to authenticated.
+Named public calls work without credentials. The client defaults to production.
+Generic `request` calls default to authenticated; pass `authenticated: false`
+for unsigned generic calls.
 
 ## Authentication
 
@@ -137,7 +140,7 @@ const client = new KalshiClient({
   environment: "demo",
   auth: { apiKeyId, privateKeyPem: readFileSync(keyFile) }
 });
-const balance = await client.request("GetBalance");
+const balance = await client.portfolio.getBalance();
 console.log(balance);
 ```
 
@@ -153,20 +156,13 @@ official wire names (`snake_case`); the typed fills helper uses camelCase.
 
 ### List Markets with Pagination
 
-The response type below is consumer-defined, not an SDK-generated schema.
-Validate responses at your application boundary when stronger guarantees are needed.
+Named calls infer response types and validate the official schema.
 
 ```ts
-type MarketPage = {
-  markets: Array<{ ticker: string; title: string }>;
-  cursor?: string;
-};
-
 let cursor: string | undefined;
 do {
-  const page: MarketPage = await client.request<MarketPage>("GetMarkets", {
-    authenticated: false,
-    query: { limit: 100, status: "open", cursor }
+  const page = await client.markets.getMarkets({
+    query: { limit: 100, status: "open", ...(cursor ? { cursor } : {}) }
   });
   for (const market of page.markets) console.log(market.ticker, market.title);
   cursor = page.cursor || undefined;
@@ -181,12 +177,10 @@ Use a ticker returned by market discovery:
 
 ```ts
 const ticker = "YOUR-DEMO-MARKET-TICKER";
-const market = await client.request("GetMarket", {
-  authenticated: false,
+const market = await client.markets.getMarket({
   pathParameters: { ticker }
 });
-const book = await client.request("GetMarketOrderbook", {
-  authenticated: false,
+const book = await client.markets.getMarketOrderbook({
   pathParameters: { ticker },
   query: { depth: 10 }
 });
@@ -259,15 +253,13 @@ console.log(await client.request("GetWeatherIndex", {
 }));
 ```
 
-Endpoint-specific availability and permissions remain Kalshi's responsibility.
-Use the inventory below to discover other operation IDs and required paths.
+Use operation lookup below to find other operation IDs and required paths.
 
 ### Demo Order Creation and Cancellation
 
 This function submits an order when called. Use demo credentials and a currently
-tradable demo ticker. It deliberately constructs its own demo client.
-Generic bodies are not schema-validated by the SDK; consult the current
-[official OpenAPI](https://docs.kalshi.com/openapi.yaml) before placing orders.
+tradable demo ticker. It uses a demo client.
+Named order methods validate inputs against the checked-in official schema.
 
 ```ts
 import { randomUUID } from "node:crypto";
@@ -275,7 +267,7 @@ import { KalshiClient, type KalshiAuthOptions } from "@hurley451/kalshi-ts";
 
 async function demoOrder(auth: KalshiAuthOptions, ticker: string) {
   const demo = new KalshiClient({ environment: "demo", auth });
-  const order = await demo.request<{ order_id: string }>("CreateOrderV2", {
+  const order = await demo.orders.createOrderV2({
     body: {
       ticker, side: "bid", count: "1.00", price: "0.0100",
       time_in_force: "good_till_canceled",
@@ -284,7 +276,7 @@ async function demoOrder(auth: KalshiAuthOptions, ticker: string) {
     }
   });
   if (!order.order_id) throw new Error("Creation returned no order ID.");
-  return demo.request("CancelOrderV2", {
+  return demo.orders.cancelOrderV2({
     pathParameters: { order_id: order.order_id },
     query: { exchange_index: -1, market_ticker: ticker }
   });
@@ -313,17 +305,20 @@ subscribe, reconnect, validate channel payload schemas, or maintain an order boo
 ## Error Handling
 
 ```ts
-import { KalshiApiError, KalshiOperationError } from "@hurley451/kalshi-ts";
+import { KalshiApiError, KalshiContractError, isEndpointError } from "@hurley451/kalshi-ts";
 
 try {
-  await client.request("GetBalance");
+  await client.portfolio.getBalance();
 } catch (error) {
   if (error instanceof KalshiApiError) {
     console.error("HTTP status:", error.status);
     if (error.status === 429) console.error("Retry-After:", error.headers.get("retry-after"));
     // Inspect error.body locally; redact account details before logging it.
-  } else if (error instanceof KalshiOperationError) {
-    console.error("Check the operation ID and path parameters:", error.message);
+    if (isEndpointError(error, "GetBalance")) {
+      console.error("Declared endpoint failure:", error.contract.status);
+    }
+  } else if (error instanceof KalshiContractError) {
+    console.error("Contract violation:", error.operationId, error.part);
   } else {
     throw error; // Key parsing, helper validation, JSON, or fetch failure.
   }
@@ -342,7 +337,7 @@ replayed because the exchange may already have accepted it.
 | `fetch` | Global fetch | Inject a compatible HTTP implementation, including test doubles |
 | `defaultHeaders` | Empty | Applied to all requests |
 | `auth.timestampProvider` | `Date.now` | Supplies signing timestamp in milliseconds |
-| Request `authenticated` | `true` | Set false for unsigned public calls |
+| Request `authenticated` | Inferred for named calls | Generic requests default to true |
 | Request `headers` | Empty | Overrides default headers; signing supplies authentication headers |
 | Request `pathParameters`, `query`, `body` | Empty/absent | Path values, query values, and JSON body |
 
@@ -358,46 +353,34 @@ Only `restBaseUrl` is used by this HTTP client. There is no direct request
 `signal` or timeout option; implement those policies in an injected fetch
 wrapper if needed.
 
-## Generated Operations and Conformance
+## Operation Lookup
 
 ```ts
-import { operations, getOperation, officialOperationSource } from "@hurley451/kalshi-ts";
+import { operations, getOperation } from "@hurley451/kalshi-ts";
 
-console.log(officialOperationSource.version, officialOperationSource.sha256);
 console.table(operations.filter(operation => operation.path.startsWith("/portfolio")));
 console.log(getOperation("GetMarket"));
 ```
 
-Ordinary builds use the checked-in inventory. Regeneration requires KalshiCore:
-
-```bash
-npm run generate:operations -- --kalshicore-root /path/to/KalshiCore
-npm test
-npm run conformance -- --kalshicore-root /path/to/KalshiCore --report artifacts/kalshicore-conformance/report.json
-```
-
-The four registered offline fixtures cover signing canonicalization, fills query
-serialization, fills response parsing, and order-book message replay. Passing them
-does not validate every operation's contract, live trading, or WebSocket transport.
-The scheduled workflow can file parent contract-gap issues when
-`KALSHICORE_ISSUE_TOKEN` is configured with issue access to KalshiCore.
+See [contributing](CONTRIBUTING.md) for development and test commands.
 
 ## Project Structure
 
 ```text
 src/
   auth.ts             RSA-PSS signing
-  client.ts           HTTP execution and typed fills convenience method
+  client.ts           Typed HTTP execution and fills convenience method
+  contracts.ts        Runtime request/response validation
   environment.ts      Production/demo URLs
   errors.ts           API and operation errors
-  generated/          Checked-in operation inventory and source provenance
+  generated/          Named endpoints, models, schemas and coverage
   operation.ts        Path substitution and query serialization
   portfolio.ts        Fills types, filters, and parsing
   websocket.ts        Envelope parsing
 examples/read-only.ts Read-only demo examples
 scripts/              Inventory generation and conformance adapter
 test/                 SDK tests
-docs/                 Coverage and visibility tracking
+docs/                 API documentation
 ```
 
 ## Running Examples
@@ -430,7 +413,6 @@ Read [contributing](CONTRIBUTING.md), ask a
 [usage question](https://github.com/hurley451/KalshiTS/issues/new?template=question.yml),
 or open a [discussion](https://github.com/hurley451/KalshiTS/discussions).
 Report SDK behavior here and shared contract/fixture gaps in KalshiCore.
-See [visibility tracking](docs/VISIBILITY.md) for discovery metrics.
 
 ## License
 

@@ -2,8 +2,8 @@
   "name": "@hurley451/kalshi-ts",
   "version": "0.1.0-alpha.1",
   "private": false,
-  "kalshiCoreRef": "ba5d98ed0ec3a1a7a37f0d005eaf36fb23be36b7",
-  "description": "TypeScript and JavaScript SDK for the Kalshi prediction market API with REST requests, RSA-PSS signing, and typed portfolio fills.",
+  "kalshiCoreRef": "da235871e8c55ca1f6bcc2020f5324e909f1998a",
+  "description": "TypeScript and JavaScript SDK for Kalshi with schema-derived named REST endpoints, typed models, contract validation, and RSA-PSS signing.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hurley451/KalshiTS.git"
@@ -30,6 +30,8 @@
   "types": "dist/src/index.d.ts",
   "files": [
     "dist/src",
+    "src/generated/coverage.json",
+    "src/generated/schema-coverage.json",
     "README.md",
     "LICENSE",
     "CONTRIBUTING.md",
@@ -38,7 +40,9 @@
     "docs/VISIBILITY.md"
   ],
   "scripts": {
+    "generate:client": "node scripts/generate-client.mjs",
     "generate:operations": "node scripts/generate-operations.mjs",
+    "check:generated": "node scripts/check-generated.mjs",
     "build": "tsc -p tsconfig.json",
     "prepack": "npm run build",
     "conformance": "node dist/scripts/conformance.js",
@@ -47,6 +51,8 @@
   },
   "devDependencies": {
     "@types/node": "^24.7.2",
+    "openapi-sampler": "^1.7.6",
+    "openapi-typescript": "^7.13.0",
     "typescript": "^5.9.3",
     "yaml": "^2.9.1"
   },
@@ -56,5 +62,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ajv-draft-04": "^1.0.0",
+    "ajv-formats": "^3.0.1"
+  }
 }

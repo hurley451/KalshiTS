@@ -8,6 +8,7 @@ import {
   buildTradeApiPath,
   getOperation,
   KalshiApiError,
+  KalshiResponseParseError,
   KalshiClient,
   officialOperationSource,
   operations,
@@ -247,7 +248,7 @@ test("HTTP failures retain status headers and raw malformed bodies", async () =>
       error instanceof KalshiApiError && error.status === status && error.body === "{broken" && error.headers.get("retry-after") === "5");
   }
   const client = new KalshiClient({ fetch: async () => new Response("{broken", { headers: { "content-type": "application/json" } }) });
-  await assert.rejects(client.request("GetMarkets", { authenticated: false }), SyntaxError);
+  await assert.rejects(client.request("GetMarkets", { authenticated: false }), KalshiResponseParseError);
 });
 
 test("raw requests preserve empty successes and text responses", async () => {

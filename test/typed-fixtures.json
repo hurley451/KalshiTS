@@ -1,0 +1,7826 @@
+{
+  "sha256": "091f171718a0376b0c1a2e9348b02b1ce003d0786dd04d772dd11005ca414bf4",
+  "fixtures": [
+    {
+      "operationId": "AcceptBlockTradeProposal",
+      "methodName": "acceptBlockTradeProposal",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "block_trade_proposal_id": "string"
+        },
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "AcceptQuote",
+      "methodName": "acceptQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "quote_id": "string"
+        },
+        "body": {
+          "accepted_side": "yes"
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "AcceptRFQQuote",
+      "methodName": "acceptRFQQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "rfq_id": "string",
+          "quote_id": "string"
+        },
+        "body": {
+          "accepted_side": "yes"
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "AmendOrderV2",
+      "methodName": "amendOrderV2",
+      "domain": "orders",
+      "input": {
+        "pathParameters": {
+          "order_id": "string"
+        },
+        "query": {
+          "subaccount": 0
+        },
+        "body": {
+          "ticker": "HIGHNY-24JAN01-T60",
+          "side": "bid",
+          "price": "0.5700",
+          "count": "8.00",
+          "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+          "updated_client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+            "remaining_count": "8.00",
+            "fill_count": "0.00",
+            "ts_ms": 1715793690123
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        },
+        {
+          "status": 503,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "ApplySubaccountTransfer",
+      "methodName": "applySubaccountTransfer",
+      "domain": "portfolio",
+      "input": {
+        "body": {
+          "client_transfer_id": "778092c0-0f15-4c52-8c9e-65903f88fe9c",
+          "from_subaccount": 0,
+          "to_subaccount": 0,
+          "amount_cents": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "BatchCancelOrdersV2",
+      "methodName": "batchCancelOrdersV2",
+      "domain": "orders",
+      "input": {
+        "body": {
+          "orders": [
+            {
+              "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+              "subaccount": 0,
+              "exchange_index": 0
+            },
+            {
+              "order_id": "a6d6010d-6d5f-40a1-a7e7-5501386bb621",
+              "subaccount": 0,
+              "exchange_index": 0
+            }
+          ]
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "orders": [
+              {
+                "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+                "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+                "reduced_by": "10.00",
+                "ts_ms": 1715793660456
+              },
+              {
+                "order_id": "a6d6010d-6d5f-40a1-a7e7-5501386bb621",
+                "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+                "reduced_by": "5.00",
+                "ts_ms": 1715793660789
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "BatchCreateOrdersV2",
+      "methodName": "batchCreateOrdersV2",
+      "domain": "orders",
+      "input": {
+        "body": {
+          "orders": [
+            {
+              "ticker": "HIGHNY-24JAN01-T60",
+              "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+              "side": "bid",
+              "count": "10.00",
+              "price": "0.5600",
+              "time_in_force": "good_till_canceled",
+              "self_trade_prevention_type": "taker_at_cross",
+              "exchange_index": 0
+            },
+            {
+              "ticker": "HIGHNY-24JAN01-T60",
+              "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+              "side": "ask",
+              "count": "5.00",
+              "price": "0.5800",
+              "time_in_force": "immediate_or_cancel",
+              "self_trade_prevention_type": "maker",
+              "exchange_index": 0
+            }
+          ]
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "orders": [
+              {
+                "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+                "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+                "fill_count": "0.00",
+                "remaining_count": "10.00",
+                "ts_ms": 1715793600123
+              },
+              {
+                "order_id": "a6d6010d-6d5f-40a1-a7e7-5501386bb621",
+                "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+                "fill_count": "5.00",
+                "remaining_count": "0.00",
+                "average_fill_price": "0.5800",
+                "average_fee_paid": "0.0012",
+                "ts_ms": 1715793600456
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "BatchGetMarketCandlesticks",
+      "methodName": "batchGetMarketCandlesticks",
+      "domain": "markets",
+      "input": {
+        "query": {
+          "market_tickers": "string",
+          "start_ts": 0,
+          "end_ts": 0,
+          "period_interval": 1,
+          "include_latest_before_start": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "markets": [
+              {
+                "market_ticker": "string",
+                "candlesticks": [
+                  {
+                    "end_period_ts": 0,
+                    "yes_bid": {
+                      "open_dollars": "0.5600",
+                      "low_dollars": "0.5600",
+                      "high_dollars": "0.5600",
+                      "close_dollars": "0.5600"
+                    },
+                    "yes_ask": {
+                      "open_dollars": "0.5600",
+                      "low_dollars": "0.5600",
+                      "high_dollars": "0.5600",
+                      "close_dollars": "0.5600"
+                    },
+                    "price": {},
+                    "volume_fp": "10.00",
+                    "open_interest_fp": "10.00"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "CancelAllOrders",
+      "methodName": "cancelAllOrders",
+      "domain": "orders",
+      "input": {
+        "query": {
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 429,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CancelOrderV2",
+      "methodName": "cancelOrderV2",
+      "domain": "orders",
+      "input": {
+        "pathParameters": {
+          "order_id": "string"
+        },
+        "query": {
+          "subaccount": 0,
+          "exchange_index": 0,
+          "market_ticker": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+            "reduced_by": "10.00",
+            "ts_ms": 1715793660456
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "ConfirmQuote",
+      "methodName": "confirmQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "quote_id": "string"
+        },
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "ConfirmRFQQuote",
+      "methodName": "confirmRFQQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "rfq_id": "string",
+          "quote_id": "string"
+        },
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateApiKey",
+      "methodName": "createApiKey",
+      "domain": "apiKeys",
+      "input": {
+        "body": {
+          "name": "string",
+          "public_key": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "api_key_id": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 403
+        },
+        {
+          "status": 409
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "CreateFCMPositionTransfer",
+      "methodName": "createFCMPositionTransfer",
+      "domain": "fcm",
+      "input": {
+        "body": {
+          "source_subtrader_id": "string",
+          "target_subtrader_id": "string",
+          "market_ticker": "string",
+          "position_centicount": 0,
+          "price_centicents": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "position_transfer_id": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 409,
+          "body": {}
+        },
+        {
+          "status": 429,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateFCMSubtrader",
+      "methodName": "createFCMSubtrader",
+      "domain": "fcm",
+      "input": {
+        "body": {
+          "subtrader_suffix": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "subtrader_id": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 409,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateMarketInMultivariateEventCollection",
+      "methodName": "createMarketInMultivariateEventCollection",
+      "domain": "multivariate",
+      "input": {
+        "pathParameters": {
+          "collection_ticker": "string"
+        },
+        "body": {
+          "selected_markets": [
+            {
+              "market_ticker": "string",
+              "event_ticker": "string",
+              "side": "yes"
+            }
+          ]
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "event_ticker": "string",
+            "market_ticker": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 429,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateOrderGroup",
+      "methodName": "createOrderGroup",
+      "domain": "orderGroups",
+      "input": {
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "order_group_id": "string",
+            "subaccount": 0
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateOrderV2",
+      "methodName": "createOrderV2",
+      "domain": "orders",
+      "input": {
+        "body": {
+          "ticker": "HIGHNY-24JAN01-T60",
+          "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+          "side": "bid",
+          "count": "10.00",
+          "price": "0.5600",
+          "time_in_force": "good_till_canceled",
+          "self_trade_prevention_type": "taker_at_cross",
+          "post_only": false,
+          "cancel_order_on_pause": false,
+          "reduce_only": false,
+          "subaccount": 0,
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+            "fill_count": "0.00",
+            "remaining_count": "10.00",
+            "ts_ms": 1715793600123
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 409,
+          "body": {}
+        },
+        {
+          "status": 429,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        },
+        {
+          "status": 503,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateQuote",
+      "methodName": "createQuote",
+      "domain": "communications",
+      "input": {
+        "body": {
+          "rfq_id": "string",
+          "yes_bid": "0.5600",
+          "no_bid": "0.5600",
+          "rest_remainder": true
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "id": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateRFQ",
+      "methodName": "createRFQ",
+      "domain": "communications",
+      "input": {
+        "body": {
+          "market_ticker": "string",
+          "rest_remainder": true
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "id": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 409,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "CreateSubaccount",
+      "methodName": "createSubaccount",
+      "domain": "portfolio",
+      "input": {
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "subaccount_number": 0
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "DecreaseOrderV2",
+      "methodName": "decreaseOrderV2",
+      "domain": "orders",
+      "input": {
+        "pathParameters": {
+          "order_id": "string"
+        },
+        "query": {
+          "subaccount": 0
+        },
+        "body": {
+          "reduce_by": "2.00",
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+            "remaining_count": "8.00",
+            "ts_ms": 1715793680789
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "DeleteApiKey",
+      "methodName": "deleteApiKey",
+      "domain": "apiKeys",
+      "input": {
+        "pathParameters": {
+          "api_key": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "DeleteFCMEventContractDailyCap",
+      "methodName": "deleteFCMEventContractDailyCap",
+      "domain": "fcm",
+      "input": {
+        "query": {
+          "subtrader_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "DeleteOrderGroup",
+      "methodName": "deleteOrderGroup",
+      "domain": "orderGroups",
+      "input": {
+        "pathParameters": {
+          "order_group_id": "string"
+        },
+        "query": {
+          "subaccount": 0,
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "DeleteQuote",
+      "methodName": "deleteQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "quote_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "DeleteRFQ",
+      "methodName": "deleteRFQ",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "rfq_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "DeleteRFQQuote",
+      "methodName": "deleteRFQQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "rfq_id": "string",
+          "quote_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 204
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GenerateApiKey",
+      "methodName": "generateApiKey",
+      "domain": "apiKeys",
+      "input": {
+        "body": {
+          "name": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "api_key_id": "string",
+            "private_key": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 403
+        },
+        {
+          "status": 409
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetAccountApiLimits",
+      "methodName": "getAccountApiLimits",
+      "domain": "account",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "usage_tier": "expert",
+            "read": {
+              "refill_rate": 0,
+              "bucket_capacity": 0
+            },
+            "write": {
+              "refill_rate": 0,
+              "bucket_capacity": 0
+            },
+            "grants": [
+              {
+                "exchange_instance": "event_contract",
+                "level": "prestige",
+                "source": "string"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetAccountApiUsageLevelVolumeProgress",
+      "methodName": "getAccountApiUsageLevelVolumeProgress",
+      "domain": "account",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "volume_progress": [
+              {
+                "computed_ts": 0,
+                "trailing_30d_volume_fp": "10.00",
+                "goals": [
+                  {
+                    "level": "expert",
+                    "earn_volume_goal_fp": "10.00",
+                    "keep_volume_goal_fp": "10.00"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetAccountEndpointCosts",
+      "methodName": "getAccountEndpointCosts",
+      "domain": "account",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "default_cost": 0,
+            "endpoint_costs": [
+              {
+                "method": "string",
+                "path": "string",
+                "cost": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetApiKeys",
+      "methodName": "getApiKeys",
+      "domain": "apiKeys",
+      "input": {
+        "query": {
+          "fcm_subtrader_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "api_keys": [
+              {
+                "api_key_id": "string",
+                "name": "string",
+                "scopes": [
+                  "read"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetBalance",
+      "methodName": "getBalance",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "subaccount": 0,
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "balance": 0,
+            "balance_dollars": "0.5600",
+            "portfolio_value": 0,
+            "updated_ts": 0
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetBlockTradeProposals",
+      "methodName": "getBlockTradeProposals",
+      "domain": "communications",
+      "input": {
+        "query": {
+          "cursor": "string",
+          "market_ticker": "string",
+          "limit": 100,
+          "status": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "block_trade_proposals": [
+              {
+                "id": "string",
+                "proposer_user_id": "string",
+                "buyer_user_id": "string",
+                "seller_user_id": "string",
+                "market_ticker": "string",
+                "price_centi_cents": 0,
+                "centicount": 0,
+                "maker_side": "yes",
+                "expiration_ts": "2019-08-24T14:15:22Z",
+                "status": "string",
+                "created_ts": "2019-08-24T14:15:22Z",
+                "updated_ts": "2019-08-24T14:15:22Z",
+                "buyer_accepted": true,
+                "seller_accepted": true
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetCommunicationsID",
+      "methodName": "getCommunicationsID",
+      "domain": "communications",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "communications_id": "string"
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetDeposits",
+      "methodName": "getDeposits",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "deposits": [
+              {
+                "id": "string",
+                "status": "pending",
+                "type": "ach",
+                "amount_cents": 0,
+                "fee_cents": 0,
+                "created_ts": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetEvent",
+      "methodName": "getEvent",
+      "domain": "events",
+      "input": {
+        "pathParameters": {
+          "event_ticker": "string"
+        },
+        "query": {
+          "with_nested_markets": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "event": {
+              "event_ticker": "string",
+              "series_ticker": "string",
+              "sub_title": "string",
+              "title": "string",
+              "collateral_return_type": "string",
+              "mutually_exclusive": true,
+              "settlement_sources": [
+                {}
+              ]
+            },
+            "markets": [
+              {
+                "ticker": "string",
+                "event_ticker": "string",
+                "market_type": "binary",
+                "yes_sub_title": "string",
+                "no_sub_title": "string",
+                "created_time": "2019-08-24T14:15:22Z",
+                "updated_time": "2019-08-24T14:15:22Z",
+                "open_time": "2019-08-24T14:15:22Z",
+                "close_time": "2019-08-24T14:15:22Z",
+                "latest_expiration_time": "2019-08-24T14:15:22Z",
+                "settlement_timer_seconds": 0,
+                "status": "initialized",
+                "yes_bid_dollars": "0.5600",
+                "yes_bid_size_fp": "10.00",
+                "yes_ask_dollars": "0.5600",
+                "yes_ask_size_fp": "10.00",
+                "no_bid_dollars": "0.5600",
+                "no_ask_dollars": "0.5600",
+                "last_price_dollars": "0.5600",
+                "volume_fp": "10.00",
+                "volume_24h_fp": "10.00",
+                "result": "yes",
+                "can_close_early": true,
+                "open_interest_fp": "10.00",
+                "notional_value_dollars": "0.5600",
+                "previous_yes_bid_dollars": "0.5600",
+                "previous_yes_ask_dollars": "0.5600",
+                "previous_price_dollars": "0.5600",
+                "settlement_bounds_type": "default",
+                "expiration_value": "string",
+                "rules_primary": "string",
+                "rules_secondary": "string",
+                "price_level_structure": "string",
+                "price_ranges": [
+                  {
+                    "start": "string",
+                    "end": "string",
+                    "step": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetEventFeeChanges",
+      "methodName": "getEventFeeChanges",
+      "domain": "events",
+      "input": {
+        "query": {
+          "event_ticker": "string",
+          "limit": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "event_fee_changes": [
+              {
+                "id": "string",
+                "event_ticker": "string",
+                "series_ticker": "string",
+                "fee_type_override": "quadratic",
+                "fee_multiplier_override": 0.1,
+                "scheduled_ts": "2019-08-24T14:15:22Z"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetEventForecastPercentilesHistory",
+      "methodName": "getEventForecastPercentilesHistory",
+      "domain": "events",
+      "input": {
+        "pathParameters": {
+          "ticker": "string",
+          "series_ticker": "string"
+        },
+        "query": {
+          "percentiles": [
+            0
+          ],
+          "start_ts": 0,
+          "end_ts": 0,
+          "period_interval": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "forecast_history": [
+              {
+                "event_ticker": "string",
+                "end_period_ts": 0,
+                "period_interval": 0,
+                "percentile_points": [
+                  {
+                    "percentile": 0,
+                    "raw_numerical_forecast": 0,
+                    "numerical_forecast": 0,
+                    "formatted_forecast": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetEventLiveData",
+      "methodName": "getEventLiveData",
+      "domain": "liveData",
+      "input": {
+        "pathParameters": {
+          "event_ticker": "string"
+        },
+        "query": {
+          "range": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "live_data": {
+              "type": "string",
+              "details": {}
+            }
+          }
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetEventMetadata",
+      "methodName": "getEventMetadata",
+      "domain": "events",
+      "input": {
+        "pathParameters": {
+          "event_ticker": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "image_url": "string",
+            "market_details": [
+              {
+                "market_ticker": "string",
+                "image_url": "string",
+                "color_code": "string"
+              }
+            ],
+            "settlement_sources": [
+              {}
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetEvents",
+      "methodName": "getEvents",
+      "domain": "events",
+      "input": {
+        "query": {
+          "limit": 200,
+          "cursor": "string",
+          "with_nested_markets": false,
+          "with_milestones": false,
+          "status": "unopened",
+          "series_ticker": "string",
+          "tickers": "string",
+          "min_close_ts": 0,
+          "min_updated_ts": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "events": [
+              {
+                "event_ticker": "string",
+                "series_ticker": "string",
+                "sub_title": "string",
+                "title": "string",
+                "collateral_return_type": "string",
+                "mutually_exclusive": true,
+                "settlement_sources": [
+                  {}
+                ]
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetExchangeSchedule",
+      "methodName": "getExchangeSchedule",
+      "domain": "exchange",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "schedule": {
+              "standard_hours": [
+                {
+                  "start_time": "2019-08-24T14:15:22Z",
+                  "end_time": "2019-08-24T14:15:22Z",
+                  "monday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ],
+                  "tuesday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ],
+                  "wednesday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ],
+                  "thursday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ],
+                  "friday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ],
+                  "saturday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ],
+                  "sunday": [
+                    {
+                      "open_time": "string",
+                      "close_time": "string"
+                    }
+                  ]
+                }
+              ],
+              "maintenance_windows": [
+                {
+                  "start_datetime": "2019-08-24T14:15:22Z",
+                  "end_datetime": "2019-08-24T14:15:22Z"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetExchangeStatus",
+      "methodName": "getExchangeStatus",
+      "domain": "exchange",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "exchange_active": true,
+            "trading_active": true
+          }
+        },
+        {
+          "status": 500,
+          "body": {
+            "exchange_active": true,
+            "trading_active": true
+          }
+        },
+        {
+          "status": 503,
+          "body": {
+            "exchange_active": true,
+            "trading_active": true
+          }
+        },
+        {
+          "status": 504,
+          "body": {
+            "exchange_active": true,
+            "trading_active": true
+          }
+        }
+      ]
+    },
+    {
+      "operationId": "GetFCMEventContractDailyCap",
+      "methodName": "getFCMEventContractDailyCap",
+      "domain": "fcm",
+      "input": {
+        "query": {
+          "subtrader_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "subtrader_id": "string",
+            "limit": "0.5600",
+            "executed_utilization": "0.5600",
+            "resting_order_utilization": "0.5600",
+            "pending_order_utilization": "0.5600",
+            "cap_date": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetFCMFills",
+      "methodName": "getFCMFills",
+      "domain": "fcm",
+      "input": {
+        "query": {
+          "min_ts": 0,
+          "max_ts": 0,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "fills": [
+              {
+                "fill_id": "string",
+                "exchange_index": 0,
+                "ticker": "string",
+                "taker_outcome_side": "yes",
+                "count_fp": "10.00",
+                "yes_price_dollars": "0.5600"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 403
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetFCMOrders",
+      "methodName": "getFCMOrders",
+      "domain": "fcm",
+      "input": {
+        "query": {
+          "subtrader_id": "string",
+          "client_order_ids": "string",
+          "cursor": "string",
+          "event_ticker": "string",
+          "ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "status": "resting",
+          "limit": 1
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "orders": [
+              {
+                "order_id": "string",
+                "user_id": "string",
+                "client_order_id": "string",
+                "ticker": "string",
+                "outcome_side": "yes",
+                "book_side": "bid",
+                "type": "limit",
+                "status": "resting",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "fill_count_fp": "10.00",
+                "remaining_count_fp": "10.00",
+                "initial_count_fp": "10.00",
+                "taker_fill_cost_dollars": "0.5600",
+                "maker_fill_cost_dollars": "0.5600",
+                "taker_fees_dollars": "0.5600",
+                "maker_fees_dollars": "0.5600"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 403
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetFCMPositions",
+      "methodName": "getFCMPositions",
+      "domain": "fcm",
+      "input": {
+        "query": {
+          "subtrader_id": "string",
+          "ticker": "string",
+          "event_ticker": "string",
+          "count_filter": "string",
+          "settlement_status": "all",
+          "limit": 1,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market_positions": [
+              {
+                "ticker": "string",
+                "exchange_index": 0,
+                "total_traded_dollars": "0.5600",
+                "position_fp": "10.00",
+                "market_exposure_dollars": "0.5600",
+                "realized_pnl_dollars": "0.5600",
+                "fees_paid_dollars": "0.5600",
+                "last_updated_ts": "2019-08-24T14:15:22Z"
+              }
+            ],
+            "event_positions": [
+              {
+                "event_ticker": "string",
+                "total_cost_dollars": "0.5600",
+                "total_cost_shares_fp": "10.00",
+                "event_exposure_dollars": "0.5600",
+                "realized_pnl_dollars": "0.5600",
+                "fees_paid_dollars": "0.5600"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 403
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetFCMSubtraderBlockedCategories",
+      "methodName": "getFCMSubtraderBlockedCategories",
+      "domain": "fcm",
+      "input": {
+        "query": {
+          "subtrader_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "categories": [
+              "string"
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetFills",
+      "methodName": "getFills",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "ticker": "string",
+          "order_id": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "limit": 100,
+          "cursor": "string",
+          "subaccount": 0,
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "fills": [
+              {
+                "fill_id": "string",
+                "exchange_index": 0,
+                "trade_id": "string",
+                "order_id": "string",
+                "ticker": "string",
+                "market_ticker": "string",
+                "outcome_side": "yes",
+                "book_side": "bid",
+                "count_fp": "10.00",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "is_taker": true,
+                "fee_cost": "0.5600"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetFillsHistorical",
+      "methodName": "getFillsHistorical",
+      "domain": "historical",
+      "input": {
+        "query": {
+          "ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "limit": 100,
+          "cursor": "string",
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "fills": [
+              {
+                "fill_id": "string",
+                "exchange_index": 0,
+                "trade_id": "string",
+                "order_id": "string",
+                "ticker": "string",
+                "market_ticker": "string",
+                "outcome_side": "yes",
+                "book_side": "bid",
+                "count_fp": "10.00",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "is_taker": true,
+                "fee_cost": "0.5600"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetFiltersForSports",
+      "methodName": "getFiltersForSports",
+      "domain": "search",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "filters_by_sports": {
+              "property1": {
+                "scopes": [
+                  "string"
+                ],
+                "competitions": {
+                  "property1": {
+                    "scopes": [
+                      "string"
+                    ]
+                  },
+                  "property2": {
+                    "scopes": [
+                      "string"
+                    ]
+                  }
+                }
+              },
+              "property2": {
+                "scopes": [
+                  "string"
+                ],
+                "competitions": {
+                  "property1": {
+                    "scopes": [
+                      "string"
+                    ]
+                  },
+                  "property2": {
+                    "scopes": [
+                      "string"
+                    ]
+                  }
+                }
+              }
+            },
+            "sport_ordering": [
+              "string"
+            ]
+          }
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetGameStats",
+      "methodName": "getGameStats",
+      "domain": "liveData",
+      "input": {
+        "pathParameters": {
+          "milestone_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetHistoricalCutoff",
+      "methodName": "getHistoricalCutoff",
+      "domain": "historical",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market_settled_ts": "2019-08-24T14:15:22Z",
+            "trades_created_ts": "2019-08-24T14:15:22Z",
+            "orders_updated_ts": "2019-08-24T14:15:22Z"
+          }
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetHistoricalMarket",
+      "methodName": "getHistoricalMarket",
+      "domain": "historical",
+      "input": {
+        "pathParameters": {
+          "ticker": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market": {
+              "ticker": "string",
+              "event_ticker": "string",
+              "market_type": "binary",
+              "yes_sub_title": "string",
+              "no_sub_title": "string",
+              "created_time": "2019-08-24T14:15:22Z",
+              "updated_time": "2019-08-24T14:15:22Z",
+              "open_time": "2019-08-24T14:15:22Z",
+              "close_time": "2019-08-24T14:15:22Z",
+              "latest_expiration_time": "2019-08-24T14:15:22Z",
+              "settlement_timer_seconds": 0,
+              "status": "initialized",
+              "yes_bid_dollars": "0.5600",
+              "yes_bid_size_fp": "10.00",
+              "yes_ask_dollars": "0.5600",
+              "yes_ask_size_fp": "10.00",
+              "no_bid_dollars": "0.5600",
+              "no_ask_dollars": "0.5600",
+              "last_price_dollars": "0.5600",
+              "volume_fp": "10.00",
+              "volume_24h_fp": "10.00",
+              "result": "yes",
+              "can_close_early": true,
+              "open_interest_fp": "10.00",
+              "notional_value_dollars": "0.5600",
+              "previous_yes_bid_dollars": "0.5600",
+              "previous_yes_ask_dollars": "0.5600",
+              "previous_price_dollars": "0.5600",
+              "settlement_bounds_type": "default",
+              "expiration_value": "string",
+              "rules_primary": "string",
+              "rules_secondary": "string",
+              "price_level_structure": "string",
+              "price_ranges": [
+                {
+                  "start": "string",
+                  "end": "string",
+                  "step": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetHistoricalMarkets",
+      "methodName": "getHistoricalMarkets",
+      "domain": "historical",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string",
+          "tickers": "string",
+          "event_ticker": "string",
+          "series_ticker": "string",
+          "mve_filter": "exclude"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "markets": [
+              {
+                "ticker": "string",
+                "event_ticker": "string",
+                "market_type": "binary",
+                "yes_sub_title": "string",
+                "no_sub_title": "string",
+                "created_time": "2019-08-24T14:15:22Z",
+                "updated_time": "2019-08-24T14:15:22Z",
+                "open_time": "2019-08-24T14:15:22Z",
+                "close_time": "2019-08-24T14:15:22Z",
+                "latest_expiration_time": "2019-08-24T14:15:22Z",
+                "settlement_timer_seconds": 0,
+                "status": "initialized",
+                "yes_bid_dollars": "0.5600",
+                "yes_bid_size_fp": "10.00",
+                "yes_ask_dollars": "0.5600",
+                "yes_ask_size_fp": "10.00",
+                "no_bid_dollars": "0.5600",
+                "no_ask_dollars": "0.5600",
+                "last_price_dollars": "0.5600",
+                "volume_fp": "10.00",
+                "volume_24h_fp": "10.00",
+                "result": "yes",
+                "can_close_early": true,
+                "open_interest_fp": "10.00",
+                "notional_value_dollars": "0.5600",
+                "previous_yes_bid_dollars": "0.5600",
+                "previous_yes_ask_dollars": "0.5600",
+                "previous_price_dollars": "0.5600",
+                "settlement_bounds_type": "default",
+                "expiration_value": "string",
+                "rules_primary": "string",
+                "rules_secondary": "string",
+                "price_level_structure": "string",
+                "price_ranges": [
+                  {
+                    "start": "string",
+                    "end": "string",
+                    "step": "string"
+                  }
+                ]
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetHistoricalOrders",
+      "methodName": "getHistoricalOrders",
+      "domain": "historical",
+      "input": {
+        "query": {
+          "ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "limit": 100,
+          "cursor": "string",
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "orders": [
+              {
+                "order_id": "string",
+                "user_id": "string",
+                "client_order_id": "string",
+                "ticker": "string",
+                "outcome_side": "yes",
+                "book_side": "bid",
+                "type": "limit",
+                "status": "resting",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "fill_count_fp": "10.00",
+                "remaining_count_fp": "10.00",
+                "initial_count_fp": "10.00",
+                "taker_fill_cost_dollars": "0.5600",
+                "maker_fill_cost_dollars": "0.5600",
+                "taker_fees_dollars": "0.5600",
+                "maker_fees_dollars": "0.5600"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetHistoricalPositions",
+      "methodName": "getHistoricalPositions",
+      "domain": "historical",
+      "input": {
+        "query": {
+          "ticker": "string",
+          "event_ticker": "string",
+          "subaccount": 0,
+          "limit": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market_positions": [
+              {
+                "ticker": "string",
+                "exchange_index": 0,
+                "total_traded_dollars": "0.5600",
+                "position_fp": "10.00",
+                "market_exposure_dollars": "0.5600",
+                "realized_pnl_dollars": "0.5600",
+                "fees_paid_dollars": "0.5600",
+                "last_updated_ts": "2019-08-24T14:15:22Z"
+              }
+            ],
+            "event_positions": [
+              {
+                "event_ticker": "string",
+                "total_cost_dollars": "0.5600",
+                "total_cost_shares_fp": "10.00",
+                "event_exposure_dollars": "0.5600",
+                "realized_pnl_dollars": "0.5600",
+                "fees_paid_dollars": "0.5600"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetIncentivePrograms",
+      "methodName": "getIncentivePrograms",
+      "domain": "incentivePrograms",
+      "input": {
+        "query": {
+          "status": "all",
+          "type": "all",
+          "incentive_description": "string",
+          "limit": 1,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "incentive_programs": [
+              {
+                "id": "string",
+                "market_id": "string",
+                "market_ticker": "string",
+                "incentive_type": "liquidity",
+                "incentive_description": "string",
+                "start_date": "2019-08-24T14:15:22Z",
+                "end_date": "2019-08-24T14:15:22Z",
+                "period_reward": 0,
+                "paid_out": true
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetIntraExchangeInstanceTransfer",
+      "methodName": "getIntraExchangeInstanceTransfer",
+      "domain": "portfolio",
+      "input": {
+        "pathParameters": {
+          "transfer_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "transfer": {
+              "transfer_id": "string",
+              "source": "event_contract",
+              "destination": "event_contract",
+              "source_exchange_shard": 0,
+              "destination_exchange_shard": 0,
+              "amount": "0.5600",
+              "status": "pending",
+              "created_ts": 0
+            }
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetIntraExchangeInstanceTransfers",
+      "methodName": "getIntraExchangeInstanceTransfers",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "transfers": [
+              {
+                "transfer_id": "string",
+                "source": "event_contract",
+                "destination": "event_contract",
+                "source_exchange_shard": 0,
+                "destination_exchange_shard": 0,
+                "amount": "0.5600",
+                "status": "pending",
+                "created_ts": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetLiveData",
+      "methodName": "getLiveData",
+      "domain": "liveData",
+      "input": {
+        "pathParameters": {
+          "type": "string",
+          "milestone_id": "string"
+        },
+        "query": {
+          "include_player_stats": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "live_data": {
+              "type": "string",
+              "details": {},
+              "milestone_id": "string"
+            }
+          }
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetLiveDataByMilestone",
+      "methodName": "getLiveDataByMilestone",
+      "domain": "liveData",
+      "input": {
+        "pathParameters": {
+          "milestone_id": "string"
+        },
+        "query": {
+          "include_player_stats": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "live_data": {
+              "type": "string",
+              "details": {},
+              "milestone_id": "string"
+            }
+          }
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetLiveDatas",
+      "methodName": "getLiveDatas",
+      "domain": "liveData",
+      "input": {
+        "query": {
+          "milestone_ids": [
+            "string"
+          ],
+          "include_player_stats": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "live_datas": [
+              {
+                "type": "string",
+                "details": {},
+                "milestone_id": "string"
+              }
+            ]
+          }
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarket",
+      "methodName": "getMarket",
+      "domain": "markets",
+      "input": {
+        "pathParameters": {
+          "ticker": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market": {
+              "ticker": "string",
+              "event_ticker": "string",
+              "market_type": "binary",
+              "yes_sub_title": "string",
+              "no_sub_title": "string",
+              "created_time": "2019-08-24T14:15:22Z",
+              "updated_time": "2019-08-24T14:15:22Z",
+              "open_time": "2019-08-24T14:15:22Z",
+              "close_time": "2019-08-24T14:15:22Z",
+              "latest_expiration_time": "2019-08-24T14:15:22Z",
+              "settlement_timer_seconds": 0,
+              "status": "initialized",
+              "yes_bid_dollars": "0.5600",
+              "yes_bid_size_fp": "10.00",
+              "yes_ask_dollars": "0.5600",
+              "yes_ask_size_fp": "10.00",
+              "no_bid_dollars": "0.5600",
+              "no_ask_dollars": "0.5600",
+              "last_price_dollars": "0.5600",
+              "volume_fp": "10.00",
+              "volume_24h_fp": "10.00",
+              "result": "yes",
+              "can_close_early": true,
+              "open_interest_fp": "10.00",
+              "notional_value_dollars": "0.5600",
+              "previous_yes_bid_dollars": "0.5600",
+              "previous_yes_ask_dollars": "0.5600",
+              "previous_price_dollars": "0.5600",
+              "settlement_bounds_type": "default",
+              "expiration_value": "string",
+              "rules_primary": "string",
+              "rules_secondary": "string",
+              "price_level_structure": "string",
+              "price_ranges": [
+                {
+                  "start": "string",
+                  "end": "string",
+                  "step": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarketCandlesticks",
+      "methodName": "getMarketCandlesticks",
+      "domain": "markets",
+      "input": {
+        "pathParameters": {
+          "series_ticker": "string",
+          "ticker": "string"
+        },
+        "query": {
+          "start_ts": 0,
+          "end_ts": 0,
+          "period_interval": 1,
+          "include_latest_before_start": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "ticker": "string",
+            "candlesticks": [
+              {
+                "end_period_ts": 0,
+                "yes_bid": {
+                  "open_dollars": "0.5600",
+                  "low_dollars": "0.5600",
+                  "high_dollars": "0.5600",
+                  "close_dollars": "0.5600"
+                },
+                "yes_ask": {
+                  "open_dollars": "0.5600",
+                  "low_dollars": "0.5600",
+                  "high_dollars": "0.5600",
+                  "close_dollars": "0.5600"
+                },
+                "price": {},
+                "volume_fp": "10.00",
+                "open_interest_fp": "10.00"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarketCandlesticksByEvent",
+      "methodName": "getMarketCandlesticksByEvent",
+      "domain": "events",
+      "input": {
+        "pathParameters": {
+          "ticker": "string",
+          "series_ticker": "string"
+        },
+        "query": {
+          "start_ts": 0,
+          "end_ts": 0,
+          "period_interval": 1
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market_tickers": [
+              "string"
+            ],
+            "market_candlesticks": [
+              [
+                {
+                  "end_period_ts": 0,
+                  "yes_bid": {
+                    "open_dollars": "0.5600",
+                    "low_dollars": "0.5600",
+                    "high_dollars": "0.5600",
+                    "close_dollars": "0.5600"
+                  },
+                  "yes_ask": {
+                    "open_dollars": "0.5600",
+                    "low_dollars": "0.5600",
+                    "high_dollars": "0.5600",
+                    "close_dollars": "0.5600"
+                  },
+                  "price": {},
+                  "volume_fp": "10.00",
+                  "open_interest_fp": "10.00"
+                }
+              ]
+            ],
+            "adjusted_end_ts": 0
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarketCandlesticksHistorical",
+      "methodName": "getMarketCandlesticksHistorical",
+      "domain": "historical",
+      "input": {
+        "pathParameters": {
+          "ticker": "string"
+        },
+        "query": {
+          "start_ts": 0,
+          "end_ts": 0,
+          "period_interval": 1
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "ticker": "string",
+            "candlesticks": [
+              {
+                "end_period_ts": 0,
+                "yes_bid": {
+                  "open": "0.5600",
+                  "low": "0.5600",
+                  "high": "0.5600",
+                  "close": "0.5600"
+                },
+                "yes_ask": {
+                  "open": "0.5600",
+                  "low": "0.5600",
+                  "high": "0.5600",
+                  "close": "0.5600"
+                },
+                "price": {
+                  "open": "0.5600",
+                  "low": "0.5600",
+                  "high": "0.5600",
+                  "close": "0.5600",
+                  "mean": "0.5600",
+                  "previous": "0.5600"
+                },
+                "volume": "10.00",
+                "open_interest": "10.00"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarketOrderbook",
+      "methodName": "getMarketOrderbook",
+      "domain": "markets",
+      "input": {
+        "pathParameters": {
+          "ticker": "string"
+        },
+        "query": {
+          "depth": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "orderbook_fp": {
+              "yes_dollars": [
+                [
+                  "0.1500",
+                  "100.00"
+                ]
+              ],
+              "no_dollars": [
+                [
+                  "0.1500",
+                  "100.00"
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarketOrderbooks",
+      "methodName": "getMarketOrderbooks",
+      "domain": "markets",
+      "input": {
+        "query": {
+          "tickers": [
+            "string"
+          ]
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "orderbooks": [
+              {
+                "ticker": "string",
+                "orderbook_fp": {
+                  "yes_dollars": [
+                    [
+                      "0.1500",
+                      "100.00"
+                    ]
+                  ],
+                  "no_dollars": [
+                    [
+                      "0.1500",
+                      "100.00"
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetMarkets",
+      "methodName": "getMarkets",
+      "domain": "markets",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string",
+          "event_ticker": "string",
+          "series_ticker": "string",
+          "min_created_ts": 0,
+          "max_created_ts": 0,
+          "min_updated_ts": 0,
+          "max_updated_ts": 0,
+          "max_close_ts": 0,
+          "min_close_ts": 0,
+          "min_settled_ts": 0,
+          "max_settled_ts": 0,
+          "status": "unopened",
+          "tickers": "string",
+          "mve_filter": "only"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "markets": [
+              {
+                "ticker": "string",
+                "event_ticker": "string",
+                "market_type": "binary",
+                "yes_sub_title": "string",
+                "no_sub_title": "string",
+                "created_time": "2019-08-24T14:15:22Z",
+                "updated_time": "2019-08-24T14:15:22Z",
+                "open_time": "2019-08-24T14:15:22Z",
+                "close_time": "2019-08-24T14:15:22Z",
+                "latest_expiration_time": "2019-08-24T14:15:22Z",
+                "settlement_timer_seconds": 0,
+                "status": "initialized",
+                "yes_bid_dollars": "0.5600",
+                "yes_bid_size_fp": "10.00",
+                "yes_ask_dollars": "0.5600",
+                "yes_ask_size_fp": "10.00",
+                "no_bid_dollars": "0.5600",
+                "no_ask_dollars": "0.5600",
+                "last_price_dollars": "0.5600",
+                "volume_fp": "10.00",
+                "volume_24h_fp": "10.00",
+                "result": "yes",
+                "can_close_early": true,
+                "open_interest_fp": "10.00",
+                "notional_value_dollars": "0.5600",
+                "previous_yes_bid_dollars": "0.5600",
+                "previous_yes_ask_dollars": "0.5600",
+                "previous_price_dollars": "0.5600",
+                "settlement_bounds_type": "default",
+                "expiration_value": "string",
+                "rules_primary": "string",
+                "rules_secondary": "string",
+                "price_level_structure": "string",
+                "price_ranges": [
+                  {
+                    "start": "string",
+                    "end": "string",
+                    "step": "string"
+                  }
+                ]
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMilestone",
+      "methodName": "getMilestone",
+      "domain": "milestones",
+      "input": {
+        "pathParameters": {
+          "milestone_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "milestone": {
+              "id": "string",
+              "category": "Sports",
+              "type": "football_game",
+              "start_date": "2019-08-24T14:15:22Z",
+              "related_event_tickers": [
+                "string"
+              ],
+              "title": "string",
+              "notification_message": "string",
+              "details": {},
+              "primary_event_tickers": [
+                "string"
+              ],
+              "last_updated_ts": "2019-08-24T14:15:22Z"
+            }
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMilestones",
+      "methodName": "getMilestones",
+      "domain": "milestones",
+      "input": {
+        "query": {
+          "limit": 1,
+          "minimum_start_date": "2019-08-24T14:15:22Z",
+          "category": "Sports",
+          "competition": "Pro Football",
+          "source_id": "string",
+          "type": "football_game",
+          "related_event_ticker": "string",
+          "cursor": "string",
+          "min_updated_ts": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "milestones": [
+              {
+                "id": "string",
+                "category": "Sports",
+                "type": "football_game",
+                "start_date": "2019-08-24T14:15:22Z",
+                "related_event_tickers": [
+                  "string"
+                ],
+                "title": "string",
+                "notification_message": "string",
+                "details": {},
+                "primary_event_tickers": [
+                  "string"
+                ],
+                "last_updated_ts": "2019-08-24T14:15:22Z"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetMultivariateEventCollection",
+      "methodName": "getMultivariateEventCollection",
+      "domain": "multivariate",
+      "input": {
+        "pathParameters": {
+          "collection_ticker": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "multivariate_contract": {
+              "collection_ticker": "string",
+              "series_ticker": "string",
+              "title": "string",
+              "description": "string",
+              "open_date": "2019-08-24T14:15:22Z",
+              "close_date": "2019-08-24T14:15:22Z",
+              "associated_events": [
+                {
+                  "ticker": "string",
+                  "is_yes_only": true,
+                  "active_quoters": [
+                    "string"
+                  ]
+                }
+              ],
+              "associated_event_tickers": [
+                "string"
+              ],
+              "is_ordered": true,
+              "is_single_market_per_event": true,
+              "is_all_yes": true,
+              "size_min": 0,
+              "size_max": 0,
+              "functional_description": "string",
+              "price_level_structure": "string",
+              "price_ranges": [
+                {
+                  "start": "string",
+                  "end": "string",
+                  "step": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetMultivariateEventCollections",
+      "methodName": "getMultivariateEventCollections",
+      "domain": "multivariate",
+      "input": {
+        "query": {
+          "status": "unopened",
+          "associated_event_ticker": "string",
+          "series_ticker": "string",
+          "limit": 1,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "multivariate_contracts": [
+              {
+                "collection_ticker": "string",
+                "series_ticker": "string",
+                "title": "string",
+                "description": "string",
+                "open_date": "2019-08-24T14:15:22Z",
+                "close_date": "2019-08-24T14:15:22Z",
+                "associated_events": [
+                  {
+                    "ticker": "string",
+                    "is_yes_only": true,
+                    "active_quoters": [
+                      "string"
+                    ]
+                  }
+                ],
+                "associated_event_tickers": [
+                  "string"
+                ],
+                "is_ordered": true,
+                "is_single_market_per_event": true,
+                "is_all_yes": true,
+                "size_min": 0,
+                "size_max": 0,
+                "functional_description": "string",
+                "price_level_structure": "string",
+                "price_ranges": [
+                  {
+                    "start": "string",
+                    "end": "string",
+                    "step": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetMultivariateEvents",
+      "methodName": "getMultivariateEvents",
+      "domain": "events",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string",
+          "series_ticker": "string",
+          "collection_ticker": "string",
+          "with_nested_markets": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "events": [
+              {
+                "event_ticker": "string",
+                "series_ticker": "string",
+                "sub_title": "string",
+                "title": "string",
+                "collateral_return_type": "string",
+                "mutually_exclusive": true,
+                "settlement_sources": [
+                  {}
+                ]
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetOrder",
+      "methodName": "getOrder",
+      "domain": "orders",
+      "input": {
+        "pathParameters": {
+          "order_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "order": {
+              "order_id": "string",
+              "user_id": "string",
+              "client_order_id": "string",
+              "ticker": "string",
+              "outcome_side": "yes",
+              "book_side": "bid",
+              "type": "limit",
+              "status": "resting",
+              "yes_price_dollars": "0.5600",
+              "no_price_dollars": "0.5600",
+              "fill_count_fp": "10.00",
+              "remaining_count_fp": "10.00",
+              "initial_count_fp": "10.00",
+              "taker_fill_cost_dollars": "0.5600",
+              "maker_fill_cost_dollars": "0.5600",
+              "taker_fees_dollars": "0.5600",
+              "maker_fees_dollars": "0.5600"
+            }
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetOrderGroup",
+      "methodName": "getOrderGroup",
+      "domain": "orderGroups",
+      "input": {
+        "pathParameters": {
+          "order_group_id": "string"
+        },
+        "query": {
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "is_auto_cancel_enabled": true,
+            "orders": [
+              "string"
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetOrderGroups",
+      "methodName": "getOrderGroups",
+      "domain": "orderGroups",
+      "input": {
+        "query": {
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetOrderQueuePosition",
+      "methodName": "getOrderQueuePosition",
+      "domain": "orders",
+      "input": {
+        "pathParameters": {
+          "order_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "queue_position_fp": "10.00"
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetOrderQueuePositions",
+      "methodName": "getOrderQueuePositions",
+      "domain": "orders",
+      "input": {
+        "query": {
+          "market_tickers": "string",
+          "event_ticker": "string",
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "queue_positions": [
+              {
+                "order_id": "string",
+                "market_ticker": "string",
+                "queue_position_fp": "10.00"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetOrders",
+      "methodName": "getOrders",
+      "domain": "orders",
+      "input": {
+        "query": {
+          "ticker": "string",
+          "event_ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "status": "string",
+          "limit": 100,
+          "cursor": "string",
+          "subaccount": 0,
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "orders": [
+              {
+                "order_id": "string",
+                "user_id": "string",
+                "client_order_id": "string",
+                "ticker": "string",
+                "outcome_side": "yes",
+                "book_side": "bid",
+                "type": "limit",
+                "status": "resting",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "fill_count_fp": "10.00",
+                "remaining_count_fp": "10.00",
+                "initial_count_fp": "10.00",
+                "taker_fill_cost_dollars": "0.5600",
+                "maker_fill_cost_dollars": "0.5600",
+                "taker_fees_dollars": "0.5600",
+                "maker_fees_dollars": "0.5600"
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetPortfolioRestingOrderTotalValue",
+      "methodName": "getPortfolioRestingOrderTotalValue",
+      "domain": "portfolio",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "total_resting_order_value": 0,
+            "resting_order_value_breakdown": [
+              {
+                "exchange_index": 0,
+                "balance": "0.5600"
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetPositions",
+      "methodName": "getPositions",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "cursor": "string",
+          "limit": 100,
+          "count_filter": "string",
+          "settlement_status": "unsettled",
+          "ticker": "string",
+          "event_ticker": "string",
+          "subaccount": 0,
+          "exchange_index": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "market_positions": [
+              {
+                "ticker": "string",
+                "exchange_index": 0,
+                "total_traded_dollars": "0.5600",
+                "position_fp": "10.00",
+                "market_exposure_dollars": "0.5600",
+                "realized_pnl_dollars": "0.5600",
+                "fees_paid_dollars": "0.5600",
+                "last_updated_ts": "2019-08-24T14:15:22Z"
+              }
+            ],
+            "event_positions": [
+              {
+                "event_ticker": "string",
+                "total_cost_dollars": "0.5600",
+                "total_cost_shares_fp": "10.00",
+                "event_exposure_dollars": "0.5600",
+                "realized_pnl_dollars": "0.5600",
+                "fees_paid_dollars": "0.5600"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetQuote",
+      "methodName": "getQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "quote_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "quote": {
+              "id": "string",
+              "rfq_id": "string",
+              "creator_id": "string",
+              "rfq_creator_id": "string",
+              "market_ticker": "string",
+              "contracts_fp": "10.00",
+              "yes_bid_dollars": "0.5600",
+              "no_bid_dollars": "0.5600",
+              "created_ts": "2019-08-24T14:15:22Z",
+              "updated_ts": "2019-08-24T14:15:22Z",
+              "status": "open"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetQuotes",
+      "methodName": "getQuotes",
+      "domain": "communications",
+      "input": {
+        "query": {
+          "cursor": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "limit": 500,
+          "status": "string",
+          "quote_creator_user_id": "string",
+          "user_filter": "self",
+          "rfq_user_filter": "self",
+          "rfq_creator_user_id": "string",
+          "rfq_creator_subtrader_id": "string",
+          "rfq_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "quotes": [
+              {
+                "id": "string",
+                "rfq_id": "string",
+                "creator_id": "string",
+                "rfq_creator_id": "string",
+                "market_ticker": "string",
+                "contracts_fp": "10.00",
+                "yes_bid_dollars": "0.5600",
+                "no_bid_dollars": "0.5600",
+                "created_ts": "2019-08-24T14:15:22Z",
+                "updated_ts": "2019-08-24T14:15:22Z",
+                "status": "open"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetRFQ",
+      "methodName": "getRFQ",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "rfq_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "rfq": {
+              "id": "string",
+              "creator_id": "string",
+              "market_ticker": "string",
+              "contracts_fp": "10.00",
+              "status": "open",
+              "created_ts": "2019-08-24T14:15:22Z"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetRFQQuote",
+      "methodName": "getRFQQuote",
+      "domain": "communications",
+      "input": {
+        "pathParameters": {
+          "rfq_id": "string",
+          "quote_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "quote": {
+              "id": "string",
+              "rfq_id": "string",
+              "creator_id": "string",
+              "rfq_creator_id": "string",
+              "market_ticker": "string",
+              "contracts_fp": "10.00",
+              "yes_bid_dollars": "0.5600",
+              "no_bid_dollars": "0.5600",
+              "created_ts": "2019-08-24T14:15:22Z",
+              "updated_ts": "2019-08-24T14:15:22Z",
+              "status": "open"
+            }
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetRFQs",
+      "methodName": "getRFQs",
+      "domain": "communications",
+      "input": {
+        "query": {
+          "cursor": "string",
+          "event_ticker": "string",
+          "market_ticker": "string",
+          "subaccount": 0,
+          "limit": 100,
+          "status": "string",
+          "creator_user_id": "string",
+          "user_filter": "self"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "rfqs": [
+              {
+                "id": "string",
+                "creator_id": "string",
+                "market_ticker": "string",
+                "contracts_fp": "10.00",
+                "status": "open",
+                "created_ts": "2019-08-24T14:15:22Z"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetSeries",
+      "methodName": "getSeries",
+      "domain": "markets",
+      "input": {
+        "pathParameters": {
+          "series_ticker": "string"
+        },
+        "query": {
+          "include_volume": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "series": {
+              "ticker": "string",
+              "frequency": "string",
+              "title": "string",
+              "category": "string",
+              "categories": [
+                "string"
+              ],
+              "tags": [
+                "string"
+              ],
+              "settlement_sources": [
+                {}
+              ],
+              "contract_url": "string",
+              "contract_terms_url": "string",
+              "fee_type": "quadratic",
+              "fee_multiplier": 0.1,
+              "additional_prohibitions": [
+                "string"
+              ]
+            }
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetSeriesFeeChanges",
+      "methodName": "getSeriesFeeChanges",
+      "domain": "exchange",
+      "input": {
+        "query": {
+          "series_ticker": "string",
+          "show_historical": false
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "series_fee_change_arr": [
+              {
+                "id": "string",
+                "series_ticker": "string",
+                "fee_type": "quadratic",
+                "fee_multiplier": 0.1,
+                "scheduled_ts": "2019-08-24T14:15:22Z"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetSeriesList",
+      "methodName": "getSeriesList",
+      "domain": "markets",
+      "input": {
+        "query": {
+          "category": "string",
+          "tags": "string",
+          "include_product_metadata": false,
+          "include_volume": false,
+          "min_updated_ts": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "series": [
+              {
+                "ticker": "string",
+                "frequency": "string",
+                "title": "string",
+                "category": "string",
+                "categories": [
+                  "string"
+                ],
+                "tags": [
+                  "string"
+                ],
+                "settlement_sources": [
+                  {}
+                ],
+                "contract_url": "string",
+                "contract_terms_url": "string",
+                "fee_type": "quadratic",
+                "fee_multiplier": 0.1,
+                "additional_prohibitions": [
+                  "string"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetSettlements",
+      "methodName": "getSettlements",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string",
+          "ticker": "string",
+          "event_ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "subaccount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "settlements": [
+              {
+                "ticker": "string",
+                "exchange_index": 0,
+                "event_ticker": "string",
+                "market_result": "yes",
+                "yes_count_fp": "10.00",
+                "yes_total_cost_dollars": "0.5600",
+                "no_count_fp": "10.00",
+                "no_total_cost_dollars": "0.5600",
+                "revenue": 0,
+                "settled_time": "2019-08-24T14:15:22Z",
+                "fee_cost": "0.5600"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetStructuredTarget",
+      "methodName": "getStructuredTarget",
+      "domain": "structuredTargets",
+      "input": {
+        "pathParameters": {
+          "structured_target_id": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 404
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetStructuredTargets",
+      "methodName": "getStructuredTargets",
+      "domain": "structuredTargets",
+      "input": {
+        "query": {
+          "ids": [
+            "string"
+          ],
+          "type": "basketball_player",
+          "competition": "NBA",
+          "page_size": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetSubaccountBalances",
+      "methodName": "getSubaccountBalances",
+      "domain": "portfolio",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "subaccount_balances": [
+              {
+                "subaccount_number": 0,
+                "exchange_index": 0,
+                "balance": "0.5600",
+                "updated_ts": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetSubaccountNetting",
+      "methodName": "getSubaccountNetting",
+      "domain": "portfolio",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "netting_configs": [
+              {
+                "subaccount_number": 0,
+                "enabled": true,
+                "exchange_index": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetSubaccountTransfers",
+      "methodName": "getSubaccountTransfers",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "transfers": [
+              {
+                "transfer_id": "string",
+                "from_subaccount": 0,
+                "to_subaccount": 0,
+                "amount_cents": 0,
+                "created_ts": 0,
+                "exchange_index": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetTagsForSeriesCategories",
+      "methodName": "getTagsForSeriesCategories",
+      "domain": "search",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "tags_by_categories": {
+              "property1": [
+                "string"
+              ],
+              "property2": [
+                "string"
+              ]
+            }
+          }
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetTargetBalanceAllocation",
+      "methodName": "getTargetBalanceAllocation",
+      "domain": "portfolio",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "allocations": [
+              {
+                "exchange_index": 0,
+                "percent": 0
+              }
+            ],
+            "resting_margin_reservation": "none"
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetTrades",
+      "methodName": "getTrades",
+      "domain": "markets",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string",
+          "ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "is_block_trade": true
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "trades": [
+              {
+                "trade_id": "string",
+                "ticker": "string",
+                "count_fp": "10.00",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "taker_outcome_side": "yes",
+                "taker_book_side": "bid",
+                "created_time": "2019-08-24T14:15:22Z",
+                "is_block_trade": true
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetTradesHistorical",
+      "methodName": "getTradesHistorical",
+      "domain": "historical",
+      "input": {
+        "query": {
+          "ticker": "string",
+          "min_ts": 0,
+          "max_ts": 0,
+          "limit": 100,
+          "cursor": "string",
+          "is_block_trade": true
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "trades": [
+              {
+                "trade_id": "string",
+                "ticker": "string",
+                "count_fp": "10.00",
+                "yes_price_dollars": "0.5600",
+                "no_price_dollars": "0.5600",
+                "taker_outcome_side": "yes",
+                "taker_book_side": "bid",
+                "created_time": "2019-08-24T14:15:22Z",
+                "is_block_trade": true
+              }
+            ],
+            "cursor": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "GetUserDataTimestamp",
+      "methodName": "getUserDataTimestamp",
+      "domain": "exchange",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "as_of_time": "2019-08-24T14:15:22Z"
+          }
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetWeatherIndex",
+      "methodName": "getWeatherIndex",
+      "domain": "liveData",
+      "input": {
+        "pathParameters": {
+          "city": "string"
+        },
+        "query": {
+          "from": 0,
+          "to": 0,
+          "last_sec": 0,
+          "detailed": true
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "city": "string",
+            "units": "string",
+            "timeseries": [
+              {
+                "t": 0,
+                "status": "string"
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetWeatherIndexCalibrations",
+      "methodName": "getWeatherIndexCalibrations",
+      "domain": "liveData",
+      "input": {
+        "pathParameters": {
+          "city": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "city": "string",
+            "units": "string",
+            "calibrations": [
+              {
+                "config_version": "string",
+                "effective_at_ms": 0,
+                "city_reference_c": 0.1,
+                "stations": [
+                  {
+                    "station_id": "string",
+                    "weight": 0.1,
+                    "offset_c": 0.1
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "status": 400
+        },
+        {
+          "status": 500
+        }
+      ]
+    },
+    {
+      "operationId": "GetWithdrawals",
+      "methodName": "getWithdrawals",
+      "domain": "portfolio",
+      "input": {
+        "query": {
+          "limit": 100,
+          "cursor": "string"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "withdrawals": [
+              {
+                "id": "string",
+                "status": "pending",
+                "type": "ach",
+                "amount_cents": 0,
+                "fee_cents": 0,
+                "created_ts": 0
+              }
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "IntraExchangeInstanceTransfer",
+      "methodName": "intraExchangeInstanceTransfer",
+      "domain": "portfolio",
+      "input": {
+        "body": {
+          "source": "event_contract",
+          "destination": "event_contract",
+          "amount": 0
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "transfer_id": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "ListFCMSubtraders",
+      "methodName": "listFCMSubtraders",
+      "domain": "fcm",
+      "input": {},
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "subtraders": [
+              {
+                "subtrader_id": "string",
+                "exchange_indices": [
+                  0
+                ],
+                "trading_blocked": true,
+                "fcm_trading_blocked": true,
+                "propagation_pending": true
+              }
+            ]
+          }
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "ProposeBlockTrade",
+      "methodName": "proposeBlockTrade",
+      "domain": "communications",
+      "input": {
+        "body": {
+          "buyer_user_id": "string",
+          "seller_user_id": "string",
+          "market_ticker": "string",
+          "price_centi_cents": 1,
+          "centicount": 1,
+          "maker_side": "yes",
+          "expiration_ts": "2019-08-24T14:15:22Z"
+        }
+      },
+      "responses": [
+        {
+          "status": 201,
+          "body": {
+            "block_trade_proposal_id": "string"
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "ResetOrderGroup",
+      "methodName": "resetOrderGroup",
+      "domain": "orderGroups",
+      "input": {
+        "pathParameters": {
+          "order_group_id": "string"
+        },
+        "query": {
+          "subaccount": 0,
+          "exchange_index": 0
+        },
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "SetTargetBalanceAllocation",
+      "methodName": "setTargetBalanceAllocation",
+      "domain": "portfolio",
+      "input": {
+        "body": {
+          "allocations": [
+            {
+              "exchange_index": 0,
+              "percent": 0
+            }
+          ]
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "TriggerOrderGroup",
+      "methodName": "triggerOrderGroup",
+      "domain": "orderGroups",
+      "input": {
+        "pathParameters": {
+          "order_group_id": "string"
+        },
+        "query": {
+          "subaccount": 0,
+          "exchange_index": 0
+        },
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "UpdateFCMEventContractDailyCap",
+      "methodName": "updateFCMEventContractDailyCap",
+      "domain": "fcm",
+      "input": {
+        "body": {
+          "subtrader_id": "string",
+          "limit": "0.5600"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "UpdateFCMSubtraderBlockedCategories",
+      "methodName": "updateFCMSubtraderBlockedCategories",
+      "domain": "fcm",
+      "input": {
+        "body": {
+          "subtrader_id": "string",
+          "category": "string",
+          "blocked": true
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "categories": [
+              "string"
+            ]
+          }
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 403,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "UpdateOrderGroupLimit",
+      "methodName": "updateOrderGroupLimit",
+      "domain": "orderGroups",
+      "input": {
+        "pathParameters": {
+          "order_group_id": "string"
+        },
+        "query": {
+          "subaccount": 0,
+          "exchange_index": 0
+        },
+        "body": {}
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {}
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 404,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "UpdateSubaccountNetting",
+      "methodName": "updateSubaccountNetting",
+      "domain": "portfolio",
+      "input": {
+        "body": {
+          "subaccount_number": 0,
+          "enabled": true
+        }
+      },
+      "responses": [
+        {
+          "status": 200
+        },
+        {
+          "status": 400,
+          "body": {}
+        },
+        {
+          "status": 401,
+          "body": {}
+        },
+        {
+          "status": 500,
+          "body": {}
+        }
+      ]
+    },
+    {
+      "operationId": "UpgradeAccountApiUsageLevel",
+      "methodName": "upgradeAccountApiUsageLevel",
+      "domain": "account",
+      "input": {},
+      "responses": [
+        {
+          "status": 201
+        },
+        {
+          "status": 401
+        },
+        {
+          "status": 403
+        },
+        {
+          "status": 429
+        },
+        {
+          "status": 500
+        }
+      ]
+    }
+  ],
+  "schemaFixtures": [
+    {
+      "name": "FixedPointDollars",
+      "value": "0.5600"
+    },
+    {
+      "name": "FixedPointCount",
+      "value": "10.00"
+    },
+    {
+      "name": "ExchangeIndex",
+      "value": 0
+    },
+    {
+      "name": "FeeType",
+      "value": "quadratic"
+    },
+    {
+      "name": "GetMarketCandlesticksHistoricalResponse",
+      "value": {
+        "ticker": "string",
+        "candlesticks": [
+          {
+            "end_period_ts": 0,
+            "yes_bid": {
+              "open": "0.5600",
+              "low": "0.5600",
+              "high": "0.5600",
+              "close": "0.5600"
+            },
+            "yes_ask": {
+              "open": "0.5600",
+              "low": "0.5600",
+              "high": "0.5600",
+              "close": "0.5600"
+            },
+            "price": {
+              "open": "0.5600",
+              "low": "0.5600",
+              "high": "0.5600",
+              "close": "0.5600",
+              "mean": "0.5600",
+              "previous": "0.5600"
+            },
+            "volume": "10.00",
+            "open_interest": "10.00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketCandlestickHistorical",
+      "value": {
+        "end_period_ts": 0,
+        "yes_bid": {
+          "open": "0.5600",
+          "low": "0.5600",
+          "high": "0.5600",
+          "close": "0.5600"
+        },
+        "yes_ask": {
+          "open": "0.5600",
+          "low": "0.5600",
+          "high": "0.5600",
+          "close": "0.5600"
+        },
+        "price": {
+          "open": "0.5600",
+          "low": "0.5600",
+          "high": "0.5600",
+          "close": "0.5600",
+          "mean": "0.5600",
+          "previous": "0.5600"
+        },
+        "volume": "10.00",
+        "open_interest": "10.00"
+      }
+    },
+    {
+      "name": "BidAskDistributionHistorical",
+      "value": {
+        "open": "0.5600",
+        "low": "0.5600",
+        "high": "0.5600",
+        "close": "0.5600"
+      }
+    },
+    {
+      "name": "PriceDistributionHistorical",
+      "value": {
+        "open": "0.5600",
+        "low": "0.5600",
+        "high": "0.5600",
+        "close": "0.5600",
+        "mean": "0.5600",
+        "previous": "0.5600"
+      }
+    },
+    {
+      "name": "ErrorResponse",
+      "value": {}
+    },
+    {
+      "name": "SelfTradePreventionType",
+      "value": "taker_at_cross"
+    },
+    {
+      "name": "BookSide",
+      "value": "bid"
+    },
+    {
+      "name": "OrderStatus",
+      "value": "resting"
+    },
+    {
+      "name": "ExchangeInstance",
+      "value": "event_contract"
+    },
+    {
+      "name": "UserFilter",
+      "value": "self"
+    },
+    {
+      "name": "ApiKeyScope",
+      "value": "read"
+    },
+    {
+      "name": "ApiKeyType",
+      "value": "rsa"
+    },
+    {
+      "name": "ApiKey",
+      "value": {
+        "api_key_id": "string",
+        "name": "string",
+        "scopes": [
+          "read"
+        ]
+      }
+    },
+    {
+      "name": "GetApiKeysResponse",
+      "value": {
+        "api_keys": [
+          {
+            "api_key_id": "string",
+            "name": "string",
+            "scopes": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateApiKeyRequest",
+      "value": {
+        "name": "string",
+        "public_key": "string"
+      }
+    },
+    {
+      "name": "CreateApiKeyResponse",
+      "value": {
+        "api_key_id": "string"
+      }
+    },
+    {
+      "name": "GenerateApiKeyRequest",
+      "value": {
+        "name": "string"
+      }
+    },
+    {
+      "name": "GenerateApiKeyResponse",
+      "value": {
+        "api_key_id": "string",
+        "private_key": "string"
+      }
+    },
+    {
+      "name": "GetTagsForSeriesCategoriesResponse",
+      "value": {
+        "tags_by_categories": {
+          "property1": [
+            "string"
+          ],
+          "property2": [
+            "string"
+          ]
+        }
+      }
+    },
+    {
+      "name": "ScopeList",
+      "value": {
+        "scopes": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "SportFilterDetails",
+      "value": {
+        "scopes": [
+          "string"
+        ],
+        "competitions": {
+          "property1": {
+            "scopes": [
+              "string"
+            ]
+          },
+          "property2": {
+            "scopes": [
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "GetFiltersBySportsResponse",
+      "value": {
+        "filters_by_sports": {
+          "property1": {
+            "scopes": [
+              "string"
+            ],
+            "competitions": {
+              "property1": {
+                "scopes": [
+                  "string"
+                ]
+              },
+              "property2": {
+                "scopes": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "property2": {
+            "scopes": [
+              "string"
+            ],
+            "competitions": {
+              "property1": {
+                "scopes": [
+                  "string"
+                ]
+              },
+              "property2": {
+                "scopes": [
+                  "string"
+                ]
+              }
+            }
+          }
+        },
+        "sport_ordering": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "BucketLimit",
+      "value": {
+        "refill_rate": 0,
+        "bucket_capacity": 0
+      }
+    },
+    {
+      "name": "GetAccountApiLimitsResponse",
+      "value": {
+        "usage_tier": "expert",
+        "read": {
+          "refill_rate": 0,
+          "bucket_capacity": 0
+        },
+        "write": {
+          "refill_rate": 0,
+          "bucket_capacity": 0
+        },
+        "grants": [
+          {
+            "exchange_instance": "event_contract",
+            "level": "prestige",
+            "source": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ApiUsageLevelGrant",
+      "value": {
+        "exchange_instance": "event_contract",
+        "level": "prestige",
+        "source": "string"
+      }
+    },
+    {
+      "name": "GetAccountApiUsageLevelVolumeProgressResponse",
+      "value": {
+        "volume_progress": [
+          {
+            "computed_ts": 0,
+            "trailing_30d_volume_fp": "10.00",
+            "goals": [
+              {
+                "level": "expert",
+                "earn_volume_goal_fp": "10.00",
+                "keep_volume_goal_fp": "10.00"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountApiUsageLevelVolumeProgress",
+      "value": {
+        "computed_ts": 0,
+        "trailing_30d_volume_fp": "10.00",
+        "goals": [
+          {
+            "level": "expert",
+            "earn_volume_goal_fp": "10.00",
+            "keep_volume_goal_fp": "10.00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountApiUsageLevelVolumeGoal",
+      "value": {
+        "level": "expert",
+        "earn_volume_goal_fp": "10.00",
+        "keep_volume_goal_fp": "10.00"
+      }
+    },
+    {
+      "name": "EndpointTokenCost",
+      "value": {
+        "method": "string",
+        "path": "string",
+        "cost": 0
+      }
+    },
+    {
+      "name": "GetAccountEndpointCostsResponse",
+      "value": {
+        "default_cost": 0,
+        "endpoint_costs": [
+          {
+            "method": "string",
+            "path": "string",
+            "cost": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "ExchangeStatus",
+      "value": {
+        "exchange_active": true,
+        "trading_active": true
+      }
+    },
+    {
+      "name": "ExchangeIndexStatus",
+      "value": {
+        "exchange_index": 0,
+        "description": "string",
+        "exchange_active": true,
+        "trading_active": true,
+        "intra_exchange_transfers_active": true
+      }
+    },
+    {
+      "name": "GetExchangeScheduleResponse",
+      "value": {
+        "schedule": {
+          "standard_hours": [
+            {
+              "start_time": "2019-08-24T14:15:22Z",
+              "end_time": "2019-08-24T14:15:22Z",
+              "monday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ],
+              "tuesday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ],
+              "wednesday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ],
+              "thursday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ],
+              "friday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ],
+              "saturday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ],
+              "sunday": [
+                {
+                  "open_time": "string",
+                  "close_time": "string"
+                }
+              ]
+            }
+          ],
+          "maintenance_windows": [
+            {
+              "start_datetime": "2019-08-24T14:15:22Z",
+              "end_datetime": "2019-08-24T14:15:22Z"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Schedule",
+      "value": {
+        "standard_hours": [
+          {
+            "start_time": "2019-08-24T14:15:22Z",
+            "end_time": "2019-08-24T14:15:22Z",
+            "monday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ],
+            "tuesday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ],
+            "wednesday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ],
+            "thursday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ],
+            "friday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ],
+            "saturday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ],
+            "sunday": [
+              {
+                "open_time": "string",
+                "close_time": "string"
+              }
+            ]
+          }
+        ],
+        "maintenance_windows": [
+          {
+            "start_datetime": "2019-08-24T14:15:22Z",
+            "end_datetime": "2019-08-24T14:15:22Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WeeklySchedule",
+      "value": {
+        "start_time": "2019-08-24T14:15:22Z",
+        "end_time": "2019-08-24T14:15:22Z",
+        "monday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ],
+        "tuesday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ],
+        "wednesday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ],
+        "thursday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ],
+        "friday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ],
+        "saturday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ],
+        "sunday": [
+          {
+            "open_time": "string",
+            "close_time": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DailySchedule",
+      "value": {
+        "open_time": "string",
+        "close_time": "string"
+      }
+    },
+    {
+      "name": "MaintenanceWindow",
+      "value": {
+        "start_datetime": "2019-08-24T14:15:22Z",
+        "end_datetime": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetHistoricalCutoffResponse",
+      "value": {
+        "market_settled_ts": "2019-08-24T14:15:22Z",
+        "trades_created_ts": "2019-08-24T14:15:22Z",
+        "orders_updated_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetUserDataTimestampResponse",
+      "value": {
+        "as_of_time": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetMarketCandlesticksResponse",
+      "value": {
+        "ticker": "string",
+        "candlesticks": [
+          {
+            "end_period_ts": 0,
+            "yes_bid": {
+              "open_dollars": "0.5600",
+              "low_dollars": "0.5600",
+              "high_dollars": "0.5600",
+              "close_dollars": "0.5600"
+            },
+            "yes_ask": {
+              "open_dollars": "0.5600",
+              "low_dollars": "0.5600",
+              "high_dollars": "0.5600",
+              "close_dollars": "0.5600"
+            },
+            "price": {},
+            "volume_fp": "10.00",
+            "open_interest_fp": "10.00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetEventCandlesticksResponse",
+      "value": {
+        "market_tickers": [
+          "string"
+        ],
+        "market_candlesticks": [
+          [
+            {
+              "end_period_ts": 0,
+              "yes_bid": {
+                "open_dollars": "0.5600",
+                "low_dollars": "0.5600",
+                "high_dollars": "0.5600",
+                "close_dollars": "0.5600"
+              },
+              "yes_ask": {
+                "open_dollars": "0.5600",
+                "low_dollars": "0.5600",
+                "high_dollars": "0.5600",
+                "close_dollars": "0.5600"
+              },
+              "price": {},
+              "volume_fp": "10.00",
+              "open_interest_fp": "10.00"
+            }
+          ]
+        ],
+        "adjusted_end_ts": 0
+      }
+    },
+    {
+      "name": "BatchGetMarketCandlesticksResponse",
+      "value": {
+        "markets": [
+          {
+            "market_ticker": "string",
+            "candlesticks": [
+              {
+                "end_period_ts": 0,
+                "yes_bid": {
+                  "open_dollars": "0.5600",
+                  "low_dollars": "0.5600",
+                  "high_dollars": "0.5600",
+                  "close_dollars": "0.5600"
+                },
+                "yes_ask": {
+                  "open_dollars": "0.5600",
+                  "low_dollars": "0.5600",
+                  "high_dollars": "0.5600",
+                  "close_dollars": "0.5600"
+                },
+                "price": {},
+                "volume_fp": "10.00",
+                "open_interest_fp": "10.00"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketCandlesticksResponse",
+      "value": {
+        "market_ticker": "string",
+        "candlesticks": [
+          {
+            "end_period_ts": 0,
+            "yes_bid": {
+              "open_dollars": "0.5600",
+              "low_dollars": "0.5600",
+              "high_dollars": "0.5600",
+              "close_dollars": "0.5600"
+            },
+            "yes_ask": {
+              "open_dollars": "0.5600",
+              "low_dollars": "0.5600",
+              "high_dollars": "0.5600",
+              "close_dollars": "0.5600"
+            },
+            "price": {},
+            "volume_fp": "10.00",
+            "open_interest_fp": "10.00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketCandlestick",
+      "value": {
+        "end_period_ts": 0,
+        "yes_bid": {
+          "open_dollars": "0.5600",
+          "low_dollars": "0.5600",
+          "high_dollars": "0.5600",
+          "close_dollars": "0.5600"
+        },
+        "yes_ask": {
+          "open_dollars": "0.5600",
+          "low_dollars": "0.5600",
+          "high_dollars": "0.5600",
+          "close_dollars": "0.5600"
+        },
+        "price": {},
+        "volume_fp": "10.00",
+        "open_interest_fp": "10.00"
+      }
+    },
+    {
+      "name": "BidAskDistribution",
+      "value": {
+        "open_dollars": "0.5600",
+        "low_dollars": "0.5600",
+        "high_dollars": "0.5600",
+        "close_dollars": "0.5600"
+      }
+    },
+    {
+      "name": "PriceDistribution",
+      "value": {}
+    },
+    {
+      "name": "LiveData",
+      "value": {
+        "type": "string",
+        "details": {},
+        "milestone_id": "string"
+      }
+    },
+    {
+      "name": "GetLiveDataResponse",
+      "value": {
+        "live_data": {
+          "type": "string",
+          "details": {},
+          "milestone_id": "string"
+        }
+      }
+    },
+    {
+      "name": "GetLiveDatasResponse",
+      "value": {
+        "live_datas": [
+          {
+            "type": "string",
+            "details": {},
+            "milestone_id": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EventLiveData",
+      "value": {
+        "type": "string",
+        "details": {}
+      }
+    },
+    {
+      "name": "GetEventLiveDataResponse",
+      "value": {
+        "live_data": {
+          "type": "string",
+          "details": {}
+        }
+      }
+    },
+    {
+      "name": "GetWeatherIndexResponse",
+      "value": {
+        "city": "string",
+        "units": "string",
+        "timeseries": [
+          {
+            "t": 0,
+            "status": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WeatherIndexPoint",
+      "value": {
+        "t": 0,
+        "status": "string"
+      }
+    },
+    {
+      "name": "WeatherIndexStationReading",
+      "value": {
+        "station_id": "string",
+        "code": "string"
+      }
+    },
+    {
+      "name": "GetWeatherIndexCalibrationsResponse",
+      "value": {
+        "city": "string",
+        "units": "string",
+        "calibrations": [
+          {
+            "config_version": "string",
+            "effective_at_ms": 0,
+            "city_reference_c": 0.1,
+            "stations": [
+              {
+                "station_id": "string",
+                "weight": 0.1,
+                "offset_c": 0.1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "WeatherIndexCalibration",
+      "value": {
+        "config_version": "string",
+        "effective_at_ms": 0,
+        "city_reference_c": 0.1,
+        "stations": [
+          {
+            "station_id": "string",
+            "weight": 0.1,
+            "offset_c": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "name": "WeatherIndexCalibrationStation",
+      "value": {
+        "station_id": "string",
+        "weight": 0.1,
+        "offset_c": 0.1
+      }
+    },
+    {
+      "name": "GetGameStatsResponse",
+      "value": {}
+    },
+    {
+      "name": "PlayByPlay",
+      "value": {}
+    },
+    {
+      "name": "IndexedBalance",
+      "value": {
+        "exchange_index": 0,
+        "balance": "0.5600"
+      }
+    },
+    {
+      "name": "GetBalanceResponse",
+      "value": {
+        "balance": 0,
+        "balance_dollars": "0.5600",
+        "portfolio_value": 0,
+        "updated_ts": 0
+      }
+    },
+    {
+      "name": "CreateSubaccountRequest",
+      "value": {}
+    },
+    {
+      "name": "CreateSubaccountResponse",
+      "value": {
+        "subaccount_number": 0
+      }
+    },
+    {
+      "name": "ApplySubaccountTransferRequest",
+      "value": {
+        "client_transfer_id": "778092c0-0f15-4c52-8c9e-65903f88fe9c",
+        "from_subaccount": 0,
+        "to_subaccount": 0,
+        "amount_cents": 0
+      }
+    },
+    {
+      "name": "ApplySubaccountTransferResponse",
+      "value": {}
+    },
+    {
+      "name": "GetSubaccountBalancesResponse",
+      "value": {
+        "subaccount_balances": [
+          {
+            "subaccount_number": 0,
+            "exchange_index": 0,
+            "balance": "0.5600",
+            "updated_ts": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "SubaccountBalance",
+      "value": {
+        "subaccount_number": 0,
+        "exchange_index": 0,
+        "balance": "0.5600",
+        "updated_ts": 0
+      }
+    },
+    {
+      "name": "GetSubaccountTransfersResponse",
+      "value": {
+        "transfers": [
+          {
+            "transfer_id": "string",
+            "from_subaccount": 0,
+            "to_subaccount": 0,
+            "amount_cents": 0,
+            "created_ts": 0,
+            "exchange_index": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "SubaccountTransfer",
+      "value": {
+        "transfer_id": "string",
+        "from_subaccount": 0,
+        "to_subaccount": 0,
+        "amount_cents": 0,
+        "created_ts": 0,
+        "exchange_index": 0
+      }
+    },
+    {
+      "name": "UpdateSubaccountNettingRequest",
+      "value": {
+        "subaccount_number": 0,
+        "enabled": true
+      }
+    },
+    {
+      "name": "GetSubaccountNettingResponse",
+      "value": {
+        "netting_configs": [
+          {
+            "subaccount_number": 0,
+            "enabled": true,
+            "exchange_index": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "SubaccountNettingConfig",
+      "value": {
+        "subaccount_number": 0,
+        "enabled": true,
+        "exchange_index": 0
+      }
+    },
+    {
+      "name": "GetSettlementsResponse",
+      "value": {
+        "settlements": [
+          {
+            "ticker": "string",
+            "exchange_index": 0,
+            "event_ticker": "string",
+            "market_result": "yes",
+            "yes_count_fp": "10.00",
+            "yes_total_cost_dollars": "0.5600",
+            "no_count_fp": "10.00",
+            "no_total_cost_dollars": "0.5600",
+            "revenue": 0,
+            "settled_time": "2019-08-24T14:15:22Z",
+            "fee_cost": "0.5600"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Settlement",
+      "value": {
+        "ticker": "string",
+        "exchange_index": 0,
+        "event_ticker": "string",
+        "market_result": "yes",
+        "yes_count_fp": "10.00",
+        "yes_total_cost_dollars": "0.5600",
+        "no_count_fp": "10.00",
+        "no_total_cost_dollars": "0.5600",
+        "revenue": 0,
+        "settled_time": "2019-08-24T14:15:22Z",
+        "fee_cost": "0.5600"
+      }
+    },
+    {
+      "name": "GetPortfolioRestingOrderTotalValueResponse",
+      "value": {
+        "total_resting_order_value": 0,
+        "resting_order_value_breakdown": [
+          {
+            "exchange_index": 0,
+            "balance": "0.5600"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetDepositsResponse",
+      "value": {
+        "deposits": [
+          {
+            "id": "string",
+            "status": "pending",
+            "type": "ach",
+            "amount_cents": 0,
+            "fee_cents": 0,
+            "created_ts": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "Deposit",
+      "value": {
+        "id": "string",
+        "status": "pending",
+        "type": "ach",
+        "amount_cents": 0,
+        "fee_cents": 0,
+        "created_ts": 0
+      }
+    },
+    {
+      "name": "GetWithdrawalsResponse",
+      "value": {
+        "withdrawals": [
+          {
+            "id": "string",
+            "status": "pending",
+            "type": "ach",
+            "amount_cents": 0,
+            "fee_cents": 0,
+            "created_ts": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "Withdrawal",
+      "value": {
+        "id": "string",
+        "status": "pending",
+        "type": "ach",
+        "amount_cents": 0,
+        "fee_cents": 0,
+        "created_ts": 0
+      }
+    },
+    {
+      "name": "Order",
+      "value": {
+        "order_id": "string",
+        "user_id": "string",
+        "client_order_id": "string",
+        "ticker": "string",
+        "outcome_side": "yes",
+        "book_side": "bid",
+        "type": "limit",
+        "status": "resting",
+        "yes_price_dollars": "0.5600",
+        "no_price_dollars": "0.5600",
+        "fill_count_fp": "10.00",
+        "remaining_count_fp": "10.00",
+        "initial_count_fp": "10.00",
+        "taker_fill_cost_dollars": "0.5600",
+        "maker_fill_cost_dollars": "0.5600",
+        "taker_fees_dollars": "0.5600",
+        "maker_fees_dollars": "0.5600"
+      }
+    },
+    {
+      "name": "Milestone",
+      "value": {
+        "id": "string",
+        "category": "Sports",
+        "type": "football_game",
+        "start_date": "2019-08-24T14:15:22Z",
+        "related_event_tickers": [
+          "string"
+        ],
+        "title": "string",
+        "notification_message": "string",
+        "details": {},
+        "primary_event_tickers": [
+          "string"
+        ],
+        "last_updated_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetMilestoneResponse",
+      "value": {
+        "milestone": {
+          "id": "string",
+          "category": "Sports",
+          "type": "football_game",
+          "start_date": "2019-08-24T14:15:22Z",
+          "related_event_tickers": [
+            "string"
+          ],
+          "title": "string",
+          "notification_message": "string",
+          "details": {},
+          "primary_event_tickers": [
+            "string"
+          ],
+          "last_updated_ts": "2019-08-24T14:15:22Z"
+        }
+      }
+    },
+    {
+      "name": "GetMilestonesResponse",
+      "value": {
+        "milestones": [
+          {
+            "id": "string",
+            "category": "Sports",
+            "type": "football_game",
+            "start_date": "2019-08-24T14:15:22Z",
+            "related_event_tickers": [
+              "string"
+            ],
+            "title": "string",
+            "notification_message": "string",
+            "details": {},
+            "primary_event_tickers": [
+              "string"
+            ],
+            "last_updated_ts": "2019-08-24T14:15:22Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetOrdersResponse",
+      "value": {
+        "orders": [
+          {
+            "order_id": "string",
+            "user_id": "string",
+            "client_order_id": "string",
+            "ticker": "string",
+            "outcome_side": "yes",
+            "book_side": "bid",
+            "type": "limit",
+            "status": "resting",
+            "yes_price_dollars": "0.5600",
+            "no_price_dollars": "0.5600",
+            "fill_count_fp": "10.00",
+            "remaining_count_fp": "10.00",
+            "initial_count_fp": "10.00",
+            "taker_fill_cost_dollars": "0.5600",
+            "maker_fill_cost_dollars": "0.5600",
+            "taker_fees_dollars": "0.5600",
+            "maker_fees_dollars": "0.5600"
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "GetOrderQueuePositionResponse",
+      "value": {
+        "queue_position_fp": "10.00"
+      }
+    },
+    {
+      "name": "OrderQueuePosition",
+      "value": {
+        "order_id": "string",
+        "market_ticker": "string",
+        "queue_position_fp": "10.00"
+      }
+    },
+    {
+      "name": "GetOrderQueuePositionsResponse",
+      "value": {
+        "queue_positions": [
+          {
+            "order_id": "string",
+            "market_ticker": "string",
+            "queue_position_fp": "10.00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketPosition",
+      "value": {
+        "ticker": "string",
+        "exchange_index": 0,
+        "total_traded_dollars": "0.5600",
+        "position_fp": "10.00",
+        "market_exposure_dollars": "0.5600",
+        "realized_pnl_dollars": "0.5600",
+        "fees_paid_dollars": "0.5600",
+        "last_updated_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "EventPosition",
+      "value": {
+        "event_ticker": "string",
+        "total_cost_dollars": "0.5600",
+        "total_cost_shares_fp": "10.00",
+        "event_exposure_dollars": "0.5600",
+        "realized_pnl_dollars": "0.5600",
+        "fees_paid_dollars": "0.5600"
+      }
+    },
+    {
+      "name": "GetPositionsResponse",
+      "value": {
+        "market_positions": [
+          {
+            "ticker": "string",
+            "exchange_index": 0,
+            "total_traded_dollars": "0.5600",
+            "position_fp": "10.00",
+            "market_exposure_dollars": "0.5600",
+            "realized_pnl_dollars": "0.5600",
+            "fees_paid_dollars": "0.5600",
+            "last_updated_ts": "2019-08-24T14:15:22Z"
+          }
+        ],
+        "event_positions": [
+          {
+            "event_ticker": "string",
+            "total_cost_dollars": "0.5600",
+            "total_cost_shares_fp": "10.00",
+            "event_exposure_dollars": "0.5600",
+            "realized_pnl_dollars": "0.5600",
+            "fees_paid_dollars": "0.5600"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Trade",
+      "value": {
+        "trade_id": "string",
+        "ticker": "string",
+        "count_fp": "10.00",
+        "yes_price_dollars": "0.5600",
+        "no_price_dollars": "0.5600",
+        "taker_outcome_side": "yes",
+        "taker_book_side": "bid",
+        "created_time": "2019-08-24T14:15:22Z",
+        "is_block_trade": true
+      }
+    },
+    {
+      "name": "GetIncentiveProgramsResponse",
+      "value": {
+        "incentive_programs": [
+          {
+            "id": "string",
+            "market_id": "string",
+            "market_ticker": "string",
+            "incentive_type": "liquidity",
+            "incentive_description": "string",
+            "start_date": "2019-08-24T14:15:22Z",
+            "end_date": "2019-08-24T14:15:22Z",
+            "period_reward": 0,
+            "paid_out": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "IncentiveProgram",
+      "value": {
+        "id": "string",
+        "market_id": "string",
+        "market_ticker": "string",
+        "incentive_type": "liquidity",
+        "incentive_description": "string",
+        "start_date": "2019-08-24T14:15:22Z",
+        "end_date": "2019-08-24T14:15:22Z",
+        "period_reward": 0,
+        "paid_out": true
+      }
+    },
+    {
+      "name": "GetTradesResponse",
+      "value": {
+        "trades": [
+          {
+            "trade_id": "string",
+            "ticker": "string",
+            "count_fp": "10.00",
+            "yes_price_dollars": "0.5600",
+            "no_price_dollars": "0.5600",
+            "taker_outcome_side": "yes",
+            "taker_book_side": "bid",
+            "created_time": "2019-08-24T14:15:22Z",
+            "is_block_trade": true
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "OutcomeSide",
+      "value": "yes"
+    },
+    {
+      "name": "Fill",
+      "value": {
+        "fill_id": "string",
+        "exchange_index": 0,
+        "trade_id": "string",
+        "order_id": "string",
+        "ticker": "string",
+        "market_ticker": "string",
+        "outcome_side": "yes",
+        "book_side": "bid",
+        "count_fp": "10.00",
+        "yes_price_dollars": "0.5600",
+        "no_price_dollars": "0.5600",
+        "is_taker": true,
+        "fee_cost": "0.5600"
+      }
+    },
+    {
+      "name": "FcmFill",
+      "value": {
+        "fill_id": "string",
+        "exchange_index": 0,
+        "ticker": "string",
+        "taker_outcome_side": "yes",
+        "count_fp": "10.00",
+        "yes_price_dollars": "0.5600"
+      }
+    },
+    {
+      "name": "GetFillsResponse",
+      "value": {
+        "fills": [
+          {
+            "fill_id": "string",
+            "exchange_index": 0,
+            "trade_id": "string",
+            "order_id": "string",
+            "ticker": "string",
+            "market_ticker": "string",
+            "outcome_side": "yes",
+            "book_side": "bid",
+            "count_fp": "10.00",
+            "yes_price_dollars": "0.5600",
+            "no_price_dollars": "0.5600",
+            "is_taker": true,
+            "fee_cost": "0.5600"
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "GetFcmFillsResponse",
+      "value": {
+        "fills": [
+          {
+            "fill_id": "string",
+            "exchange_index": 0,
+            "ticker": "string",
+            "taker_outcome_side": "yes",
+            "count_fp": "10.00",
+            "yes_price_dollars": "0.5600"
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "StructuredTarget",
+      "value": {}
+    },
+    {
+      "name": "GetStructuredTargetsResponse",
+      "value": {}
+    },
+    {
+      "name": "GetStructuredTargetResponse",
+      "value": {}
+    },
+    {
+      "name": "FCMSubtrader",
+      "value": {
+        "subtrader_id": "string",
+        "exchange_indices": [
+          0
+        ],
+        "trading_blocked": true,
+        "fcm_trading_blocked": true,
+        "propagation_pending": true
+      }
+    },
+    {
+      "name": "ListFCMSubtradersResponse",
+      "value": {
+        "subtraders": [
+          {
+            "subtrader_id": "string",
+            "exchange_indices": [
+              0
+            ],
+            "trading_blocked": true,
+            "fcm_trading_blocked": true,
+            "propagation_pending": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateFCMSubtraderRequest",
+      "value": {
+        "subtrader_suffix": "string"
+      }
+    },
+    {
+      "name": "CreateFCMSubtraderResponse",
+      "value": {
+        "subtrader_id": "string"
+      }
+    },
+    {
+      "name": "CreateFCMPositionTransferRequest",
+      "value": {
+        "source_subtrader_id": "string",
+        "target_subtrader_id": "string",
+        "market_ticker": "string",
+        "position_centicount": 0,
+        "price_centicents": 0
+      }
+    },
+    {
+      "name": "CreateFCMPositionTransferResponse",
+      "value": {
+        "position_transfer_id": "string"
+      }
+    },
+    {
+      "name": "GetFCMEventContractDailyCapResponse",
+      "value": {
+        "subtrader_id": "string",
+        "limit": "0.5600",
+        "executed_utilization": "0.5600",
+        "resting_order_utilization": "0.5600",
+        "pending_order_utilization": "0.5600",
+        "cap_date": "string"
+      }
+    },
+    {
+      "name": "UpdateFCMEventContractDailyCapRequest",
+      "value": {
+        "subtrader_id": "string",
+        "limit": "0.5600"
+      }
+    },
+    {
+      "name": "GetFCMSubtraderBlockedCategoriesResponse",
+      "value": {
+        "categories": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "UpdateFCMSubtraderBlockedCategoriesRequest",
+      "value": {
+        "subtrader_id": "string",
+        "category": "string",
+        "blocked": true
+      }
+    },
+    {
+      "name": "UpdateFCMSubtraderBlockedCategoriesResponse",
+      "value": {
+        "categories": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "EmptyResponse",
+      "value": {}
+    },
+    {
+      "name": "TargetBalanceAllocation",
+      "value": {
+        "exchange_index": 0,
+        "percent": 0
+      }
+    },
+    {
+      "name": "TargetBalanceAllocationInput",
+      "value": {
+        "exchange_index": 0,
+        "percent": 0
+      }
+    },
+    {
+      "name": "RestingMarginReservation",
+      "value": "none"
+    },
+    {
+      "name": "GetTargetBalanceAllocationResponse",
+      "value": {
+        "allocations": [
+          {
+            "exchange_index": 0,
+            "percent": 0
+          }
+        ],
+        "resting_margin_reservation": "none"
+      }
+    },
+    {
+      "name": "SetTargetBalanceAllocationRequest",
+      "value": {
+        "allocations": [
+          {
+            "exchange_index": 0,
+            "percent": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "IntraExchangeInstanceTransferRequest",
+      "value": {
+        "source": "event_contract",
+        "destination": "event_contract",
+        "amount": 0
+      }
+    },
+    {
+      "name": "IntraExchangeInstanceTransferResponse",
+      "value": {
+        "transfer_id": "string"
+      }
+    },
+    {
+      "name": "IntraExchangeInstanceTransferStatus",
+      "value": "pending"
+    },
+    {
+      "name": "IntraExchangeInstanceTransfer",
+      "value": {
+        "transfer_id": "string",
+        "source": "event_contract",
+        "destination": "event_contract",
+        "source_exchange_shard": 0,
+        "destination_exchange_shard": 0,
+        "amount": "0.5600",
+        "status": "pending",
+        "created_ts": 0
+      }
+    },
+    {
+      "name": "GetIntraExchangeInstanceTransfersResponse",
+      "value": {
+        "transfers": [
+          {
+            "transfer_id": "string",
+            "source": "event_contract",
+            "destination": "event_contract",
+            "source_exchange_shard": 0,
+            "destination_exchange_shard": 0,
+            "amount": "0.5600",
+            "status": "pending",
+            "created_ts": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetIntraExchangeInstanceTransferResponse",
+      "value": {
+        "transfer": {
+          "transfer_id": "string",
+          "source": "event_contract",
+          "destination": "event_contract",
+          "source_exchange_shard": 0,
+          "destination_exchange_shard": 0,
+          "amount": "0.5600",
+          "status": "pending",
+          "created_ts": 0
+        }
+      }
+    },
+    {
+      "name": "OrderGroup",
+      "value": {
+        "id": "string",
+        "is_auto_cancel_enabled": true
+      }
+    },
+    {
+      "name": "GetOrderGroupsResponse",
+      "value": {}
+    },
+    {
+      "name": "GetOrderGroupResponse",
+      "value": {
+        "is_auto_cancel_enabled": true,
+        "orders": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "CreateOrderGroupRequest",
+      "value": {}
+    },
+    {
+      "name": "UpdateOrderGroupLimitRequest",
+      "value": {}
+    },
+    {
+      "name": "CreateOrderGroupResponse",
+      "value": {
+        "order_group_id": "string",
+        "subaccount": 0
+      }
+    },
+    {
+      "name": "GetCommunicationsIDResponse",
+      "value": {
+        "communications_id": "string"
+      }
+    },
+    {
+      "name": "BlockTradeProposal",
+      "value": {
+        "id": "string",
+        "proposer_user_id": "string",
+        "buyer_user_id": "string",
+        "seller_user_id": "string",
+        "market_ticker": "string",
+        "price_centi_cents": 0,
+        "centicount": 0,
+        "maker_side": "yes",
+        "expiration_ts": "2019-08-24T14:15:22Z",
+        "status": "string",
+        "created_ts": "2019-08-24T14:15:22Z",
+        "updated_ts": "2019-08-24T14:15:22Z",
+        "buyer_accepted": true,
+        "seller_accepted": true
+      }
+    },
+    {
+      "name": "GetBlockTradeProposalsResponse",
+      "value": {
+        "block_trade_proposals": [
+          {
+            "id": "string",
+            "proposer_user_id": "string",
+            "buyer_user_id": "string",
+            "seller_user_id": "string",
+            "market_ticker": "string",
+            "price_centi_cents": 0,
+            "centicount": 0,
+            "maker_side": "yes",
+            "expiration_ts": "2019-08-24T14:15:22Z",
+            "status": "string",
+            "created_ts": "2019-08-24T14:15:22Z",
+            "updated_ts": "2019-08-24T14:15:22Z",
+            "buyer_accepted": true,
+            "seller_accepted": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProposeBlockTradeRequest",
+      "value": {
+        "buyer_user_id": "string",
+        "seller_user_id": "string",
+        "market_ticker": "string",
+        "price_centi_cents": 1,
+        "centicount": 1,
+        "maker_side": "yes",
+        "expiration_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "ProposeBlockTradeResponse",
+      "value": {
+        "block_trade_proposal_id": "string"
+      }
+    },
+    {
+      "name": "AcceptBlockTradeProposalRequest",
+      "value": {}
+    },
+    {
+      "name": "RFQ",
+      "value": {
+        "id": "string",
+        "creator_id": "string",
+        "market_ticker": "string",
+        "contracts_fp": "10.00",
+        "status": "open",
+        "created_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetRFQsResponse",
+      "value": {
+        "rfqs": [
+          {
+            "id": "string",
+            "creator_id": "string",
+            "market_ticker": "string",
+            "contracts_fp": "10.00",
+            "status": "open",
+            "created_ts": "2019-08-24T14:15:22Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetRFQResponse",
+      "value": {
+        "rfq": {
+          "id": "string",
+          "creator_id": "string",
+          "market_ticker": "string",
+          "contracts_fp": "10.00",
+          "status": "open",
+          "created_ts": "2019-08-24T14:15:22Z"
+        }
+      }
+    },
+    {
+      "name": "CreateRFQRequest",
+      "value": {
+        "market_ticker": "string",
+        "rest_remainder": true
+      }
+    },
+    {
+      "name": "CreateRFQResponse",
+      "value": {
+        "id": "string"
+      }
+    },
+    {
+      "name": "Quote",
+      "value": {
+        "id": "string",
+        "rfq_id": "string",
+        "creator_id": "string",
+        "rfq_creator_id": "string",
+        "market_ticker": "string",
+        "contracts_fp": "10.00",
+        "yes_bid_dollars": "0.5600",
+        "no_bid_dollars": "0.5600",
+        "created_ts": "2019-08-24T14:15:22Z",
+        "updated_ts": "2019-08-24T14:15:22Z",
+        "status": "open"
+      }
+    },
+    {
+      "name": "GetQuotesResponse",
+      "value": {
+        "quotes": [
+          {
+            "id": "string",
+            "rfq_id": "string",
+            "creator_id": "string",
+            "rfq_creator_id": "string",
+            "market_ticker": "string",
+            "contracts_fp": "10.00",
+            "yes_bid_dollars": "0.5600",
+            "no_bid_dollars": "0.5600",
+            "created_ts": "2019-08-24T14:15:22Z",
+            "updated_ts": "2019-08-24T14:15:22Z",
+            "status": "open"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetQuoteResponse",
+      "value": {
+        "quote": {
+          "id": "string",
+          "rfq_id": "string",
+          "creator_id": "string",
+          "rfq_creator_id": "string",
+          "market_ticker": "string",
+          "contracts_fp": "10.00",
+          "yes_bid_dollars": "0.5600",
+          "no_bid_dollars": "0.5600",
+          "created_ts": "2019-08-24T14:15:22Z",
+          "updated_ts": "2019-08-24T14:15:22Z",
+          "status": "open"
+        }
+      }
+    },
+    {
+      "name": "CreateQuoteRequest",
+      "value": {
+        "rfq_id": "string",
+        "yes_bid": "0.5600",
+        "no_bid": "0.5600",
+        "rest_remainder": true
+      }
+    },
+    {
+      "name": "CreateQuoteResponse",
+      "value": {
+        "id": "string"
+      }
+    },
+    {
+      "name": "AcceptQuoteRequest",
+      "value": {
+        "accepted_side": "yes"
+      }
+    },
+    {
+      "name": "GetOrderResponse",
+      "value": {
+        "order": {
+          "order_id": "string",
+          "user_id": "string",
+          "client_order_id": "string",
+          "ticker": "string",
+          "outcome_side": "yes",
+          "book_side": "bid",
+          "type": "limit",
+          "status": "resting",
+          "yes_price_dollars": "0.5600",
+          "no_price_dollars": "0.5600",
+          "fill_count_fp": "10.00",
+          "remaining_count_fp": "10.00",
+          "initial_count_fp": "10.00",
+          "taker_fill_cost_dollars": "0.5600",
+          "maker_fill_cost_dollars": "0.5600",
+          "taker_fees_dollars": "0.5600",
+          "maker_fees_dollars": "0.5600"
+        }
+      }
+    },
+    {
+      "name": "CreateOrderRequest",
+      "value": {
+        "ticker": "string",
+        "side": "yes",
+        "action": "buy"
+      }
+    },
+    {
+      "name": "CreateOrderResponse",
+      "value": {
+        "order": {
+          "order_id": "string",
+          "user_id": "string",
+          "client_order_id": "string",
+          "ticker": "string",
+          "outcome_side": "yes",
+          "book_side": "bid",
+          "type": "limit",
+          "status": "resting",
+          "yes_price_dollars": "0.5600",
+          "no_price_dollars": "0.5600",
+          "fill_count_fp": "10.00",
+          "remaining_count_fp": "10.00",
+          "initial_count_fp": "10.00",
+          "taker_fill_cost_dollars": "0.5600",
+          "maker_fill_cost_dollars": "0.5600",
+          "taker_fees_dollars": "0.5600",
+          "maker_fees_dollars": "0.5600"
+        }
+      }
+    },
+    {
+      "name": "BatchCreateOrdersRequest",
+      "value": {
+        "orders": [
+          {
+            "ticker": "string",
+            "side": "yes",
+            "action": "buy"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BatchCreateOrdersResponse",
+      "value": {
+        "orders": [
+          {}
+        ]
+      }
+    },
+    {
+      "name": "BatchCreateOrdersIndividualResponse",
+      "value": {}
+    },
+    {
+      "name": "BatchCancelOrdersRequest",
+      "value": {}
+    },
+    {
+      "name": "BatchCancelOrdersRequestOrder",
+      "value": {
+        "order_id": "string"
+      }
+    },
+    {
+      "name": "BatchCancelOrdersResponse",
+      "value": {
+        "orders": [
+          {
+            "order_id": "string",
+            "reduced_by_fp": "10.00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BatchCancelOrdersIndividualResponse",
+      "value": {
+        "order_id": "string",
+        "reduced_by_fp": "10.00"
+      }
+    },
+    {
+      "name": "AmendOrderRequest",
+      "value": {
+        "ticker": "string",
+        "side": "yes",
+        "action": "buy"
+      }
+    },
+    {
+      "name": "AmendOrderResponse",
+      "value": {
+        "old_order": {
+          "order_id": "string",
+          "user_id": "string",
+          "client_order_id": "string",
+          "ticker": "string",
+          "outcome_side": "yes",
+          "book_side": "bid",
+          "type": "limit",
+          "status": "resting",
+          "yes_price_dollars": "0.5600",
+          "no_price_dollars": "0.5600",
+          "fill_count_fp": "10.00",
+          "remaining_count_fp": "10.00",
+          "initial_count_fp": "10.00",
+          "taker_fill_cost_dollars": "0.5600",
+          "maker_fill_cost_dollars": "0.5600",
+          "taker_fees_dollars": "0.5600",
+          "maker_fees_dollars": "0.5600"
+        },
+        "order": {
+          "order_id": "string",
+          "user_id": "string",
+          "client_order_id": "string",
+          "ticker": "string",
+          "outcome_side": "yes",
+          "book_side": "bid",
+          "type": "limit",
+          "status": "resting",
+          "yes_price_dollars": "0.5600",
+          "no_price_dollars": "0.5600",
+          "fill_count_fp": "10.00",
+          "remaining_count_fp": "10.00",
+          "initial_count_fp": "10.00",
+          "taker_fill_cost_dollars": "0.5600",
+          "maker_fill_cost_dollars": "0.5600",
+          "taker_fees_dollars": "0.5600",
+          "maker_fees_dollars": "0.5600"
+        }
+      }
+    },
+    {
+      "name": "CreateOrderV2Request",
+      "value": {
+        "ticker": "HIGHNY-24JAN01-T60",
+        "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+        "side": "bid",
+        "count": "10.00",
+        "price": "0.5600",
+        "time_in_force": "good_till_canceled",
+        "self_trade_prevention_type": "taker_at_cross",
+        "post_only": false,
+        "cancel_order_on_pause": false,
+        "reduce_only": false,
+        "subaccount": 0,
+        "exchange_index": 0
+      }
+    },
+    {
+      "name": "CreateOrderV2Response",
+      "value": {
+        "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+        "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+        "fill_count": "0.00",
+        "remaining_count": "10.00",
+        "ts_ms": 1715793600123
+      }
+    },
+    {
+      "name": "CancelOrderV2Response",
+      "value": {
+        "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+        "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+        "reduced_by": "10.00",
+        "ts_ms": 1715793660456
+      }
+    },
+    {
+      "name": "DecreaseOrderV2Request",
+      "value": {
+        "reduce_by": "2.00",
+        "exchange_index": 0
+      }
+    },
+    {
+      "name": "DecreaseOrderV2Response",
+      "value": {
+        "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+        "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+        "remaining_count": "8.00",
+        "ts_ms": 1715793680789
+      }
+    },
+    {
+      "name": "AmendOrderV2Request",
+      "value": {
+        "ticker": "HIGHNY-24JAN01-T60",
+        "side": "bid",
+        "price": "0.5700",
+        "count": "8.00",
+        "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+        "updated_client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+        "exchange_index": 0
+      }
+    },
+    {
+      "name": "AmendOrderV2Response",
+      "value": {
+        "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+        "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+        "remaining_count": "8.00",
+        "fill_count": "0.00",
+        "ts_ms": 1715793690123
+      }
+    },
+    {
+      "name": "BatchCreateOrdersV2Request",
+      "value": {
+        "orders": [
+          {
+            "ticker": "HIGHNY-24JAN01-T60",
+            "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+            "side": "bid",
+            "count": "10.00",
+            "price": "0.5600",
+            "time_in_force": "good_till_canceled",
+            "self_trade_prevention_type": "taker_at_cross",
+            "exchange_index": 0
+          },
+          {
+            "ticker": "HIGHNY-24JAN01-T60",
+            "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+            "side": "ask",
+            "count": "5.00",
+            "price": "0.5800",
+            "time_in_force": "immediate_or_cancel",
+            "self_trade_prevention_type": "maker",
+            "exchange_index": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "BatchCreateOrdersV2Response",
+      "value": {
+        "orders": [
+          {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+            "fill_count": "0.00",
+            "remaining_count": "10.00",
+            "ts_ms": 1715793600123
+          },
+          {
+            "order_id": "a6d6010d-6d5f-40a1-a7e7-5501386bb621",
+            "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+            "fill_count": "5.00",
+            "remaining_count": "0.00",
+            "average_fill_price": "0.5800",
+            "average_fee_paid": "0.0012",
+            "ts_ms": 1715793600456
+          }
+        ]
+      }
+    },
+    {
+      "name": "BatchCancelOrdersV2Request",
+      "value": {
+        "orders": [
+          {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "subaccount": 0,
+            "exchange_index": 0
+          },
+          {
+            "order_id": "a6d6010d-6d5f-40a1-a7e7-5501386bb621",
+            "subaccount": 0,
+            "exchange_index": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "BatchCancelOrdersV2Response",
+      "value": {
+        "orders": [
+          {
+            "order_id": "3b23c1c7-f4ef-4f0d-8b9a-9e53c61f1a0d",
+            "client_order_id": "8c35ecb3-328f-4f52-8c7c-0f4b9862f8d1",
+            "reduced_by": "10.00",
+            "ts_ms": 1715793660456
+          },
+          {
+            "order_id": "a6d6010d-6d5f-40a1-a7e7-5501386bb621",
+            "client_order_id": "2a0e3fc9-b593-4aa3-96e5-82f7f7566c2a",
+            "reduced_by": "5.00",
+            "ts_ms": 1715793660789
+          }
+        ]
+      }
+    },
+    {
+      "name": "AssociatedEvent",
+      "value": {
+        "ticker": "string",
+        "is_yes_only": true,
+        "active_quoters": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "MultivariateEventCollection",
+      "value": {
+        "collection_ticker": "string",
+        "series_ticker": "string",
+        "title": "string",
+        "description": "string",
+        "open_date": "2019-08-24T14:15:22Z",
+        "close_date": "2019-08-24T14:15:22Z",
+        "associated_events": [
+          {
+            "ticker": "string",
+            "is_yes_only": true,
+            "active_quoters": [
+              "string"
+            ]
+          }
+        ],
+        "associated_event_tickers": [
+          "string"
+        ],
+        "is_ordered": true,
+        "is_single_market_per_event": true,
+        "is_all_yes": true,
+        "size_min": 0,
+        "size_max": 0,
+        "functional_description": "string",
+        "price_level_structure": "string",
+        "price_ranges": [
+          {
+            "start": "string",
+            "end": "string",
+            "step": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetMultivariateEventCollectionResponse",
+      "value": {
+        "multivariate_contract": {
+          "collection_ticker": "string",
+          "series_ticker": "string",
+          "title": "string",
+          "description": "string",
+          "open_date": "2019-08-24T14:15:22Z",
+          "close_date": "2019-08-24T14:15:22Z",
+          "associated_events": [
+            {
+              "ticker": "string",
+              "is_yes_only": true,
+              "active_quoters": [
+                "string"
+              ]
+            }
+          ],
+          "associated_event_tickers": [
+            "string"
+          ],
+          "is_ordered": true,
+          "is_single_market_per_event": true,
+          "is_all_yes": true,
+          "size_min": 0,
+          "size_max": 0,
+          "functional_description": "string",
+          "price_level_structure": "string",
+          "price_ranges": [
+            {
+              "start": "string",
+              "end": "string",
+              "step": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GetMultivariateEventCollectionsResponse",
+      "value": {
+        "multivariate_contracts": [
+          {
+            "collection_ticker": "string",
+            "series_ticker": "string",
+            "title": "string",
+            "description": "string",
+            "open_date": "2019-08-24T14:15:22Z",
+            "close_date": "2019-08-24T14:15:22Z",
+            "associated_events": [
+              {
+                "ticker": "string",
+                "is_yes_only": true,
+                "active_quoters": [
+                  "string"
+                ]
+              }
+            ],
+            "associated_event_tickers": [
+              "string"
+            ],
+            "is_ordered": true,
+            "is_single_market_per_event": true,
+            "is_all_yes": true,
+            "size_min": 0,
+            "size_max": 0,
+            "functional_description": "string",
+            "price_level_structure": "string",
+            "price_ranges": [
+              {
+                "start": "string",
+                "end": "string",
+                "step": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "TickerPair",
+      "value": {
+        "market_ticker": "string",
+        "event_ticker": "string",
+        "side": "yes"
+      }
+    },
+    {
+      "name": "CreateMarketInMultivariateEventCollectionRequest",
+      "value": {
+        "selected_markets": [
+          {
+            "market_ticker": "string",
+            "event_ticker": "string",
+            "side": "yes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMarketInMultivariateEventCollectionResponse",
+      "value": {
+        "event_ticker": "string",
+        "market_ticker": "string"
+      }
+    },
+    {
+      "name": "PriceLevelDollarsCountFp",
+      "value": [
+        "0.1500",
+        "100.00"
+      ]
+    },
+    {
+      "name": "OrderbookCountFp",
+      "value": {
+        "yes_dollars": [
+          [
+            "0.1500",
+            "100.00"
+          ]
+        ],
+        "no_dollars": [
+          [
+            "0.1500",
+            "100.00"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "GetMarketOrderbooksResponse",
+      "value": {
+        "orderbooks": [
+          {
+            "ticker": "string",
+            "orderbook_fp": {
+              "yes_dollars": [
+                [
+                  "0.1500",
+                  "100.00"
+                ]
+              ],
+              "no_dollars": [
+                [
+                  "0.1500",
+                  "100.00"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketOrderbookFp",
+      "value": {
+        "ticker": "string",
+        "orderbook_fp": {
+          "yes_dollars": [
+            [
+              "0.1500",
+              "100.00"
+            ]
+          ],
+          "no_dollars": [
+            [
+              "0.1500",
+              "100.00"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "name": "GetMarketOrderbookResponse",
+      "value": {
+        "orderbook_fp": {
+          "yes_dollars": [
+            [
+              "0.1500",
+              "100.00"
+            ]
+          ],
+          "no_dollars": [
+            [
+              "0.1500",
+              "100.00"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "name": "GetEventsResponse",
+      "value": {
+        "events": [
+          {
+            "event_ticker": "string",
+            "series_ticker": "string",
+            "sub_title": "string",
+            "title": "string",
+            "collateral_return_type": "string",
+            "mutually_exclusive": true,
+            "settlement_sources": [
+              {}
+            ]
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "GetMultivariateEventsResponse",
+      "value": {
+        "events": [
+          {
+            "event_ticker": "string",
+            "series_ticker": "string",
+            "sub_title": "string",
+            "title": "string",
+            "collateral_return_type": "string",
+            "mutually_exclusive": true,
+            "settlement_sources": [
+              {}
+            ]
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "EventFeeChange",
+      "value": {
+        "id": "string",
+        "event_ticker": "string",
+        "series_ticker": "string",
+        "fee_type_override": "quadratic",
+        "fee_multiplier_override": 0.1,
+        "scheduled_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetEventFeeChangesResponse",
+      "value": {
+        "event_fee_changes": [
+          {
+            "id": "string",
+            "event_ticker": "string",
+            "series_ticker": "string",
+            "fee_type_override": "quadratic",
+            "fee_multiplier_override": 0.1,
+            "scheduled_ts": "2019-08-24T14:15:22Z"
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "GetEventResponse",
+      "value": {
+        "event": {
+          "event_ticker": "string",
+          "series_ticker": "string",
+          "sub_title": "string",
+          "title": "string",
+          "collateral_return_type": "string",
+          "mutually_exclusive": true,
+          "settlement_sources": [
+            {}
+          ]
+        },
+        "markets": [
+          {
+            "ticker": "string",
+            "event_ticker": "string",
+            "market_type": "binary",
+            "yes_sub_title": "string",
+            "no_sub_title": "string",
+            "created_time": "2019-08-24T14:15:22Z",
+            "updated_time": "2019-08-24T14:15:22Z",
+            "open_time": "2019-08-24T14:15:22Z",
+            "close_time": "2019-08-24T14:15:22Z",
+            "latest_expiration_time": "2019-08-24T14:15:22Z",
+            "settlement_timer_seconds": 0,
+            "status": "initialized",
+            "yes_bid_dollars": "0.5600",
+            "yes_bid_size_fp": "10.00",
+            "yes_ask_dollars": "0.5600",
+            "yes_ask_size_fp": "10.00",
+            "no_bid_dollars": "0.5600",
+            "no_ask_dollars": "0.5600",
+            "last_price_dollars": "0.5600",
+            "volume_fp": "10.00",
+            "volume_24h_fp": "10.00",
+            "result": "yes",
+            "can_close_early": true,
+            "open_interest_fp": "10.00",
+            "notional_value_dollars": "0.5600",
+            "previous_yes_bid_dollars": "0.5600",
+            "previous_yes_ask_dollars": "0.5600",
+            "previous_price_dollars": "0.5600",
+            "settlement_bounds_type": "default",
+            "expiration_value": "string",
+            "rules_primary": "string",
+            "rules_secondary": "string",
+            "price_level_structure": "string",
+            "price_ranges": [
+              {
+                "start": "string",
+                "end": "string",
+                "step": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketMetadata",
+      "value": {
+        "market_ticker": "string",
+        "image_url": "string",
+        "color_code": "string"
+      }
+    },
+    {
+      "name": "GetEventMetadataResponse",
+      "value": {
+        "image_url": "string",
+        "market_details": [
+          {
+            "market_ticker": "string",
+            "image_url": "string",
+            "color_code": "string"
+          }
+        ],
+        "settlement_sources": [
+          {}
+        ]
+      }
+    },
+    {
+      "name": "GetEventForecastPercentilesHistoryResponse",
+      "value": {
+        "forecast_history": [
+          {
+            "event_ticker": "string",
+            "end_period_ts": 0,
+            "period_interval": 0,
+            "percentile_points": [
+              {
+                "percentile": 0,
+                "raw_numerical_forecast": 0,
+                "numerical_forecast": 0,
+                "formatted_forecast": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ForecastPercentilesPoint",
+      "value": {
+        "event_ticker": "string",
+        "end_period_ts": 0,
+        "period_interval": 0,
+        "percentile_points": [
+          {
+            "percentile": 0,
+            "raw_numerical_forecast": 0,
+            "numerical_forecast": 0,
+            "formatted_forecast": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PercentilePoint",
+      "value": {
+        "percentile": 0,
+        "raw_numerical_forecast": 0,
+        "numerical_forecast": 0,
+        "formatted_forecast": "string"
+      }
+    },
+    {
+      "name": "EventData",
+      "value": {
+        "event_ticker": "string",
+        "series_ticker": "string",
+        "sub_title": "string",
+        "title": "string",
+        "collateral_return_type": "string",
+        "mutually_exclusive": true,
+        "settlement_sources": [
+          {}
+        ]
+      }
+    },
+    {
+      "name": "Series",
+      "value": {
+        "ticker": "string",
+        "frequency": "string",
+        "title": "string",
+        "category": "string",
+        "categories": [
+          "string"
+        ],
+        "tags": [
+          "string"
+        ],
+        "settlement_sources": [
+          {}
+        ],
+        "contract_url": "string",
+        "contract_terms_url": "string",
+        "fee_type": "quadratic",
+        "fee_multiplier": 0.1,
+        "additional_prohibitions": [
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "SeriesFeeChange",
+      "value": {
+        "id": "string",
+        "series_ticker": "string",
+        "fee_type": "quadratic",
+        "fee_multiplier": 0.1,
+        "scheduled_ts": "2019-08-24T14:15:22Z"
+      }
+    },
+    {
+      "name": "GetSeriesResponse",
+      "value": {
+        "series": {
+          "ticker": "string",
+          "frequency": "string",
+          "title": "string",
+          "category": "string",
+          "categories": [
+            "string"
+          ],
+          "tags": [
+            "string"
+          ],
+          "settlement_sources": [
+            {}
+          ],
+          "contract_url": "string",
+          "contract_terms_url": "string",
+          "fee_type": "quadratic",
+          "fee_multiplier": 0.1,
+          "additional_prohibitions": [
+            "string"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GetSeriesListResponse",
+      "value": {
+        "series": [
+          {
+            "ticker": "string",
+            "frequency": "string",
+            "title": "string",
+            "category": "string",
+            "categories": [
+              "string"
+            ],
+            "tags": [
+              "string"
+            ],
+            "settlement_sources": [
+              {}
+            ],
+            "contract_url": "string",
+            "contract_terms_url": "string",
+            "fee_type": "quadratic",
+            "fee_multiplier": 0.1,
+            "additional_prohibitions": [
+              "string"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "GetSeriesFeeChangesResponse",
+      "value": {
+        "series_fee_change_arr": [
+          {
+            "id": "string",
+            "series_ticker": "string",
+            "fee_type": "quadratic",
+            "fee_multiplier": 0.1,
+            "scheduled_ts": "2019-08-24T14:15:22Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SettlementSource",
+      "value": {}
+    },
+    {
+      "name": "GetMarketsResponse",
+      "value": {
+        "markets": [
+          {
+            "ticker": "string",
+            "event_ticker": "string",
+            "market_type": "binary",
+            "yes_sub_title": "string",
+            "no_sub_title": "string",
+            "created_time": "2019-08-24T14:15:22Z",
+            "updated_time": "2019-08-24T14:15:22Z",
+            "open_time": "2019-08-24T14:15:22Z",
+            "close_time": "2019-08-24T14:15:22Z",
+            "latest_expiration_time": "2019-08-24T14:15:22Z",
+            "settlement_timer_seconds": 0,
+            "status": "initialized",
+            "yes_bid_dollars": "0.5600",
+            "yes_bid_size_fp": "10.00",
+            "yes_ask_dollars": "0.5600",
+            "yes_ask_size_fp": "10.00",
+            "no_bid_dollars": "0.5600",
+            "no_ask_dollars": "0.5600",
+            "last_price_dollars": "0.5600",
+            "volume_fp": "10.00",
+            "volume_24h_fp": "10.00",
+            "result": "yes",
+            "can_close_early": true,
+            "open_interest_fp": "10.00",
+            "notional_value_dollars": "0.5600",
+            "previous_yes_bid_dollars": "0.5600",
+            "previous_yes_ask_dollars": "0.5600",
+            "previous_price_dollars": "0.5600",
+            "settlement_bounds_type": "default",
+            "expiration_value": "string",
+            "rules_primary": "string",
+            "rules_secondary": "string",
+            "price_level_structure": "string",
+            "price_ranges": [
+              {
+                "start": "string",
+                "end": "string",
+                "step": "string"
+              }
+            ]
+          }
+        ],
+        "cursor": "string"
+      }
+    },
+    {
+      "name": "GetMarketResponse",
+      "value": {
+        "market": {
+          "ticker": "string",
+          "event_ticker": "string",
+          "market_type": "binary",
+          "yes_sub_title": "string",
+          "no_sub_title": "string",
+          "created_time": "2019-08-24T14:15:22Z",
+          "updated_time": "2019-08-24T14:15:22Z",
+          "open_time": "2019-08-24T14:15:22Z",
+          "close_time": "2019-08-24T14:15:22Z",
+          "latest_expiration_time": "2019-08-24T14:15:22Z",
+          "settlement_timer_seconds": 0,
+          "status": "initialized",
+          "yes_bid_dollars": "0.5600",
+          "yes_bid_size_fp": "10.00",
+          "yes_ask_dollars": "0.5600",
+          "yes_ask_size_fp": "10.00",
+          "no_bid_dollars": "0.5600",
+          "no_ask_dollars": "0.5600",
+          "last_price_dollars": "0.5600",
+          "volume_fp": "10.00",
+          "volume_24h_fp": "10.00",
+          "result": "yes",
+          "can_close_early": true,
+          "open_interest_fp": "10.00",
+          "notional_value_dollars": "0.5600",
+          "previous_yes_bid_dollars": "0.5600",
+          "previous_yes_ask_dollars": "0.5600",
+          "previous_price_dollars": "0.5600",
+          "settlement_bounds_type": "default",
+          "expiration_value": "string",
+          "rules_primary": "string",
+          "rules_secondary": "string",
+          "price_level_structure": "string",
+          "price_ranges": [
+            {
+              "start": "string",
+              "end": "string",
+              "step": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "MveSelectedLeg",
+      "value": {}
+    },
+    {
+      "name": "PriceRange",
+      "value": {
+        "start": "string",
+        "end": "string",
+        "step": "string"
+      }
+    },
+    {
+      "name": "Market",
+      "value": {
+        "ticker": "string",
+        "event_ticker": "string",
+        "market_type": "binary",
+        "yes_sub_title": "string",
+        "no_sub_title": "string",
+        "created_time": "2019-08-24T14:15:22Z",
+        "updated_time": "2019-08-24T14:15:22Z",
+        "open_time": "2019-08-24T14:15:22Z",
+        "close_time": "2019-08-24T14:15:22Z",
+        "latest_expiration_time": "2019-08-24T14:15:22Z",
+        "settlement_timer_seconds": 0,
+        "status": "initialized",
+        "yes_bid_dollars": "0.5600",
+        "yes_bid_size_fp": "10.00",
+        "yes_ask_dollars": "0.5600",
+        "yes_ask_size_fp": "10.00",
+        "no_bid_dollars": "0.5600",
+        "no_ask_dollars": "0.5600",
+        "last_price_dollars": "0.5600",
+        "volume_fp": "10.00",
+        "volume_24h_fp": "10.00",
+        "result": "yes",
+        "can_close_early": true,
+        "open_interest_fp": "10.00",
+        "notional_value_dollars": "0.5600",
+        "previous_yes_bid_dollars": "0.5600",
+        "previous_yes_ask_dollars": "0.5600",
+        "previous_price_dollars": "0.5600",
+        "settlement_bounds_type": "default",
+        "expiration_value": "string",
+        "rules_primary": "string",
+        "rules_secondary": "string",
+        "price_level_structure": "string",
+        "price_ranges": [
+          {
+            "start": "string",
+            "end": "string",
+            "step": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

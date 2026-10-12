@@ -1,3 +1,5 @@
+import type { OperationError, TypedOperationId } from "./generated/models.js";
+
 export class KalshiApiError extends Error {
   readonly status: number;
   readonly statusText: string;
@@ -14,9 +16,38 @@ export class KalshiApiError extends Error {
   }
 }
 
+export class KalshiEndpointError<I extends TypedOperationId> extends KalshiApiError {
+  readonly operationId: I;
+  readonly contract: OperationError<I>;
+  constructor(operationId: I, response: Response, body: unknown) {
+    super(response, body);
+    this.name = "KalshiEndpointError";
+    this.operationId = operationId;
+    this.contract = { status: response.status, body } as OperationError<I>;
+  }
+}
+
+export function isEndpointError<I extends TypedOperationId>(error: unknown, operationId: I): error is KalshiEndpointError<I> {
+  return error instanceof KalshiEndpointError && error.operationId === operationId;
+}
+
+export class KalshiContractError extends Error {
+  constructor(readonly operationId: string, readonly part: string, detail: string) {
+    super(`${operationId} ${part}: ${detail}`);
+    this.name = "KalshiContractError";
+  }
+}
+
 export class KalshiOperationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "KalshiOperationError";
+  }
+}
+
+export class KalshiResponseParseError extends Error {
+  constructor(readonly status: number) {
+    super(`Kalshi response with HTTP ${status} contains invalid JSON.`);
+    this.name = "KalshiResponseParseError";
   }
 }
