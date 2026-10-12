@@ -1,0 +1,33 @@
+{
+  "product": "perps",
+  "sourceFile": "perps_asyncapi.yaml",
+  "sourceSnapshot": "sources/perps/perps_asyncapi.yaml",
+  "url": "https://docs.kalshi.com/perps_asyncapi.yaml",
+  "sha256": "e5cc0f026b8e306e917860b870e23c9152d0d782c33137d42698f051a9dbe824",
+  "counts": {
+    "channels": 8,
+    "operations": 22,
+    "bindings": 22,
+    "components": 22,
+    "schemas": 27
+  },
+  "rules": [
+    {
+      "pointer": "#/components/messages/incomingPong/payload/const",
+      "raw": "",
+      "effective": "Contextual byte-identical echo of the received Ping; empty unsolicited Pong remains valid.",
+      "reason": "Empty-only Pong contradicts the source's heartbeat Ping and RFC 6455 section 5.5.3.",
+      "evidence": "https://www.rfc-editor.org/rfc/rfc6455#section-5.5.3",
+      "issue": "https://github.com/hurley451/KalshiCore/issues/12"
+    },
+    {
+      "pointer": "#/components/messages/outgoingPing/payload/const",
+      "raw": "heartbeat",
+      "effective": "Native empty Ping is also accepted; ws echoes its empty payload exactly once.",
+      "reason": "A heartbeat-only server Ping excludes the RFC-permitted empty Ping that the source accepts in the opposite direction.",
+      "evidence": "https://www.rfc-editor.org/rfc/rfc6455#section-5.5.2",
+      "echoEvidence": "https://www.rfc-editor.org/rfc/rfc6455#section-5.5.3",
+      "issue": "https://github.com/hurley451/KalshiCore/issues/12"
+    }
+  ]
+}
