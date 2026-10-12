@@ -13,7 +13,7 @@ type Params<I extends TypedOperationId> = operations[I]["parameters"];
 type Part<I extends TypedOperationId, K extends string, N extends string> = K extends keyof Params<I> ? [NonNullable<Params<I>[K]>] extends [never] ? { [P in N]?: never } : {} extends NonNullable<Params<I>[K]> ? { [P in N]?: NonNullable<Params<I>[K]> } : { [P in N]: NonNullable<Params<I>[K]> } : { [P in N]?: never };
 type Body<I extends TypedOperationId> = "requestBody" extends keyof operations[I] ? [NonNullable<operations[I]["requestBody"]>] extends [never] ? { body?: never } : operations[I] extends { requestBody: unknown } ? { body: Content<NonNullable<operations[I]["requestBody"]>> } : { body?: Content<NonNullable<operations[I]["requestBody"]>> } : { body?: never };
 export type OperationInput<I extends TypedOperationId> = Part<I, "path", "pathParameters"> & Part<I, "query", "query"> & Part<I, "header", "parameterHeaders"> & Part<I, "cookie", "cookies"> & Body<I>;
-export interface EndpointOptions { headers?: Record<string,string>; authenticated?: boolean }
+export interface EndpointOptions { headers?: Record<string,string>; authenticated?: boolean; signal?: AbortSignal; timeoutMs?: number }
 export type EndpointArguments<I extends TypedOperationId> = {} extends OperationInput<I> ? [input?: OperationInput<I>, options?: EndpointOptions] : [input: OperationInput<I>, options?: EndpointOptions];
 export type FixedPointDollarsModel = KalshiModels["FixedPointDollars"];
 export type FixedPointDollars = KalshiModels["FixedPointDollars"];

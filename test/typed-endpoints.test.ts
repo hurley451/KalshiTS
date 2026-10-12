@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { constants, generateKeyPairSync, verify } from "node:crypto";
 import test from "node:test";
-import { KalshiClient, KalshiContractError, isEndpointError, officialOperationSource, validateContract } from "../src/index.js";
+import { KalshiClient, KalshiContractError, KalshiInvalidResponseError, isEndpointError, officialOperationSource, validateContract } from "../src/index.js";
 import { operationContracts, contractComponents } from "../src/generated/contracts.js";
 import type { EndpointOptions, TypedOperationId } from "../src/generated/models.js";
 
@@ -69,7 +69,7 @@ for (const fixture of data.fixtures) {
     for (const response of fixture.responses) {
       if (!contract.responses[String(response.status)]?.content && response.status !== 204) continue;
       const invalid = new KalshiClient({fetch:async()=>Response.json(42,{status:response.status === 204 ? 200 : response.status})});
-      await assert.rejects(named(invalid,fixture)(fixture.input,{authenticated:false}),KalshiContractError);
+      await assert.rejects(named(invalid,fixture)(fixture.input,{authenticated:false}), response.status >= 300 ? KalshiInvalidResponseError : KalshiContractError);
     }
   });
 }

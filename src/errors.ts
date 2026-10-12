@@ -38,6 +38,13 @@ export class KalshiContractError extends Error {
   }
 }
 
+export class KalshiInvalidResponseError extends KalshiApiError {
+  constructor(error: KalshiApiError, readonly contractViolation: KalshiContractError) {
+    super(new Response(null, {status: error.status, statusText: error.statusText, headers: error.headers}), error.body);
+    this.name = "KalshiInvalidResponseError";
+  }
+}
+
 export class KalshiOperationError extends Error {
   constructor(message: string) {
     super(message);
@@ -49,5 +56,17 @@ export class KalshiResponseParseError extends Error {
   constructor(readonly status: number) {
     super(`Kalshi response with HTTP ${status} contains invalid JSON.`);
     this.name = "KalshiResponseParseError";
+  }
+}
+
+export class KalshiTransportError extends Error {
+  constructor() { super("Kalshi HTTP transport failed."); this.name = "KalshiTransportError"; }
+}
+
+export class KalshiResponseReadError extends KalshiApiError {
+  constructor(response: Response) {
+    super(response, undefined);
+    this.name = "KalshiResponseReadError";
+    this.message = `Kalshi HTTP ${response.status} response body could not be read.`;
   }
 }

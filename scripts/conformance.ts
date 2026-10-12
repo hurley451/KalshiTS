@@ -114,28 +114,33 @@ async function runRestRequestFixture(fixtureId: string, fixture: Record<string, 
   const { privateKey, publicKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
   const timestamp = "1790000000000";
   let requests = 0;
+  let validateEmission: (() => void) | undefined;
   const client = new KalshiClient({ environment: "demo", auth: {
     apiKeyId: "conformance-key", privateKeyPem: privateKey, timestampProvider: () => timestamp
   }, fetch: async (url, init) => {
     requests++;
     const requestUrl = new URL(url);
-    expectEqual(readString(input, "method"), init?.method, "input HTTP method");
-    expectEqual(readString(input, "path"), requestUrl.pathname, "input path");
-    expectEqual(readString(expected, "method"), init?.method, "emitted HTTP method");
-    expectEqual(readString(expected, "pathAndQuery"), `${requestUrl.pathname}${requestUrl.search}`, "emitted path and query");
-    expectEqual(expected.body, init?.body === undefined ? null : JSON.parse(String(init.body)), "emitted body");
-    const headers = new Headers(init?.headers);
-    expectEqual("conformance-key", headers.get("KALSHI-ACCESS-KEY"), "emitted API key");
-    expectEqual(timestamp, headers.get("KALSHI-ACCESS-TIMESTAMP"), "emitted timestamp");
-    const signature = Buffer.from(headers.get("KALSHI-ACCESS-SIGNATURE") ?? "", "base64");
-    expectEqual(true, verify("sha256", Buffer.from(`${timestamp}${readString(expected, "method")}${requestUrl.pathname}`), {
-      key: publicKey, padding: constants.RSA_PKCS1_PSS_PADDING, saltLength: constants.RSA_PSS_SALTLEN_DIGEST
-    }, signature), "emitted RSA-PSS signature");
+    // Keep fixture diagnostics outside the sanitized HTTP error boundary.
+    validateEmission = () => {
+      expectEqual(readString(input, "method"), init?.method, "input HTTP method");
+      expectEqual(readString(input, "path"), requestUrl.pathname, "input path");
+      expectEqual(readString(expected, "method"), init?.method, "emitted HTTP method");
+      expectEqual(readString(expected, "pathAndQuery"), `${requestUrl.pathname}${requestUrl.search}`, "emitted path and query");
+      expectEqual(expected.body, init?.body === undefined ? null : JSON.parse(String(init.body)), "emitted body");
+      const headers = new Headers(init?.headers);
+      expectEqual("conformance-key", headers.get("KALSHI-ACCESS-KEY"), "emitted API key");
+      expectEqual(timestamp, headers.get("KALSHI-ACCESS-TIMESTAMP"), "emitted timestamp");
+      const signature = Buffer.from(headers.get("KALSHI-ACCESS-SIGNATURE") ?? "", "base64");
+      expectEqual(true, verify("sha256", Buffer.from(`${timestamp}${readString(expected, "method")}${requestUrl.pathname}`), {
+        key: publicKey, padding: constants.RSA_PKCS1_PSS_PADDING, saltLength: constants.RSA_PSS_SALTLEN_DIGEST
+      }, signature), "emitted RSA-PSS signature");
+    };
     return new Response(JSON.stringify({ fills: [], cursor: "" }), { headers: { "content-type": "application/json" } });
   }});
   await client.portfolio.getFills({ tickers: readStringArray(query, "tickers"),
     limit: readOptionalNumber(query, "limit"), cursor: readOptionalString(query, "cursor") });
   expectEqual(1, requests, "emitted request count");
+  validateEmission!();
   return pass(fixtureId, "Portfolio fills emitted method, URL, headers and RSA-PSS signature matched.");
 }
 

@@ -9,4 +9,6 @@ export * from "./contracts.js";
 export * from "./operation.js";
 export * from "./portfolio.js";
 export * from "./types.js";
+export { KalshiTimeoutError, KalshiAbortError } from "./transport.js";
+export type { RetryPolicy, RateLimitPolicy } from "./transport.js";
 export * from "./websocket.js";
