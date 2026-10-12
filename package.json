@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.1",
   "private": false,
   "kalshiCoreRef": "da235871e8c55ca1f6bcc2020f5324e909f1998a",
-  "description": "TypeScript and JavaScript SDK for Kalshi with schema-derived named REST endpoints, typed models, contract validation, and RSA-PSS signing.",
+  "description": "TypeScript and JavaScript SDK for Kalshi with named REST endpoints, typed models, contract validation, and RSA-PSS or Ed25519 signing.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hurley451/KalshiTS.git"

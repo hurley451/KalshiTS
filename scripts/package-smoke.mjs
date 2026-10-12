@@ -30,7 +30,7 @@ try {
   const consumer = `
 import assert from "node:assert/strict";
 import { constants, generateKeyPairSync, verify } from "node:crypto";
-import { KalshiClient, KalshiApiError, getOperation, parseFillsPage } from "@hurley451/kalshi-ts";
+import { KalshiClient, KalshiApiError, KalshiAuthError, getOperation, parseFillsPage } from "@hurley451/kalshi-ts";
 const { privateKey, publicKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
 const client = new KalshiClient({ environment: "demo", auth: { apiKeyId: "consumer", privateKeyPem: privateKey, timestampProvider: () => "1790000000000" },
   fetch: async (url, init) => {
@@ -44,6 +44,23 @@ const client = new KalshiClient({ environment: "demo", auth: { apiKeyId: "consum
     return new Response(null, { status: 204 });
   }});
 assert.equal(await client.request("GetMarketOrderbooks", { query: { tickers: ["A", "B"] } }), undefined);
+for (const algorithm of ["rsa", "ed25519"]) {
+  const keys = algorithm === "rsa" ? generateKeyPairSync("rsa", { modulusLength: 2048 }) : generateKeyPairSync("ed25519");
+  const pem = keys.privateKey.export({ type: algorithm === "rsa" ? "pkcs1" : "pkcs8", format: "pem" });
+  const signedClient = new KalshiClient({ auth: { apiKeyId: "consumer", privateKeyPem: pem, timestampProvider: () => "1790000000000" },
+    fetch: async (url, init) => {
+      assert.equal(new URL(url).pathname, "/trade-api/v2/exchange/status");
+      const headers = new Headers(init.headers);
+      const key = algorithm === "rsa" ? { key: keys.publicKey, padding: constants.RSA_PKCS1_PSS_PADDING, saltLength: constants.RSA_PSS_SALTLEN_DIGEST } : keys.publicKey;
+      assert.equal(verify(algorithm === "rsa" ? "sha256" : null, Buffer.from("1790000000000GET/trade-api/v2/exchange/status"), key,
+        Buffer.from(headers.get("kalshi-access-signature"), "base64")), true);
+      return new Response(JSON.stringify({ exchange_active: true, trading_active: true }), { headers: { "content-type": "application/json" } });
+    }});
+  assert.equal((await signedClient.exchange.getExchangeStatus()).exchange_active, true);
+}
+const invalidKeyClient = new KalshiClient({ auth: { apiKeyId: "consumer", privateKeyPem: "private-test-secret" },
+  fetch: async () => { throw new Error("Invalid key must not dispatch."); } });
+await assert.rejects(invalidKeyClient.getExchangeStatus(), e => e instanceof KalshiAuthError && !String(e.stack).includes("private-test-secret"));
 assert.deepEqual(parseFillsPage({ fills: [], cursor: "" }), { fills: [], cursor: "" });
 assert.throws(() => getOperation("toString"));
 const failing = new KalshiClient({ fetch: async () => new Response("{broken", { status: 429, headers: { "content-type": "application/json", "retry-after": "5" } }) });
