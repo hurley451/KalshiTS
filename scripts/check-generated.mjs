@@ -15,7 +15,9 @@ export const generatedFiles = Object.freeze([
   "src/generated/coverage.json",
   "src/generated/schema-coverage.json",
   "test/typed-contracts.test.ts",
-  "test/typed-fixtures.json"
+  "test/typed-fixtures.json",
+  "src/generated/pagination-coverage.json",
+  "test/pagination-contracts.test.ts"
 ]);
 
 export async function compareGenerated(repository, outputRoot) {

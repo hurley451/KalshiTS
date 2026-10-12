@@ -15,6 +15,10 @@ type Body<I extends TypedOperationId> = "requestBody" extends keyof operations[I
 export type OperationInput<I extends TypedOperationId> = Part<I, "path", "pathParameters"> & Part<I, "query", "query"> & Part<I, "header", "parameterHeaders"> & Part<I, "cookie", "cookies"> & Body<I>;
 export interface EndpointOptions { headers?: Record<string,string>; authenticated?: boolean; signal?: AbortSignal; timeoutMs?: number }
 export type EndpointArguments<I extends TypedOperationId> = {} extends OperationInput<I> ? [input?: OperationInput<I>, options?: EndpointOptions] : [input: OperationInput<I>, options?: EndpointOptions];
+export { KalshiPaginationError } from "../pagination.js";
+export type { PaginationOptions } from "../pagination.js";
+export type PaginatedOperationId = "GetBlockTradeProposals" | "GetDeposits" | "GetEventFeeChanges" | "GetEvents" | "GetFCMFills" | "GetFCMOrders" | "GetFCMPositions" | "GetFills" | "GetFillsHistorical" | "GetHistoricalMarkets" | "GetHistoricalOrders" | "GetHistoricalPositions" | "GetIncentivePrograms" | "GetIntraExchangeInstanceTransfers" | "GetMarkets" | "GetMilestones" | "GetMultivariateEventCollections" | "GetMultivariateEvents" | "GetOrders" | "GetPositions" | "GetQuotes" | "GetRFQs" | "GetSettlements" | "GetStructuredTargets" | "GetSubaccountTransfers" | "GetTrades" | "GetTradesHistorical" | "GetWithdrawals";
+export type PaginationArguments<I extends PaginatedOperationId> = {} extends OperationInput<I> ? [input?: OperationInput<I>, options?: EndpointOptions, pagination?: import("../pagination.js").PaginationOptions] : [input: OperationInput<I>, options?: EndpointOptions, pagination?: import("../pagination.js").PaginationOptions];
 export type FixedPointDollarsModel = KalshiModels["FixedPointDollars"];
 export type FixedPointDollars = KalshiModels["FixedPointDollars"];
 export type FixedPointCountModel = KalshiModels["FixedPointCount"];

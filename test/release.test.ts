@@ -40,12 +40,12 @@ const generatedFiles: string[] = JSON.parse(execFileSync(process.execPath,
   ["--input-type=module", "-e", "const gate = await import(process.argv[2]); console.log(JSON.stringify(gate.generatedFiles));", "generation-test", generationGate],
   { encoding: "utf8" }));
 
-test("generation comparison rejects mismatches and missing outputs for all nine files", (t) => {
+test("generation comparison rejects mismatches and missing outputs for every generated file", (t) => {
   const root = mkdtempSync(path.join(tmpdir(), "kalshits-generation-comparison-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const expected = path.join(root, "expected");
   const generated = path.join(root, "generated");
-  assert.equal(generatedFiles.length, 9);
+  assert.equal(generatedFiles.length, 11);
   for (const file of generatedFiles) {
     for (const directory of [expected, generated]) {
       mkdirSync(path.dirname(path.join(directory, file)), { recursive: true });
