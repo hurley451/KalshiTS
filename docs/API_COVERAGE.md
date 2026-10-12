@@ -16,6 +16,8 @@ with later API changes.
 | Unspecified bodies | Unknown, not assumed empty; failure metadata retained |
 | Authentication | RSA-PSS signing, API-key headers, canonical signing paths |
 | Environments | Production and demo |
+| Transport | Configurable fetch, total deadlines, cancellation and local rate limits |
+| Retries | Opt-in, bounded GET-only retries; mutations never replay automatically |
 | Portfolio fills | Query helper and response parsing |
 | WebSocket | Envelope parsing and offline replay; no connection/subscription client |
 | Conformance | Four registered offline fixtures |
@@ -50,7 +52,6 @@ contents. These four fixtures supplement, rather than replace, endpoint tests.
 
 - Automatic pagination helpers.
 - WebSocket transport, subscriptions, reconnect, and order-book state management.
-- Automatic retries, rate limiting, and cancellation configuration.
 - Credentialed integration tests and independent live API validation.
 - Public registry release and published-package consumer verification.
 

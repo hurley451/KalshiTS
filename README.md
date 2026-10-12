@@ -37,6 +37,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - Typed portfolio fills helper with camelCase fields and fixed-point strings.
 - WebSocket envelope parsing and shared offline conformance fixtures.
 - Custom fetch implementations, request headers, and access to raw HTTP responses.
+- Total-request deadlines, cancellation, configurable local rate limits and bounded GET retries.
 
 Generic requests return `unknown` unless the caller supplies a type argument.
 That type argument does not validate the response at runtime. Named methods
@@ -68,9 +69,8 @@ The checked-in OpenAPI snapshot contains 118 REST operations. Named methods and
 contract tests cover each operation; this is not live exchange verification. See
 [API coverage and gaps](docs/API_COVERAGE.md) and [official API docs](https://docs.kalshi.com).
 
-Automatic retries, rate limiting, a public cancellation/timeout option, WebSocket
-connections/reconnect, and browser support are not implemented. Node.js crypto is
-required even when a particular request is public.
+WebSocket connections/reconnect, automatic pagination helpers and browser support
+are not implemented. Node.js crypto is required even for public requests.
 
 ## Requirements
 
@@ -325,8 +325,11 @@ try {
 }
 ```
 
-Retry policy belongs to the application. A failed mutation must not be blindly
-replayed because the exchange may already have accepted it.
+Automatic retries are opt-in and limited to GET requests. Mutations are never
+automatically replayed because the exchange may already have accepted them.
+Malformed declared error payloads raise `KalshiInvalidResponseError`, a
+`KalshiApiError` retaining status, headers, raw body and `contractViolation`.
+Such payloads do not qualify for `isEndpointError` typed narrowing.
 
 ## Configuration
 
@@ -336,9 +339,15 @@ replayed because the exchange may already have accepted it.
 | `auth` | None | API key ID and private key; required for authenticated calls |
 | `fetch` | Global fetch | Inject a compatible HTTP implementation, including test doubles |
 | `defaultHeaders` | Empty | Applied to all requests |
+| `timeoutMs` | `30000` | Total deadline, including rate waits, backoff and body reads; zero disables it |
+| `retry.maxAttempts` | `1` | Total attempts, from 1 to 6; GET only |
+| `retry.baseDelayMs`, `retry.maxDelayMs` | `250`, `30000` | Exponential backoff and wait limit |
+| `rateLimit` | None | Local token-bucket capacity, refill rate and optional operation-cost callback |
 | `auth.timestampProvider` | `Date.now` | Supplies signing timestamp in milliseconds |
 | Request `authenticated` | Inferred for named calls | Generic requests default to true |
 | Request `headers` | Empty | Overrides default headers; signing supplies authentication headers |
+| Request `signal` | None | Caller cancellation via AbortSignal |
+| Request `timeoutMs` | Client setting | Per-request total-deadline override |
 | Request `pathParameters`, `query`, `body` | Empty/absent | Path values, query values, and JSON body |
 
 ```ts
@@ -349,9 +358,40 @@ console.log(response.status, body);
 ```
 
 A custom environment object supplies `name`, `restBaseUrl`, and `websocketUrl`.
-Only `restBaseUrl` is used by this HTTP client. There is no direct request
-`signal` or timeout option; implement those policies in an injected fetch
-wrapper if needed.
+Only `restBaseUrl` is used by this HTTP client. HTTP redirects fail rather than
+forward authentication headers to a redirect target.
+
+```ts
+import { KalshiClient } from "@hurley451/kalshi-ts";
+
+const client = new KalshiClient({
+  environment: "demo",
+  timeoutMs: 10_000,
+  retry: { maxAttempts: 3, baseDelayMs: 250, maxDelayMs: 5_000 },
+  rateLimit: { capacity: 5, refillPerSecond: 2 }
+});
+const page = await client.markets.getMarkets(
+  { query: { limit: 20 } },
+  { signal: AbortSignal.timeout(5_000) }
+);
+console.log(page.markets);
+```
+
+Rate limits are local settings, not inferred account limits. The default local
+cost is one token per attempt; configure `rateLimit.cost(operationId)` from your
+account's endpoint-cost data when appropriate. Concurrent requests queue in order.
+Retries apply to network failures and HTTP 408, 429, 500, 502, 503 and 504.
+`Retry-After` is honored; when it exceeds `maxDelayMs`, the HTTP error is returned
+without retrying early. Each attempt is signed again. Cancellation and deadlines
+also stop rate queues and retry waits. Errors are `KalshiAbortError` or
+`KalshiTimeoutError`; injected fetch implementations should honor their signal
+to release underlying network resources.
+
+Kalshi's [rate-limit documentation](https://docs.kalshi.com/getting_started/rate_limits)
+describes separate read/write and shard budgets, with authoritative non-default
+costs from `getAccountEndpointCosts`. This local limiter does not automatically
+mirror those buckets. Kalshi currently documents no `Retry-After` on its 429s;
+the client still respects that header when supplied by a server or proxy.
 
 ## Operation Lookup
 
