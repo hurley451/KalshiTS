@@ -6,7 +6,7 @@ import { inspect } from "node:util";
 import type { AddressInfo } from "node:net";
 import test, { type TestContext } from "node:test";
 import WebSocket, { WebSocketServer } from "ws";
-import { KalshiPredictionsWebSocketClient, KalshiPerpsWebSocketClient, KalshiWebSocketBackpressureError, KalshiWebSocketCommandError, KalshiWebSocketPartialSubscriptionError } from "../src/index.js";
+import { KalshiPredictionsWebSocketClient, KalshiPerpsWebSocketClient, KalshiWebSocketError, KalshiWebSocketBackpressureError, KalshiWebSocketCommandError, KalshiWebSocketPartialSubscriptionError } from "../src/index.js";
 import { predictionsWsContract } from "../src/generated/predictions-ws-contracts.js";
 import { perpsWsContract } from "../src/generated/perps-ws-contracts.js";
 import { StreamingValidator, type StreamingContract, type Schema } from "../src/streaming/contracts.js";
@@ -81,6 +81,65 @@ async function wire<P extends "predictions"|"perps"="predictions">(t:TestContext
   t.after(async()=>{await client.close();for(const peer of peers)peer.terminate();await new Promise<void>(r=>wss.close(()=>r()));await new Promise<void>(r=>http.close(()=>r()));assert.deepEqual(failures,[]);});
   await client.connect();return {client,peers,commands,stamps};
 }
+
+for(const product of ["predictions","perps"] as const)test(`${product} malformed TCP upgrade cannot expose reflected credentials through rejection or events`,{timeout:5000},async t=>{
+  const marker="STREAMING_REFLECTED_UPGRADE_SECRET", http=createServer();
+  const sockets=new Set<import("node:net").Socket>();
+  let signature="", reflected="";
+  http.on("connection",socket=>{sockets.add(socket);socket.on("close",()=>sockets.delete(socket));});
+  http.on("upgrade",(req,socket)=>{
+    signature=String(req.headers["kalshi-access-signature"]);
+    reflected=`HTTP/1.1 101 Switching Protocols\r\nBad Header: ${req.headers["kalshi-access-key"]} ${signature}\r\n\r\n`;
+    socket.end(reflected);
+  });
+  http.listen(0,"127.0.0.1");await once(http,"listening");
+  const config:StreamingClientOptions={auth:{apiKeyId:marker,privateKeyPem:generateKeyPairSync("ed25519").privateKey},
+    url:`ws://127.0.0.1:${(http.address() as AddressInfo).port}/trade-api/ws/v2${product==="perps"?"/margin":""}`,reconnect:{maxAttempts:0}};
+  const client=product==="predictions"?new KalshiPredictionsWebSocketClient(config):new KalshiPerpsWebSocketClient(config);
+  const errors:unknown[]=[];
+  const consume=(async()=>{for await(const event of client.events())if(event.kind==="error")errors.push(event.value);})();
+  t.after(async()=>{await client.close();await consume;for(const socket of sockets)socket.destroy();await new Promise<void>(r=>http.close(()=>r()));});
+  await assert.rejects(client.connect(),error=>{errors.push(error);return error instanceof KalshiWebSocketError;});
+  await until(()=>errors.length>=2);
+  assert.ok(signature.length>0);assert.ok(reflected.includes(marker));assert.ok(reflected.includes(signature));
+  function diagnostics(value:unknown,seen=new Set<unknown>()):string[] {
+    if(value===null||typeof value!=="object")return [String(value)];
+    if(seen.has(value))return [];seen.add(value);
+    if(Buffer.isBuffer(value)||value instanceof Uint8Array)return [Buffer.from(value).toString()];
+    if(Array.isArray(value)&&value.every(n=>Number.isInteger(n)&&n>=0&&n<=255))return [Buffer.from(value).toString()];
+    return Reflect.ownKeys(value).flatMap(key=>diagnostics(Object.getOwnPropertyDescriptor(value,key)?.value,seen));
+  }
+  for(const error of errors){
+    assert.ok(error instanceof KalshiWebSocketError);
+    for(const key of ["rawPacket","cause","bytesParsed","code","reason"])assert.equal(Object.hasOwn(error,key),false);
+    const json=JSON.stringify(error);
+    for(const output of [String(error),String(error.stack),inspect(error,{depth:20,showHidden:true}),json,...diagnostics(error),...diagnostics(JSON.parse(json))]){
+      assert.equal(output.includes(marker),false);assert.equal(output.includes(signature),false);
+    }
+  }
+});
+
+for(const product of ["predictions","perps"] as const)for(const operation of ["subscribe","list","partial"] as const)test(`${product} matching-ID unknown-SID ${operation} error is promptly terminal`,{timeout:5000},async t=>{
+  const frame={type:"error",sid:77,seq:1,msg:{code:7,msg:"terminal source-valid error"}};
+  new StreamingValidator(product==="predictions"?predictionsWsContract:perpsWsContract).validate("errorResponse",{...frame,id:1});
+  const {client}=await wire(t,(socket,c)=>{
+    if(c.cmd!== (operation==="list"?"list_subscriptions":"subscribe"))return false;
+    if(operation==="partial")socket.send(JSON.stringify({id:c.id,type:"subscribed",msg:{channel:"trade",sid:1}}));
+    socket.send(JSON.stringify({...frame,id:c.id}));return true;
+  },{commandTimeoutMs:10000,reconnect:{maxAttempts:0}},product,"ed25519");
+  let settled=false;
+  const request=operation==="list"?client.listSubscriptions():operation==="partial"?client.subscribeMany({channels:["trade","ticker"]}):product==="predictions"?(client as KalshiPredictionsWebSocketClient).subscribe("trade"):(client as KalshiPerpsWebSocketClient).subscribe("trade");
+  const proof=assert.rejects(request,error=>{
+    settled=true;
+    if(operation==="partial"){
+      assert.ok(error instanceof KalshiWebSocketPartialSubscriptionError);
+      assert.deepEqual(error.acknowledgedChannels,["trade"]);assert.equal(error.cleanup,"session-reset");
+      error=error.cause;
+    }
+    assert.ok(error instanceof KalshiWebSocketCommandError);assert.equal(error.response.msg.code,7);return true;
+  });
+  await until(()=>settled);await proof;
+});
 
 for(const initial of ["ticker","uuid"] as const)test(`Volta mixed ${initial} selection restores exclusive subscribe and acknowledged mutation commands`,{timeout:5000},async t=>{
   const selections=new Map<number,{tickers:Set<string>;ids:Set<string>}>();

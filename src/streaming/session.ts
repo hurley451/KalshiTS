@@ -1,10 +1,10 @@
 import WebSocket from "ws";
 import { signKalshiRequest, type KalshiAuthOptions } from "../auth.js";
-import { requestContext, delay, withSignal, KalshiAbortError } from "../transport.js";
+import { requestContext, delay, withSignal, KalshiAbortError, KalshiTimeoutError } from "../transport.js";
 import { StreamingValidator, type Schema, type StreamingContract } from "./contracts.js";
 import { BoundedQueue } from "./queue.js";
 import { BookStore } from "./orderbook.js";
-import { KalshiContractError } from "../errors.js";
+import { KalshiAuthError, KalshiContractError } from "../errors.js";
 import { KalshiWebSocketError, KalshiWebSocketBackpressureError, KalshiWebSocketCommandError, KalshiWebSocketPartialSubscriptionError } from "./errors.js";
 
 export interface StreamingCommandOptions {
@@ -223,7 +223,7 @@ export class StreamingSession {
     if (!this.opening) this.opening = Promise.resolve().then(() => {
       if (context.signal.aborted || this.lifetime.signal.aborted) throw context.signal.reason ?? this.lifetime.signal.reason;
       return this.open();
-    }).catch(error => { this.fence(error, false); throw error; }).finally(() => { this.opening = undefined; });
+    }).catch(error => { const safe = this.safeError(error); this.fence(safe, false); throw safe; }).finally(() => { this.opening = undefined; });
     return new Promise<void>((resolve, reject) => {
       const cancel = () => { const reason = context.signal.reason; this.fence(reason, false); reject(reason); };
       if (context.signal.aborted) cancel();
@@ -247,7 +247,9 @@ export class StreamingSession {
     const transportOptions = { headers: signed.headers, followRedirects: false, autoPong: true,
       handshakeTimeout: this.options.handshakeTimeoutMs ?? 10000, closeTimeout: this.options.closeTimeoutMs ?? 3000,
       maxPayload: this.limits.maxPayloadBytes, perMessageDeflate: false };
-    const socket = new WebSocket(url, transportOptions);
+    let socket: WebSocket;
+    try { socket = new WebSocket(url, transportOptions); }
+    catch (error) { throw this.safeError(error); }
     this.socket = socket;
     return new Promise<void>((resolve, reject) => {
       let opened = false;
@@ -258,7 +260,11 @@ export class StreamingSession {
       socket.on("unexpected-response", (_request, response) => {
         response.resume(); socket.terminate(); reject(new KalshiWebSocketError(`WebSocket upgrade refused: HTTP ${response.statusCode}.`, generation));
       });
-      socket.on("error", error => { if (!opened) reject(error); if (this.generation === generation) this.observe("error", new KalshiWebSocketError("WebSocket transport failed.", generation)); });
+      socket.on("error", () => {
+        const safe = new KalshiWebSocketError("WebSocket transport failed.", generation);
+        if (!opened) reject(safe);
+        if (this.generation === generation) this.observe("error", safe);
+      });
       socket.on("ping", data => { if (this.generation === generation) {
         try {
           this.validator.validateControl("outgoingPing", data); this.validator.validateControl("incomingPong", data, data);
@@ -290,7 +296,15 @@ export class StreamingSession {
     clearTimeout(this.heartbeat);
     this.heartbeat = setTimeout(() => { if (this.generation === generation) this.fence(new KalshiWebSocketError("WebSocket heartbeat deadline exceeded.", generation), true); }, this.options.heartbeatTimeoutMs ?? 30000);
   }
+  private safeError(error: unknown): Error {
+    if (error instanceof KalshiWebSocketError || error instanceof KalshiContractError || error instanceof KalshiAuthError
+      || error instanceof KalshiAbortError || error instanceof KalshiTimeoutError) return error;
+    // Preserve our fixed configuration diagnostics, never native parser/request properties.
+    if (error instanceof TypeError && ["Invalid WebSocket URL.", "Authenticated WebSockets require TLS outside loopback."].includes(error.message)) return new TypeError(error.message);
+    return new KalshiWebSocketError("WebSocket transport failed.", this.generation);
+  }
   private fence(error: unknown, reconnect: boolean): void {
+    error = this.safeError(error);
     const old = this.socket;
     ++this.generation; this.socket = undefined; clearTimeout(this.heartbeat);
     for (const handle of this.handles) { handle.books.invalidate(); handle.recovering = undefined; handle.queue.reset(); }
@@ -517,7 +531,8 @@ export class StreamingSession {
       this.validator.validate(name, value); if (!this.sequence(value)) return; this.observe("message", value);
       if (!pending) return;
       if (value.type === "error") {
-        if (value.sid !== undefined && !pending.sids.has(value.sid) && !pending.handles.some(h=>h.generation === pending.generation && h.sid === value.sid)) return;
+        if (pending.kind !== "subscribe" && pending.kind !== "list" && value.sid !== undefined
+          && !pending.sids.has(value.sid) && !pending.handles.some(h=>h.generation === pending.generation && h.sid === value.sid)) return;
         const error = new KalshiWebSocketCommandError(this.generation, value);
         this.settle(pending, undefined, error);
         if (pending.kind === "subscribe") this.fence(error, true);
