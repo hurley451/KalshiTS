@@ -33,7 +33,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - 209 schema-derived models and runtime request/response contract validation.
 - Lazy async page iterators for all 28 cursor-paginated REST operations.
 - Promise-based HTTP requests using Node.js fetch, with production and demo environments.
-- Automatic RSA-PSS request signing using Node.js crypto.
+- Automatic RSA-PSS or Ed25519 request signing using Node.js crypto.
 - Path substitution, query encoding, JSON bodies, and API error details.
 - Typed portfolio fills helper with camelCase fields and fixed-point strings.
 - WebSocket envelope parsing and shared offline conformance fixtures.
@@ -148,7 +148,14 @@ console.log(balance);
 `privateKeyPem` accepts a PEM string, Buffer, or Node.js KeyObject.
 RSA-PSS signing uses SHA-256 and a digest-length salt. It signs the timestamp,
 uppercase method, and API path without the query string. Keep system time accurate
-and use credentials issued for the selected environment. Ed25519 is not supported.
+and use credentials issued for the selected environment. Ed25519 signs the same
+message directly, without prehashing. The algorithm is selected from the parsed
+private key. RSA PKCS#1 and PKCS#8 PEM keys, Ed25519 PKCS#8 PEM keys, and private
+Node.js `KeyObject` values are supported. PEM keys may be strings or buffers.
+Encrypted PEM input must first be decrypted with `createPrivateKey` and supplied
+as a private `KeyObject`. Public, symmetric, EC, and restricted RSA-PSS keys are
+rejected. Invalid keys and signing failures produce `KalshiAuthError` without
+including private key material or underlying crypto errors.
 
 ## REST Examples
 
@@ -429,7 +436,7 @@ See [contributing](CONTRIBUTING.md) for development and test commands.
 
 ```text
 src/
-  auth.ts             RSA-PSS signing
+  auth.ts             RSA-PSS and Ed25519 signing
   client.ts           Typed HTTP execution and fills convenience method
   contracts.ts        Runtime request/response validation
   environment.ts      Production/demo URLs

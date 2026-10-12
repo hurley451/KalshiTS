@@ -1,6 +1,10 @@
 import type { OperationError, TypedOperationId } from "./generated/models.js";
 import { inspect } from "node:util";
 
+export class KalshiAuthError extends Error {
+  constructor(message: string) { super(message); this.name = "KalshiAuthError"; }
+}
+
 export class KalshiApiError extends Error {
   readonly status: number;
   readonly statusText: string;
