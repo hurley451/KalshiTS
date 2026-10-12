@@ -25,6 +25,12 @@ function transportProof(client: KalshiClient) {
  void [client.exchange.getExchangeStatus({}, options), client.portfolio.getFills({}, options), retry, rate];
 }
 void transportProof;
+async function rawProof(client: KalshiClient) {
+ const result = await client.rawRequest("GetExchangeStatus", { authenticated: false });
+ const bytes: Uint8Array = result.rawBody;
+ void bytes;
+}
+void rawProof;
 `);
     run(process.execPath,[path.join(repository,"node_modules/typescript/lib/tsc.js"),"--strict","--noEmit","--target","ES2022","--module","NodeNext","--moduleResolution","NodeNext","--typeRoots",path.join(repository,"node_modules/@types"),"consumer.mts"]);
     run(process.execPath,[path.join(repository,"node_modules/typescript/lib/tsc.js"),"--strict","--exactOptionalPropertyTypes","--noEmit","--target","ES2022","--module","NodeNext","--moduleResolution","NodeNext","--typeRoots",path.join(repository,"node_modules/@types"),"consumer.mts"]);
@@ -57,6 +63,12 @@ const resilient = new KalshiClient({retry:{maxAttempts:2,baseDelayMs:0,maxDelayM
 await resilient.exchange.getExchangeStatus();
 assert.equal(attempts, 2);
 assert.equal(costs, 2);
+const binary = new Uint8Array([255,254,0,65]);
+const rawClient = new KalshiClient({fetch:async()=>new Response(binary, {status:201})});
+const raw = await rawClient.rawRequest("UpgradeAccountApiUsageLevel", {authenticated:false});
+assert.deepEqual(raw.rawBody, binary);
+assert.deepEqual(raw.body, binary);
+assert.deepEqual(await rawClient.upgradeAccountApiUsageLevel({}, {authenticated:false}), binary);
 console.log("118 packed named facade calls passed");
 `);
     assert.match(run(process.execPath,["consumer.mjs"]),/118 packed/);

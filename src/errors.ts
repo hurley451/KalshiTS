@@ -1,26 +1,32 @@
 import type { OperationError, TypedOperationId } from "./generated/models.js";
+import { inspect } from "node:util";
 
 export class KalshiApiError extends Error {
   readonly status: number;
   readonly statusText: string;
   readonly body: unknown;
   readonly headers: Headers;
+  readonly rawBody: Uint8Array | undefined;
 
-  constructor(response: Response, body: unknown) {
-    super(`Kalshi API request failed with HTTP ${response.status} ${response.statusText}`.trim());
+  constructor(response: Response, body: unknown, rawBody?: Uint8Array) {
+    super(`Kalshi API request failed with HTTP ${response.status}`);
     this.name = "KalshiApiError";
     this.status = response.status;
     this.statusText = response.statusText;
     this.body = body;
     this.headers = response.headers;
+    this.rawBody = rawBody;
   }
+
+  [inspect.custom](): string { return `${this.name}: ${this.message}`; }
+  toJSON() { return {name: this.name, message: this.message, status: this.status}; }
 }
 
 export class KalshiEndpointError<I extends TypedOperationId> extends KalshiApiError {
   readonly operationId: I;
   readonly contract: OperationError<I>;
-  constructor(operationId: I, response: Response, body: unknown) {
-    super(response, body);
+  constructor(operationId: I, response: Response, body: unknown, rawBody?: Uint8Array) {
+    super(response, body, rawBody);
     this.name = "KalshiEndpointError";
     this.operationId = operationId;
     this.contract = { status: response.status, body } as OperationError<I>;
@@ -40,7 +46,7 @@ export class KalshiContractError extends Error {
 
 export class KalshiInvalidResponseError extends KalshiApiError {
   constructor(error: KalshiApiError, readonly contractViolation: KalshiContractError) {
-    super(new Response(null, {status: error.status, statusText: error.statusText, headers: error.headers}), error.body);
+    super(new Response(null, {status: error.status, statusText: error.statusText, headers: error.headers}), error.body, error.rawBody);
     this.name = "KalshiInvalidResponseError";
   }
 }
@@ -53,10 +59,12 @@ export class KalshiOperationError extends Error {
 }
 
 export class KalshiResponseParseError extends Error {
-  constructor(readonly status: number) {
+  constructor(readonly status: number, readonly headers?: Headers, readonly rawBody?: Uint8Array) {
     super(`Kalshi response with HTTP ${status} contains invalid JSON.`);
     this.name = "KalshiResponseParseError";
   }
+  [inspect.custom](): string { return `${this.name}: ${this.message}`; }
+  toJSON() { return {name: this.name, message: this.message, status: this.status}; }
 }
 
 export class KalshiTransportError extends Error {

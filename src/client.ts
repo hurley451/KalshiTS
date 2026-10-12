@@ -36,6 +36,7 @@ export interface KalshiRequestOptions {
 export interface KalshiRawResponse<TBody = unknown> {
   readonly body: TBody;
   readonly response: Response;
+  readonly rawBody: Uint8Array;
 }
 
 export type PortfolioFacade = Omit<TypedEndpoints["portfolioApi"], "getFills"> & {
@@ -113,7 +114,7 @@ export class KalshiClient extends TypedEndpoints {
           if (violation instanceof KalshiContractError) throw new KalshiInvalidResponseError(error, violation);
           throw violation;
         }
-        if (declared) throw new KalshiEndpointError(id, new Response(null, { status: error.status, statusText: error.statusText, headers: error.headers }), error.body);
+        if (declared) throw new KalshiEndpointError(id, new Response(null, { status: error.status, statusText: error.statusText, headers: error.headers }), error.body, error.rawBody);
       }
       throw error;
     }
@@ -176,17 +177,17 @@ export class KalshiClient extends TypedEndpoints {
     let response: Response;
     try { response = await withSignal(this.fetchImplementation(url, init), signal); }
     catch { throw signal.aborted ? abortReason(signal) : new KalshiTransportError(); }
-    let responseBody: unknown;
-    try { responseBody = await withSignal(readResponseBody(response), signal); }
+    let decoded: {body: unknown; rawBody: Uint8Array};
+    try { decoded = await withSignal(readResponseBody(response), signal); }
     catch (error) {
       if (signal.aborted) throw abortReason(signal);
       if (error instanceof KalshiResponseParseError) throw error;
       throw new KalshiResponseReadError(response);
     }
     if (!response.ok) {
-      throw new KalshiApiError(response, responseBody);
+      throw new KalshiApiError(response, decoded.body, decoded.rawBody);
     }
-    return { body: responseBody as TBody, response };
+    return { body: decoded.body as TBody, response, rawBody: decoded.rawBody };
   }
 
   private stripTradeApiPrefix(pathAndQuery: string): string {
@@ -194,22 +195,25 @@ export class KalshiClient extends TypedEndpoints {
   }
 }
 
-async function readResponseBody(response: Response): Promise<unknown> {
-  if (response.status === 204) {
-    return undefined;
+async function readResponseBody(response: Response): Promise<{body: unknown; rawBody: Uint8Array}> {
+  const rawBody = new Uint8Array(await response.arrayBuffer());
+  if (response.status === 204 || rawBody.length === 0) return {body: undefined, rawBody};
+  const contentType = (response.headers.get("content-type") ?? "").split(";", 1)[0]!.trim().toLowerCase();
+  const json = contentType === "application/json" || contentType.endsWith("+json");
+  let text: string;
+  try { text = new TextDecoder("utf-8", {fatal: true, ignoreBOM: true}).decode(rawBody); }
+  catch {
+    if (json && response.ok) throw new KalshiResponseParseError(response.status, response.headers, rawBody);
+    return {body: rawBody.slice(), rawBody};
   }
-  const text = await response.text();
-  if (text.length === 0) {
-    return undefined;
-  }
-  const contentType = response.headers.get("content-type") ?? "";
-  if (contentType.includes("application/json")) {
+  if (contentType === "application/octet-stream") return {body: rawBody.slice(), rawBody};
+  if (json) {
     try {
-      return JSON.parse(text);
+      return {body: JSON.parse(text.charCodeAt(0) === 0xfeff ? text.slice(1) : text), rawBody};
     } catch {
-      if (response.ok) throw new KalshiResponseParseError(response.status);
-      return text;
+      if (response.ok) throw new KalshiResponseParseError(response.status, response.headers, rawBody);
+      return {body: text, rawBody};
     }
   }
-  return text;
+  return {body: text, rawBody};
 }

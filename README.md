@@ -364,15 +364,22 @@ Such payloads do not qualify for `isEndpointError` typed narrowing.
 | Request `pathParameters`, `query`, `body` | Empty/absent | Path values, query values, and JSON body |
 
 ```ts
-const { body, response } = await client.rawRequest("GetExchangeStatus", {
+const { body, response, rawBody } = await client.rawRequest("GetExchangeStatus", {
   authenticated: false, headers: { "Accept-Language": "en" }
 });
-console.log(response.status, body);
+console.log(response.status, body, rawBody.byteLength);
 ```
 
 A custom environment object supplies `name`, `restBaseUrl`, and `websocketUrl`.
 Only `restBaseUrl` is used by this HTTP client. HTTP redirects fail rather than
 forward authentication headers to a redirect target.
+
+`rawBody` retains the exact response bytes, including whitespace and BOMs.
+JSON bodies are decoded as strict UTF-8. Unspecified non-UTF-8 bodies and
+`application/octet-stream` return `Uint8Array`, not replacement text. API and
+JSON parse errors also retain `rawBody` when the body was received completely.
+Default error inspection and JSON serialization omit headers and payloads;
+access `error.body`, `error.headers` or `error.rawBody` explicitly when needed.
 
 ```ts
 import { KalshiClient } from "@hurley451/kalshi-ts";
