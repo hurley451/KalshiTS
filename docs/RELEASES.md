@@ -1,6 +1,6 @@
 # Releases
 
-The initial release is `0.1.0-alpha.1`, published under npm's `next` dist-tag.
+The planned initial release is `0.1.0-alpha.1`, using npm's `next` dist-tag.
 It is not published until registry read-back confirms availability. The SDK
 remains a Node.js ESM prerelease with the coverage exclusions documented in
 [API_COVERAGE.md](API_COVERAGE.md).
@@ -10,14 +10,14 @@ remains a Node.js ESM prerelease with the coverage exclusions documented in
 - Exact version in `package.json` and lockfile, matching an existing Git tag.
 - Complete-diff review and passing Node 20/22/24 CI, including packed consumers.
 - Immutable KalshiCore commit in `package.json`'s `kalshiCoreRef`.
-- Pinned Core tests, validation, operation regeneration comparison and SDK adapter.
+- Pinned Core tests, validation, full-client regeneration comparison and SDK adapter.
 - Intended runtime/declaration/docs/license tarball contents.
 - npm package ownership and configured trusted publisher or initial authenticated bootstrap.
 
-The initial prerelease pins KalshiCore
-[`v0.1.0`](https://github.com/hurley451/KalshiCore/releases/tag/v0.1.0), commit
-`ba5d98ed0ec3a1a7a37f0d005eaf36fb23be36b7`. Scheduled drift monitoring remains
-separate from this immutable release input.
+The initial prerelease pins KalshiCore commit
+[`da235871e8c55ca1f6bcc2020f5324e909f1998a`](https://github.com/hurley451/KalshiCore/commit/da235871e8c55ca1f6bcc2020f5324e909f1998a),
+which includes the full official source schemas. Scheduled drift monitoring
+remains separate from this immutable release input.
 
 Published versions are immutable. A failed post-publication check does not
 authorize unpublishing or overwriting the version; diagnose and issue a reviewed

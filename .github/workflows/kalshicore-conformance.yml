@@ -36,7 +36,7 @@ jobs:
         with:
           repository: hurley451/KalshiCore
           path: KalshiCore
-          ref: ${{ github.event_name == 'schedule' && 'main' || 'ba5d98ed0ec3a1a7a37f0d005eaf36fb23be36b7' }}
+          ref: ${{ github.event_name == 'schedule' && 'main' || 'da235871e8c55ca1f6bcc2020f5324e909f1998a' }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -52,6 +52,11 @@ jobs:
       - name: Build
         working-directory: KalshiTS
         run: npm run build
+
+      - name: Verify full generated client
+        id: generation
+        working-directory: KalshiTS
+        run: npm run check:generated -- --kalshicore-root "$GITHUB_WORKSPACE/KalshiCore"
 
       - name: Test
         working-directory: KalshiTS
@@ -78,10 +83,11 @@ jobs:
           if-no-files-found: warn
 
       - name: File KalshiCore contract gap
-        if: always() && matrix.node == 24 && github.event_name == 'schedule' && steps.conformance.outcome == 'failure'
+        if: always() && matrix.node == 24 && github.event_name == 'schedule' && (steps.conformance.outcome == 'failure' || steps.generation.outcome == 'failure')
         env:
           GH_TOKEN: ${{ secrets.KALSHICORE_ISSUE_TOKEN }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GENERATION_OUTCOME: ${{ steps.generation.outcome }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
             echo "KALSHICORE_ISSUE_TOKEN is not configured; skipping parent issue filing."
@@ -93,7 +99,7 @@ jobs:
           body_file="$(mktemp)"
           {
             echo "## Summary"
-            echo "KalshiTS scheduled conformance failed against KalshiCore."
+            echo "KalshiTS scheduled contract verification failed against KalshiCore main."
             echo
             echo "## Source links"
             echo "- Run: $RUN_URL"
@@ -102,6 +108,7 @@ jobs:
             echo "- typescript.KalshiTS"
             echo
             echo "## Evidence"
+            echo "- Full generated client verification: $GENERATION_OUTCOME"
             if [ -f "$CONFORMANCE_REPORT" ]; then
               echo '```json'
               cat "$CONFORMANCE_REPORT"

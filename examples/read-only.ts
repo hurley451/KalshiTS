@@ -15,18 +15,16 @@ const client = new KalshiClient({
 
 switch (scenario) {
   case "status":
-    console.log(await client.request("GetExchangeStatus", { authenticated: false }));
+    console.log(await client.exchange.getExchangeStatus());
     break;
   case "markets":
-    console.log(await client.request("GetMarkets", {
-      authenticated: false,
+    console.log(await client.markets.getMarkets({
       query: { limit: 5, status: "open" }
     }));
     break;
   case "orderbook":
     if (!ticker) throw new Error("Pass a demo market ticker after orderbook.");
-    console.log(await client.request("GetMarketOrderbook", {
-      authenticated: false,
+    console.log(await client.markets.getMarketOrderbook({
       pathParameters: { ticker },
       query: { depth: 5 }
     }));

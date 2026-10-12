@@ -11,11 +11,17 @@ for shared contracts and offline fixtures.
 ```bash
 npm ci
 npm test
+npm run check:generated -- --kalshicore-root /path/to/KalshiCore
 npm run conformance -- --kalshicore-root /path/to/KalshiCore --report artifacts/kalshicore-conformance/report.json
 ```
 
 Include the commands and results in your pull request. Keep credentials out of
 source, examples, logs, and issue reports.
+
+Regenerate models, methods, contracts and compiler fixtures together with
+`npm run generate:operations -- --kalshicore-root /path/to/KalshiCore`.
+Use the full Core commit pinned in `package.json` for reproducible builds.
+`check:generated` compares all nine outputs without changing the checkout.
 
 ## SDK and Framework Boundaries
 

@@ -67,13 +67,12 @@ jobs:
       - name: Install and verify
         run: |
           npm ci
+          npm run check:generated -- --kalshicore-root KalshiCore
           npm test
           npm run test:package
           npm --prefix KalshiCore ci
           npm --prefix KalshiCore test
           npm --prefix KalshiCore run validate
-          npm run generate:operations -- --kalshicore-root KalshiCore --out "$RUNNER_TEMP/operations.ts"
-          cmp src/generated/operations.ts "$RUNNER_TEMP/operations.ts"
           npm run conformance -- --kalshicore-root KalshiCore --report artifacts/kalshicore-conformance/report.json
 
       - name: Pack exact artifact
