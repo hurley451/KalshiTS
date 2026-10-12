@@ -17,6 +17,6 @@ export type { PredictionsSubscription, PredictionsBook, PredictionsEvent } from 
 export type { PredictionsModels, PredictionsMessageModels, PredictionsChannel, PredictionsDataChannel, PredictionsMessage, PredictionsSubscribeParams } from "./generated/predictions-ws.js";
 export { KalshiPerpsWebSocketClient } from "./generated/perps-ws-client.js";
 export type { PerpsSubscription, PerpsBook, PerpsEvent } from "./generated/perps-ws-client.js";
-export type { PerpsModels, PerpsMessageModels, PerpsChannel, PerpsDataChannel, PerpsMessage, PerpsSubscribeParams } from "./generated/perps-ws.js";
+export type { PerpsModels as PerpsWebSocketModels, PerpsMessageModels, PerpsChannel, PerpsDataChannel, PerpsMessage, PerpsSubscribeParams } from "./generated/perps-ws.js";
 export type { StreamingClientOptions, StreamingCommandOptions, StreamingLimits } from "./streaming/session.js";
 export * from "./streaming/errors.js";

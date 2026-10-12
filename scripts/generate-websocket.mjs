@@ -150,7 +150,8 @@ export class Kalshi${prefix}WebSocketClient {
 }
 `;
   await writeFile(path.join(out, `src/generated/${product}-ws-client.ts`), facade);
-  let proof = banner + `import type {Kalshi${prefix}WebSocketClient,${prefix}MessageModels,${prefix}Models,${prefix}Message} from "../src/index.js";\nasync function proof(client:Kalshi${prefix}WebSocketClient) {\n`;
+  const modelImport = product === "perps" ? "PerpsWebSocketModels as PerpsModels" : `${prefix}Models`;
+  let proof = banner + `import type {Kalshi${prefix}WebSocketClient,${prefix}MessageModels,${modelImport},${prefix}Message} from "../src/index.js";\nasync function proof(client:Kalshi${prefix}WebSocketClient) {\n`;
   for (const {name,payload} of fixtures) {
     proof += ` const ${name}: ${prefix}MessageModels[${JSON.stringify(name)}] = ${JSON.stringify(payload)}; void ${name};\n // @ts-expect-error Source message types reject booleans.\n const bad${name}: ${prefix}MessageModels[${JSON.stringify(name)}] = true; void bad${name};\n`;
   }

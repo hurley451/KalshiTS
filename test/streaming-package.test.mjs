@@ -10,7 +10,8 @@ test("installed library compiles every source-specific WS model and runs every P
   const run = (command, args, cwd = root) => execFileSync(command, args, { cwd, encoding:"utf8", stdio:["ignore","pipe","pipe"],
     env:{...process.env,npm_config_cache:path.join(root,"npm-cache")} });
   try {
-    const output = run("npm",["pack","--json","--pack-destination",root],repository);
+    // npm test builds once; parallel consumers must not rebuild shared output.
+    const output = run("npm",["pack","--ignore-scripts","--json","--pack-destination",root],repository);
     const pack = JSON.parse(output.slice(output.indexOf("[")))[0];
     for (const product of ["predictions","perps"]) for (const file of [`dist/src/generated/${product}-ws-client.d.ts`,`src/generated/${product}-ws-coverage.json`,`src/generated/${product}-ws-source-gaps.json`]) assert.ok(pack.files.some(f=>f.path===file),file);
     writeFileSync(path.join(root,"package.json"),JSON.stringify({private:true,type:"module"}));

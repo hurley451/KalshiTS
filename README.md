@@ -20,7 +20,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - [Quick start](#quick-start)
 - [Authentication](#authentication)
 - [REST examples](#rest-examples)
-- [WebSocket message parsing](#websocket-message-parsing)
+- [WebSocket clients](#websocket-clients)
 - [Error handling](#error-handling)
 - [Configuration](#configuration)
 - [Operation lookup](#operation-lookup)
@@ -36,7 +36,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - Automatic RSA-PSS or Ed25519 request signing using Node.js crypto.
 - Path substitution, query encoding, JSON bodies, and API error details.
 - Typed portfolio fills helper with camelCase fields and fixed-point strings.
-- WebSocket envelope parsing and shared offline conformance fixtures.
+- Authenticated Predictions and Perps WebSocket clients with typed subscriptions, reconnect and order-book recovery.
 - Custom fetch implementations, request headers, and access to raw HTTP responses.
 - Total-request deadlines, cancellation, configurable local rate limits and bounded GET retries.
 
@@ -64,14 +64,13 @@ narrowing. HTTP 204 responses return `undefined`.
 | Live data | `getEventLiveData`, `getWeatherIndex`, `getWeatherIndexCalibrations` | Typed REST |
 | API keys | `getApiKeys`, `createApiKey`, `deleteApiKey` | Typed REST |
 | Communications and FCM | `getCommunicationsID`, `getRFQs`, `getQuotes`, `getFCMOrders` | Typed REST |
-| WebSocket | `parseWebSocketMessage` | Parsing only; no transport or subscriptions |
+| WebSocket | `KalshiPredictionsWebSocketClient`, `KalshiPerpsWebSocketClient` | Typed connections, commands, subscriptions and book recovery |
 
 The checked-in OpenAPI snapshot contains 118 REST operations. Named methods and
 contract tests cover each operation; this is not live exchange verification. See
 [API coverage and gaps](docs/API_COVERAGE.md) and [official API docs](https://docs.kalshi.com).
 
-WebSocket connections/reconnect and browser support are not implemented.
-Node.js crypto is required even for public requests.
+Browser support is not implemented. Node.js crypto is required even for public requests.
 
 ## Requirements
 
@@ -306,7 +305,49 @@ async function demoOrder(auth: KalshiAuthOptions, ticker: string) {
 Cancellation does not undo fills. The read-only example runner below never calls
 this function or any mutation.
 
-## WebSocket Message Parsing
+## WebSocket Clients
+
+Use separate clients for Predictions and Perps. Subscriptions expose typed
+async message iterators; command IDs and subscription IDs are scoped to a
+connection generation. Reconnect restores acknowledged filters. Sequence gaps
+invalidate books until replacement snapshots restore continuity.
+
+```ts
+import { KalshiPredictionsWebSocketClient, type KalshiAuthOptions } from "@hurley451/kalshi-ts";
+
+async function readBook(auth: KalshiAuthOptions, ticker: string, signal: AbortSignal) {
+  const stream = new KalshiPredictionsWebSocketClient({ environment: "demo", auth });
+  const stop = () => { void stream.close(); };
+  signal.addEventListener("abort", stop, { once: true });
+  try {
+    await stream.connect({ signal });
+    const subscription = await stream.subscribe("orderbook_delta", {
+      market_tickers: [ticker], use_yes_price: true
+    }, { signal });
+    for await (const message of subscription.messages()) {
+      const book = subscription.book(ticker);
+      if (book?.ready) console.log(message.type, book.yes, book.no);
+    }
+  } finally {
+    signal.removeEventListener("abort", stop);
+    await stream.close();
+  }
+}
+```
+
+`KalshiPerpsWebSocketClient` has the same connection lifecycle with separate
+Perps channel types. Predictions books use yes-leg prices; Perps books use
+bid/ask prices. Quantities and prices remain decimal strings. Only books with
+`ready: true` have established continuity. `events()` exposes connection, gap,
+control-frame and error events. Queue and payload limits are configurable;
+overflow is reported rather than silently dropping book updates.
+
+Handshake, command, close and heartbeat deadlines have separate options.
+`reconnect.maxAttempts: 0` disables automatic reconnect. Explicit `close()`
+ends the client lifetime. Authentication uses fresh RSA-PSS or Ed25519 signatures
+on each handshake, and redirects are refused.
+
+### Envelope Parsing
 
 Parsing accepts an already-decoded object, not raw JSON text:
 
@@ -318,8 +359,8 @@ const envelope = parseWebSocketMessage(JSON.parse(text));
 console.log(envelope.type, envelope.sid, envelope.seq, envelope.msg);
 ```
 
-A transport must be supplied by the application. The parser does not connect,
-subscribe, reconnect, validate channel payload schemas, or maintain an order book.
+The standalone parser does not connect, subscribe, reconnect, validate channel
+payload schemas, or maintain an order book. Use a WebSocket client for those tasks.
 `OrderBookDeltaMessage` is a TypeScript interface, not a runtime validator.
 
 ## Error Handling
