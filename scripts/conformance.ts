@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { runPerpsConformance } from "./perps-conformance.js";
 import { createHash, constants, generateKeyPairSync, verify } from "node:crypto";
 import {
   buildPortfolioFillsPath,
@@ -22,6 +23,7 @@ interface Report {
   generatedAtUtc: string;
   suiteDigest: string;
   checks: CheckResult[];
+  perpsChecks: CheckResult[];
 }
 
 const kalshiCoreRoot = resolveOption("--kalshicore-root") ?? process.env.KALSHICORE_ROOT;
@@ -48,12 +50,15 @@ for (const fixtureId of fixtureIds) {
   }
 }
 
+const perpsChecks = await runPerpsConformance(resolvedKalshiCoreRoot).catch(error=>[fail("perps_openapi:source-cases",error instanceof Error ? error.message : String(error))]);
+try { digest.update(await readFile(path.join(resolvedKalshiCoreRoot,"fixtures/perps/perps_openapi-cases.json"))); } catch { /* Missing cases are reported above. */ }
 const report: Report = {
   targetId: readString(targetManifest, "id", "typescript.KalshiTS"),
   kalshiCoreRoot: resolvedKalshiCoreRoot,
   generatedAtUtc: new Date().toISOString(),
   suiteDigest: digest.digest("hex"),
-  checks
+  checks,
+  perpsChecks
 };
 
 const reportPath = path.resolve(resolveOption("--report") ?? "artifacts/kalshicore-conformance/report.json");
@@ -63,9 +68,10 @@ await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 for (const check of checks) {
   console.log(`${check.passed ? "PASS" : "FAIL"} ${check.id}: ${check.message}`);
 }
+for (const check of report.perpsChecks) console.log(`${check.passed ? "PASS" : "FAIL"} ${check.id}: ${check.message}`);
 console.log(`Report: ${reportPath}`);
 
-if (checks.some((check) => !check.passed)) {
+if ([...checks,...report.perpsChecks].some((check) => !check.passed)) {
   process.exitCode = 1;
 }
 

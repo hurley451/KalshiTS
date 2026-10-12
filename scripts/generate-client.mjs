@@ -5,6 +5,10 @@ import YAML from "yaml";
 import openapiTS, { astToString } from "openapi-typescript";
 import { sample } from "openapi-sampler";
 
+if (process.argv.includes("--product") && process.argv[process.argv.indexOf("--product") + 1] === "perps") {
+  await import("./generate-perps-rest.mjs");
+} else {
+
 const arg = (name) => process.argv[process.argv.indexOf(name) + 1];
 const source = process.argv.includes("--source") ? arg("--source") : process.env.KALSHI_OPENAPI;
 if (!source) throw new Error("Pass --source <official openapi.yaml> or set KALSHI_OPENAPI.");
@@ -205,3 +209,4 @@ function visitSchema(node, pointer) {
 visitSchema(spec.components,"#/components");
 for (const e of entries) { visitSchema(e.parameters,`#/operations/${e.operationId}/parameters`); visitSchema(e.requestBody,`#/operations/${e.operationId}/requestBody`); visitSchema(e.responses,`#/operations/${e.operationId}/responses`); }
 await writeFile("src/generated/schema-coverage.json",JSON.stringify({sha256,schemaCount:schemaFixtures.length,nodes:schemaCoverage},null,2)+"\n");
+}

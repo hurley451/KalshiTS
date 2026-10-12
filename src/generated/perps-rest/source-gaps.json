@@ -1,0 +1,578 @@
+{
+  "sourceId": "perps_openapi",
+  "url": "https://docs.kalshi.com/perps_openapi.yaml",
+  "sha256": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+  "coreRef": "99abf30c3fc818815e99f015299e2f4bcbf62a00",
+  "activeDate": "2026-10-12",
+  "operationCount": 51,
+  "modelCount": 88,
+  "schemaRootCount": 213,
+  "referenceCount": 457,
+  "responseBindingCount": 236,
+  "domainCount": 11,
+  "paginatorCount": 3,
+  "gaps": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/paths/~1portfolio~1intra_exchange_instance_transfer/post"
+      },
+      "issue": "Transfer security declares three separate alternatives; signing scheme descriptions require combined headers. Preserved without correction.",
+      "status": "unreviewed",
+      "coreLedger": "sources/perps/perps_openapi-source.json#/gaps/0",
+      "sdkDisposition": "Preserve raw security alternatives; existing trading-key signer emits all three signing headers."
+    }
+  ],
+  "compatibility": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/leverage_estimate"
+      },
+      "precondition": {
+        "type": "number",
+        "format": "double",
+        "description": "Leverage estimate (1 / margin_rate) evaluated at a small retail-sized notional position. Actual leverage may be lower for larger positions as the liquidation margin rate grows with size. Null when margin config or price data is unavailable.\n"
+      },
+      "preconditionHash": "daf498d065f9dd82b741da96e79b0f7e6b33a5eba83630ce467e9cc31a9c1f12",
+      "effectiveDate": null,
+      "disposition": "approved source-prose null compatibility; map values remain nonnullable",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/leverage_estimates"
+      },
+      "precondition": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": "Leverage estimates (1 / margin_rate) keyed by notional position size in dollars (\"1000\", \"10000\", \"100000\", \"1000000\"). Leverage decreases at larger notionals as the liquidation margin rate grows with size. Null when margin config or price data is unavailable.\n"
+      },
+      "preconditionHash": "fe6880357c988f7552ac95afad64b1e3649f00cf3d031d13b72881290231e1d5",
+      "effectiveDate": null,
+      "disposition": "approved source-prose null compatibility; map values remain nonnullable",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    }
+  ],
+  "refinements": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/CreateMarginOrderRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "required": [
+          "client_order_id",
+          "side",
+          "count",
+          "price",
+          "time_in_force",
+          "self_trade_prevention_type"
+        ],
+        "properties": {
+          "ticker": {
+            "type": "string",
+            "description": "Market ticker. Supply ticker or market_id; ticker takes precedence when both are provided.",
+            "x-go-type-skip-optional-pointer": true,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "required_without=MarketId"
+            }
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Stable exchange market UUID. May be supplied instead of ticker.",
+            "x-go-type-skip-optional-pointer": true,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "omitempty,uuid"
+            }
+          },
+          "client_order_id": {
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "side": {
+            "$ref": "#/components/schemas/BookSide",
+            "x-oapi-codegen-extra-tags": {
+              "validate": "required,oneof=bid ask"
+            }
+          },
+          "count": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "description": "String representation of the order quantity in contracts."
+          },
+          "price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Price for the order in fixed-point dollars.",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "expiration_time": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "time_in_force": {
+            "type": "string",
+            "enum": [
+              "fill_or_kill",
+              "good_till_canceled",
+              "immediate_or_cancel"
+            ],
+            "x-oapi-codegen-extra-tags": {
+              "validate": "required,oneof=fill_or_kill good_till_canceled immediate_or_cancel"
+            },
+            "x-go-type-skip-optional-pointer": true
+          },
+          "post_only": {
+            "type": "boolean"
+          },
+          "self_trade_prevention_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SelfTradePreventionType"
+              }
+            ],
+            "x-oapi-codegen-extra-tags": {
+              "validate": "required,oneof=taker_at_cross maker"
+            },
+            "x-go-type-skip-optional-pointer": true
+          },
+          "cancel_order_on_pause": {
+            "type": "boolean",
+            "description": "If this flag is set to true, the order will be canceled if the order is open and trading on the exchange is paused for any reason."
+          },
+          "reduce_only": {
+            "type": "boolean",
+            "description": "Specifies whether the order place count should be capped by the member's current position. Orders with reduce_only set to true will be rejected unless time_in_force is immediate_or_cancel or fill_or_kill."
+          },
+          "subaccount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The subaccount number to use for this margin order. 0 is the primary subaccount. Subaccount-restricted API keys must omit this field or pass their locked subaccount."
+          },
+          "order_group_id": {
+            "type": "string",
+            "description": "The order group this order is part of",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "market_version": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0,
+            "description": "The market_version you expect the market to be at. If it is set and the market's current market_version differs, the order is rejected with HTTP 409 and error code market_version_mismatch. 0 skips the check.",
+            "x-go-type-skip-optional-pointer": true
+          }
+        }
+      },
+      "preconditionHash": "9f4344701f0cc87b0d67bc620696a3ee80ad60d5860781286686cf988cb965c6",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "nonempty ticker or market UUID; both permitted with ticker precedence",
+        "nonempty market_id must be a UUID; empty optional selector is omitted",
+        "reduce_only true requires IOC/FOK"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1orders/post"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/AmendMarginOrderRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "required": [
+          "side",
+          "price",
+          "count"
+        ],
+        "properties": {
+          "ticker": {
+            "type": "string",
+            "description": "Market ticker. Supply ticker or market_id; ticker takes precedence when both are provided.",
+            "x-go-type-skip-optional-pointer": true,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "required_without=MarketId"
+            }
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Stable exchange market UUID. May be supplied instead of ticker.",
+            "x-go-type-skip-optional-pointer": true,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "omitempty,uuid"
+            }
+          },
+          "side": {
+            "$ref": "#/components/schemas/BookSide",
+            "description": "Side of the order",
+            "x-oapi-codegen-extra-tags": {
+              "validate": "required,oneof=bid ask"
+            }
+          },
+          "price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Updated price for the order in fixed-point dollars.",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "count": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "description": "String representation of the updated quantity for the order.",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "client_order_id": {
+            "type": "string",
+            "description": "The original client-specified order ID to be amended",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "updated_client_order_id": {
+            "type": "string",
+            "description": "The new client-specified order ID after amendment",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "expiration_time": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "New Unix expiration timestamp in seconds. Omit to preserve the current expiry, or use 0 to remove it (good-till-canceled). A nonzero expiry must be in the future. Send the current price and total quantity for an expiry-only amendment; this preserves queue position."
+          }
+        }
+      },
+      "preconditionHash": "953c0f0574e62c1203f6771020d4b0d5680f88e5be183bfb0af7b362ad798e84",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "nonempty ticker or market UUID; both permitted with ticker precedence",
+        "nonempty market_id must be a UUID; empty optional selector is omitted"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1orders~1{order_id}~1amend/post"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/DecreaseMarginOrderRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "properties": {
+          "reduce_by": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "nullable": true,
+            "description": "String representation of the number of contracts to reduce by. Exactly one of `reduce_by` or `reduce_to` must be provided."
+          },
+          "reduce_to": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "nullable": true,
+            "description": "String representation of the number of contracts to reduce to. Exactly one of `reduce_by` or `reduce_to` must be provided."
+          }
+        }
+      },
+      "preconditionHash": "7d6983bc25af3f19601bd51111fe7b4f1236474be630ea8678731332e4335a13",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "exactly one non-null reduce_by/reduce_to"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1orders~1{order_id}~1decrease/post"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/CreateOrderGroupRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "properties": {
+          "subaccount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Optional subaccount number to use for this order group (0 for primary, 1-63 for subaccounts). Subaccount-restricted API keys must omit this field or pass their locked subaccount."
+          },
+          "contracts_limit": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "description": "Specifies the maximum number of contracts that can be matched within this group over a rolling 15-second window. Whole contracts only. Provide contracts_limit or contracts_limit_fp; if both provided they must match.",
+            "x-go-type-skip-optional-pointer": true,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "omitempty,gte=1"
+            }
+          },
+          "contracts_limit_fp": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "nullable": true,
+            "description": "String representation of the maximum number of contracts that can be matched within this group over a rolling 15-second window. Provide contracts_limit or contracts_limit_fp; if both provided they must match."
+          },
+          "exchange_index": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExchangeIndex"
+              }
+            ],
+            "default": 0,
+            "description": "The market group this order group is bound to (default 0). All orders placed into this order group must be for markets whose exchange_index matches this value.",
+            "x-go-type-skip-optional-pointer": true
+          }
+        }
+      },
+      "preconditionHash": "5506da7ef10c75ec4d2fe0c214d397ce7bb83894f77cb4b5d896f64ef1005c33",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "at least one non-null limit",
+        "fixed-point limit represents positive whole contracts with 0-2 decimal places",
+        "both limit representations must match exactly (runtime decimal comparison)"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1order_groups~1create/post"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/UpdateOrderGroupLimitRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "properties": {
+          "contracts_limit": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "description": "New maximum number of contracts that can be matched within this group over a rolling 15-second window. Whole contracts only. Provide contracts_limit or contracts_limit_fp; if both provided they must match.",
+            "x-go-type-skip-optional-pointer": true,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "omitempty,gte=1"
+            }
+          },
+          "contracts_limit_fp": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "nullable": true,
+            "description": "String representation of the new maximum number of contracts that can be matched within this group over a rolling 15-second window. Provide contracts_limit or contracts_limit_fp; if both provided they must match."
+          }
+        }
+      },
+      "preconditionHash": "c781a9f9c94a423d89e1ff80eb1b4811f1d96a146db7da8333a7aa7ae40a9362",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "at least one non-null limit",
+        "fixed-point limit represents positive whole contracts with 0-2 decimal places",
+        "both limit representations must match exactly (runtime decimal comparison)"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1order_groups~1{order_group_id}~1limit/put"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/UpdateExitTriggerRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "description": "At least one leg is required and a leg you omit is cleared; cancel with `DELETE`.",
+        "properties": {
+          "stop_loss_price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Mark price at which the stop-loss leg fires. Must be strictly positive when supplied."
+          },
+          "take_profit_price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Mark price at which the take-profit leg fires. Must be strictly positive when supplied."
+          }
+        }
+      },
+      "preconditionHash": "f5c0c548a1358549f157a1d5ab74566c3e69b503548f73ac0b5594da4b80e706",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "at least one leg; supplied legs strictly positive; omitted leg cleared"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1cross~1positions~1{ticker}~1exit_trigger~1{trigger_id}/put"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/SetCrossExitTriggerRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "description": "For `bracket`, supply `stop_loss_price` and/or `take_profit_price`. For `trailing`, supply exactly one of `trail_amount` or `trail_bps`. Fields belonging to the other kind are rejected, as is a body that sets neither — cancel with `DELETE`. A leg you omit is cleared.",
+        "properties": {
+          "count": {
+            "$ref": "#/components/schemas/FixedPointCount",
+            "description": "Contracts this trigger closes when it fires. Omit it to cover the whole position, which then requires that no partial or anchored trigger already covers part of it. If supplied, it must be a whole number of contracts."
+          },
+          "anchor_order_id": {
+            "type": "string",
+            "description": "Ties the trigger to an order: its size follows that order's cumulative fill, and it stays pending until the order first fills. Bracket only; mutually exclusive with `count`. If the order cannot currently be validated, the request returns `409` with error code `anchor_order_unavailable` before writing anything, so retrying is safe."
+          },
+          "client_trigger_id": {
+            "type": "string",
+            "maxLength": 64,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "omitempty,max=64"
+            },
+            "description": "Your own identifier, required on a `count` or `anchor_order_id` create because those append a trigger rather than replace one; rejected on every other write. Replaying a key returns the trigger the first request made, in whatever state it has since reached. Keys are single-use per account and belong to the position they created on: reusing one returns the original even once it is `canceled`, and presenting it for another subaccount or ticker returns `409` with error code `idempotency_key_already_used`."
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExitTriggerKind"
+              }
+            ],
+            "default": "bracket",
+            "description": "Which trigger family this write targets. Defaults to `bracket`."
+          },
+          "stop_loss_price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Mark price at which the stop-loss leg fires. Bracket only; must be strictly positive when supplied."
+          },
+          "take_profit_price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Mark price at which the take-profit leg fires. Bracket only; must be strictly positive when supplied."
+          },
+          "trail_amount": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Absolute trailing distance in dollars. Trailing only; mutually exclusive with `trail_bps`."
+          },
+          "trail_bps": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9999,
+            "description": "Trailing distance in basis points of the tracked watermark (not the entry price). Trailing only; mutually exclusive with `trail_amount`."
+          }
+        }
+      },
+      "preconditionHash": "9f331f43e96374e43c33b32f1443c1cf4dc1ac21abd6d036bd2e3ae5a19d5b9f",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "at least one bracket leg; supplied legs strictly positive",
+        "set requests select bracket (default) or trailing; reject the other family's fields",
+        "trailing requires exactly one distance",
+        "whole count; count and anchor mutually exclusive; anchor bracket-only",
+        "client_trigger_id required for count/anchor creates and rejected otherwise"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1cross~1positions~1{ticker}~1exit_trigger/put"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/SetIsolatedExitTriggerRequest"
+      },
+      "precondition": {
+        "type": "object",
+        "description": "For `bracket`, supply `stop_loss_price` and/or `take_profit_price`. For `trailing`, supply exactly one of `trail_amount` or `trail_bps`. Fields belonging to the other kind are rejected, as is a body that sets neither — cancel with `DELETE`. A leg you omit is cleared.",
+        "properties": {
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExitTriggerKind"
+              }
+            ],
+            "default": "bracket",
+            "description": "Which trigger family this write targets. Defaults to `bracket`."
+          },
+          "stop_loss_price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Mark price at which the stop-loss leg fires. Bracket only; must be strictly positive when supplied."
+          },
+          "take_profit_price": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Mark price at which the take-profit leg fires. Bracket only; must be strictly positive when supplied."
+          },
+          "trail_amount": {
+            "$ref": "#/components/schemas/FixedPointDollars",
+            "description": "Absolute trailing distance in dollars. Trailing only; mutually exclusive with `trail_bps`."
+          },
+          "trail_bps": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9999,
+            "description": "Trailing distance in basis points of the tracked watermark (not the entry price). Trailing only; mutually exclusive with `trail_amount`."
+          }
+        }
+      },
+      "preconditionHash": "556a6a3443dfc5e5fe64e2080b2d4ce705bc3c25d0b46038d436c8096089febc",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "activeDate": "2026-10-12",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "at least one bracket leg; supplied legs strictly positive",
+        "set requests select bracket (default) or trailing; reject the other family's fields",
+        "trailing requires exactly one distance"
+      ],
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1isolated~1positions~1{ticker}~1exit_trigger/put"
+        }
+      ]
+    }
+  ]
+}

@@ -33,6 +33,7 @@
     "src/generated/coverage.json",
     "src/generated/schema-coverage.json",
     "src/generated/pagination-coverage.json",
+    "src/generated/perps-rest/*.json",
     "src/generated/*-ws-coverage.json",
     "src/generated/*-ws-source-gaps.json",
     "README.md",
