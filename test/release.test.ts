@@ -15,7 +15,7 @@ const gate = steps.find((step: { id?: string }) => step.id === "release");
 
 test("PR release and scheduled drift enforce full generation", () => {
   const pkg = JSON.parse(readFileSync(path.join(repository, "package.json"), "utf8"));
-  assert.equal(pkg.kalshiCoreRef, "da235871e8c55ca1f6bcc2020f5324e909f1998a");
+  assert.equal(pkg.kalshiCoreRef, "99abf30c3fc818815e99f015299e2f4bcbf62a00");
   assert.equal(pkg.scripts["check:generated"], "node scripts/check-generated.mjs");
   assert.ok(conformance.on.pull_request);
   const generation = conformance.jobs.conformance.steps.find((step: { id?: string }) => step.id === "generation");

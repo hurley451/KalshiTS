@@ -1,0 +1,557 @@
+{
+  "product": "perps",
+  "sourceFile": "perps_asyncapi.yaml",
+  "sourceSnapshot": "sources/perps/perps_asyncapi.yaml",
+  "url": "https://docs.kalshi.com/perps_asyncapi.yaml",
+  "sha256": "e5cc0f026b8e306e917860b870e23c9152d0d782c33137d42698f051a9dbe824",
+  "counts": {
+    "channels": 8,
+    "operations": 22,
+    "bindings": 22,
+    "components": 22,
+    "schemas": 27
+  },
+  "fixtures": [
+    {
+      "name": "incomingPing",
+      "payload": "",
+      "examples": [
+        ""
+      ]
+    },
+    {
+      "name": "incomingPong",
+      "payload": "",
+      "examples": [
+        ""
+      ]
+    },
+    {
+      "name": "outgoingPing",
+      "payload": "heartbeat",
+      "examples": [
+        "heartbeat"
+      ]
+    },
+    {
+      "name": "outgoingPong",
+      "payload": "",
+      "examples": [
+        ""
+      ]
+    },
+    {
+      "name": "subscribeCommand",
+      "payload": {
+        "id": 0,
+        "cmd": "subscribe",
+        "params": {
+          "channels": [
+            "orderbook_delta"
+          ]
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "unsubscribeCommand",
+      "payload": {
+        "id": 0,
+        "cmd": "unsubscribe",
+        "params": {
+          "sids": [
+            1
+          ]
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "listSubscriptionsCommand",
+      "payload": {
+        "id": 0,
+        "cmd": "list_subscriptions"
+      },
+      "examples": []
+    },
+    {
+      "name": "updateSubscriptionCommand",
+      "payload": {
+        "id": 0,
+        "cmd": "update_subscription",
+        "params": {
+          "action": "add_markets"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "updateSubscriptionDeleteCommand",
+      "payload": {
+        "id": 0,
+        "cmd": "update_subscription",
+        "params": {
+          "action": "add_markets"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "updateSubscriptionSingleSidCommand",
+      "payload": {
+        "id": 0,
+        "cmd": "update_subscription",
+        "params": {
+          "action": "add_markets"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "subscribedResponse",
+      "payload": {
+        "type": "subscribed",
+        "msg": {
+          "channel": "string",
+          "sid": 1
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "unsubscribedResponse",
+      "payload": {
+        "type": "unsubscribed",
+        "sid": 1,
+        "seq": 1
+      },
+      "examples": []
+    },
+    {
+      "name": "okResponse",
+      "payload": {
+        "type": "ok"
+      },
+      "examples": []
+    },
+    {
+      "name": "listSubscriptionsResponse",
+      "payload": {
+        "type": "ok",
+        "msg": [
+          {
+            "channel": "string",
+            "sid": 1
+          }
+        ]
+      },
+      "examples": []
+    },
+    {
+      "name": "errorResponse",
+      "payload": {
+        "type": "error",
+        "msg": {
+          "code": 1,
+          "msg": "string"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "orderbookSnapshot",
+      "payload": {
+        "type": "orderbook_snapshot",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "market_ticker": "KXTEST-A"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "orderbookDelta",
+      "payload": {
+        "type": "orderbook_delta",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "market_ticker": "KXTEST-A",
+          "price": "string",
+          "delta": "string",
+          "side": "bid"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "ticker",
+      "payload": {
+        "type": "ticker",
+        "sid": 1,
+        "msg": {
+          "market_ticker": "KXTEST-A",
+          "price": "string",
+          "bid": "string",
+          "ask": "string",
+          "bid_size_fp": "string",
+          "ask_size_fp": "string",
+          "last_trade_size_fp": "string",
+          "volume": "string",
+          "volume_notional_value_dollars": "string",
+          "volume_24h": "string",
+          "volume_24h_notional_value_dollars": "string",
+          "open_interest": "string",
+          "open_interest_notional_value_dollars": "string",
+          "ts_ms": 0
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "trade",
+      "payload": {
+        "type": "trade",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "trade_id": "716cb486-5256-4659-973c-189b58daa723",
+          "market_ticker": "KXTEST-A",
+          "price": "string",
+          "count": "string",
+          "taker_side": "bid",
+          "ts_ms": 0
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "fill",
+      "payload": {
+        "type": "fill",
+        "sid": 1,
+        "msg": {
+          "trade_id": "716cb486-5256-4659-973c-189b58daa723",
+          "order_id": "93101167-9065-4b9c-b98b-5d789a3ed9fe",
+          "market_ticker": "KXTEST-A",
+          "is_taker": true,
+          "side": "bid",
+          "ts_ms": 0,
+          "price": "string",
+          "count": "string",
+          "fee_cost": "string",
+          "post_position": "string",
+          "order_source": "user"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "userOrder",
+      "payload": {
+        "type": "user_order",
+        "sid": 1,
+        "msg": {
+          "order_id": "93101167-9065-4b9c-b98b-5d789a3ed9fe",
+          "user_id": "a169451c-8525-4352-b8ca-070dd449a1a5",
+          "client_order_id": "string",
+          "ticker": "KXTEST-A",
+          "side": "bid",
+          "price": "string",
+          "fill_count": "string",
+          "remaining_count": "string",
+          "created_ts_ms": 0,
+          "order_source": "user"
+        }
+      },
+      "examples": []
+    },
+    {
+      "name": "orderGroupUpdates",
+      "payload": {
+        "type": "order_group_updates",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "event_type": "created",
+          "order_group_id": "string",
+          "ts_ms": 0
+        }
+      },
+      "examples": [
+        {
+          "type": "order_group_updates",
+          "sending_ts_ms": 1700000000246,
+          "sid": 21,
+          "seq": 7,
+          "msg": {
+            "event_type": "limit_updated",
+            "order_group_id": "og_123",
+            "contracts_limit_fp": "150.00",
+            "ts_ms": 1700000000123
+          }
+        }
+      ]
+    }
+  ],
+  "schemas": [
+    {
+      "name": "sendingTimestampMs",
+      "value": 0
+    },
+    {
+      "name": "commandId",
+      "value": 0
+    },
+    {
+      "name": "subscriptionId",
+      "value": 1
+    },
+    {
+      "name": "sequenceNumber",
+      "value": 1
+    },
+    {
+      "name": "marketTicker",
+      "value": "KXTEST-A"
+    },
+    {
+      "name": "bookSide",
+      "value": "bid"
+    },
+    {
+      "name": "selfTradePreventionType",
+      "value": "taker_at_cross"
+    },
+    {
+      "name": "lastUpdateReason",
+      "value": "Decrease"
+    },
+    {
+      "name": "tickerPrice",
+      "value": {
+        "price": "string",
+        "ts_ms": 0
+      }
+    },
+    {
+      "name": "fundingRate",
+      "value": {
+        "rate": 0.1,
+        "next_funding_time_ms": 0,
+        "ts_ms": 0
+      }
+    },
+    {
+      "name": "priceLevelDollarsCountFp",
+      "value": [
+        "string",
+        "string"
+      ]
+    },
+    {
+      "name": "subscribeCommandPayload",
+      "value": {
+        "id": 0,
+        "cmd": "subscribe",
+        "params": {
+          "channels": [
+            "orderbook_delta"
+          ]
+        }
+      }
+    },
+    {
+      "name": "unsubscribeCommandPayload",
+      "value": {
+        "id": 0,
+        "cmd": "unsubscribe",
+        "params": {
+          "sids": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateSubscriptionCommandPayload",
+      "value": {
+        "id": 0,
+        "cmd": "update_subscription",
+        "params": {
+          "action": "add_markets"
+        }
+      }
+    },
+    {
+      "name": "listSubscriptionsCommandPayload",
+      "value": {
+        "id": 0,
+        "cmd": "list_subscriptions"
+      }
+    },
+    {
+      "name": "subscribedResponsePayload",
+      "value": {
+        "type": "subscribed",
+        "msg": {
+          "channel": "string",
+          "sid": 1
+        }
+      }
+    },
+    {
+      "name": "unsubscribedResponsePayload",
+      "value": {
+        "type": "unsubscribed",
+        "sid": 1,
+        "seq": 1
+      }
+    },
+    {
+      "name": "okResponsePayload",
+      "value": {
+        "type": "ok"
+      }
+    },
+    {
+      "name": "listSubscriptionsResponsePayload",
+      "value": {
+        "type": "ok",
+        "msg": [
+          {
+            "channel": "string",
+            "sid": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "errorResponsePayload",
+      "value": {
+        "type": "error",
+        "msg": {
+          "code": 1,
+          "msg": "string"
+        }
+      }
+    },
+    {
+      "name": "marginOrderbookSnapshotPayload",
+      "value": {
+        "type": "orderbook_snapshot",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "market_ticker": "KXTEST-A"
+        }
+      }
+    },
+    {
+      "name": "marginOrderbookDeltaPayload",
+      "value": {
+        "type": "orderbook_delta",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "market_ticker": "KXTEST-A",
+          "price": "string",
+          "delta": "string",
+          "side": "bid"
+        }
+      }
+    },
+    {
+      "name": "marginTickerPayload",
+      "value": {
+        "type": "ticker",
+        "sid": 1,
+        "msg": {
+          "market_ticker": "KXTEST-A",
+          "price": "string",
+          "bid": "string",
+          "ask": "string",
+          "bid_size_fp": "string",
+          "ask_size_fp": "string",
+          "last_trade_size_fp": "string",
+          "volume": "string",
+          "volume_notional_value_dollars": "string",
+          "volume_24h": "string",
+          "volume_24h_notional_value_dollars": "string",
+          "open_interest": "string",
+          "open_interest_notional_value_dollars": "string",
+          "ts_ms": 0
+        }
+      }
+    },
+    {
+      "name": "marginTradePayload",
+      "value": {
+        "type": "trade",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "trade_id": "716cb486-5256-4659-973c-189b58daa723",
+          "market_ticker": "KXTEST-A",
+          "price": "string",
+          "count": "string",
+          "taker_side": "bid",
+          "ts_ms": 0
+        }
+      }
+    },
+    {
+      "name": "marginFillPayload",
+      "value": {
+        "type": "fill",
+        "sid": 1,
+        "msg": {
+          "trade_id": "716cb486-5256-4659-973c-189b58daa723",
+          "order_id": "93101167-9065-4b9c-b98b-5d789a3ed9fe",
+          "market_ticker": "KXTEST-A",
+          "is_taker": true,
+          "side": "bid",
+          "ts_ms": 0,
+          "price": "string",
+          "count": "string",
+          "fee_cost": "string",
+          "post_position": "string",
+          "order_source": "user"
+        }
+      }
+    },
+    {
+      "name": "marginUserOrderPayload",
+      "value": {
+        "type": "user_order",
+        "sid": 1,
+        "msg": {
+          "order_id": "93101167-9065-4b9c-b98b-5d789a3ed9fe",
+          "user_id": "a169451c-8525-4352-b8ca-070dd449a1a5",
+          "client_order_id": "string",
+          "ticker": "KXTEST-A",
+          "side": "bid",
+          "price": "string",
+          "fill_count": "string",
+          "remaining_count": "string",
+          "created_ts_ms": 0,
+          "order_source": "user"
+        }
+      }
+    },
+    {
+      "name": "orderGroupUpdatesPayload",
+      "value": {
+        "type": "order_group_updates",
+        "sid": 1,
+        "seq": 1,
+        "msg": {
+          "event_type": "created",
+          "order_group_id": "string",
+          "ts_ms": 0
+        }
+      }
+    }
+  ]
+}

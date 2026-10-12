@@ -1,0 +1,299 @@
+{
+  "product": "perps",
+  "sourceFile": "perps_asyncapi.yaml",
+  "sourceSnapshot": "sources/perps/perps_asyncapi.yaml",
+  "url": "https://docs.kalshi.com/perps_asyncapi.yaml",
+  "sha256": "e5cc0f026b8e306e917860b870e23c9152d0d782c33137d42698f051a9dbe824",
+  "counts": {
+    "channels": 8,
+    "operations": 22,
+    "bindings": 22,
+    "components": 22,
+    "schemas": 27
+  },
+  "channels": [
+    {
+      "name": "root",
+      "messages": [
+        "subscribeCommand",
+        "unsubscribeCommand",
+        "updateSubscriptionCommand",
+        "updateSubscriptionDeleteCommand",
+        "updateSubscriptionSingleSidCommand",
+        "listSubscriptionsCommand",
+        "subscribedResponse",
+        "unsubscribedResponse",
+        "okResponse",
+        "listSubscriptionsResponse",
+        "errorResponse"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "control_frames",
+      "messages": [
+        "incomingPing",
+        "incomingPong",
+        "outgoingPing",
+        "outgoingPong"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "orderbook_delta",
+      "messages": [
+        "orderbookSnapshot",
+        "orderbookDelta"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "ticker",
+      "messages": [
+        "ticker"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "trade",
+      "messages": [
+        "trade"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "fill",
+      "messages": [
+        "fill"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "user_orders",
+      "messages": [
+        "userOrder"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    },
+    {
+      "name": "order_group_updates",
+      "messages": [
+        "orderGroupUpdates"
+      ],
+      "proof": {
+        "runtime": "test/streaming.test.ts",
+        "types": "test/perps-ws-types.test.ts",
+        "consumer": "test/streaming-package.test.mjs"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "name": "sendPing",
+      "action": "receive",
+      "messages": [
+        "#/channels/control_frames/messages/incomingPing"
+      ]
+    },
+    {
+      "name": "sendPong",
+      "action": "receive",
+      "messages": [
+        "#/channels/control_frames/messages/incomingPong"
+      ]
+    },
+    {
+      "name": "sendSubscribe",
+      "action": "receive",
+      "messages": [
+        "#/channels/root/messages/subscribeCommand"
+      ]
+    },
+    {
+      "name": "sendUnsubscribe",
+      "action": "receive",
+      "messages": [
+        "#/channels/root/messages/unsubscribeCommand"
+      ]
+    },
+    {
+      "name": "sendListSubscriptions",
+      "action": "receive",
+      "messages": [
+        "#/channels/root/messages/listSubscriptionsCommand"
+      ]
+    },
+    {
+      "name": "sendUpdateSubscription",
+      "action": "receive",
+      "messages": [
+        "#/channels/root/messages/updateSubscriptionCommand"
+      ]
+    },
+    {
+      "name": "sendUpdateSubscriptionDelete",
+      "action": "receive",
+      "messages": [
+        "#/channels/root/messages/updateSubscriptionDeleteCommand"
+      ]
+    },
+    {
+      "name": "sendUpdateSubscriptionSingleSid",
+      "action": "receive",
+      "messages": [
+        "#/channels/root/messages/updateSubscriptionSingleSidCommand"
+      ]
+    },
+    {
+      "name": "receivePing",
+      "action": "send",
+      "messages": [
+        "#/channels/control_frames/messages/outgoingPing"
+      ]
+    },
+    {
+      "name": "receivePong",
+      "action": "send",
+      "messages": [
+        "#/channels/control_frames/messages/outgoingPong"
+      ]
+    },
+    {
+      "name": "receiveSubscribed",
+      "action": "send",
+      "messages": [
+        "#/channels/root/messages/subscribedResponse"
+      ]
+    },
+    {
+      "name": "receiveUnsubscribed",
+      "action": "send",
+      "messages": [
+        "#/channels/root/messages/unsubscribedResponse"
+      ]
+    },
+    {
+      "name": "receiveOk",
+      "action": "send",
+      "messages": [
+        "#/channels/root/messages/okResponse"
+      ]
+    },
+    {
+      "name": "receiveListSubscriptions",
+      "action": "send",
+      "messages": [
+        "#/channels/root/messages/listSubscriptionsResponse"
+      ]
+    },
+    {
+      "name": "receiveError",
+      "action": "send",
+      "messages": [
+        "#/channels/root/messages/errorResponse"
+      ]
+    },
+    {
+      "name": "receiveOrderbookSnapshot",
+      "action": "send",
+      "messages": [
+        "#/channels/orderbook_delta/messages/orderbookSnapshot"
+      ]
+    },
+    {
+      "name": "receiveOrderbookDelta",
+      "action": "send",
+      "messages": [
+        "#/channels/orderbook_delta/messages/orderbookDelta"
+      ]
+    },
+    {
+      "name": "receiveTicker",
+      "action": "send",
+      "messages": [
+        "#/channels/ticker/messages/ticker"
+      ]
+    },
+    {
+      "name": "receiveTrade",
+      "action": "send",
+      "messages": [
+        "#/channels/trade/messages/trade"
+      ]
+    },
+    {
+      "name": "receiveFill",
+      "action": "send",
+      "messages": [
+        "#/channels/fill/messages/fill"
+      ]
+    },
+    {
+      "name": "receiveUserOrder",
+      "action": "send",
+      "messages": [
+        "#/channels/user_orders/messages/userOrder"
+      ]
+    },
+    {
+      "name": "receiveOrderGroupUpdates",
+      "action": "send",
+      "messages": [
+        "#/channels/order_group_updates/messages/orderGroupUpdates"
+      ]
+    }
+  ],
+  "components": [
+    "incomingPing",
+    "incomingPong",
+    "outgoingPing",
+    "outgoingPong",
+    "subscribeCommand",
+    "unsubscribeCommand",
+    "listSubscriptionsCommand",
+    "updateSubscriptionCommand",
+    "updateSubscriptionDeleteCommand",
+    "updateSubscriptionSingleSidCommand",
+    "subscribedResponse",
+    "unsubscribedResponse",
+    "okResponse",
+    "listSubscriptionsResponse",
+    "errorResponse",
+    "orderbookSnapshot",
+    "orderbookDelta",
+    "ticker",
+    "trade",
+    "fill",
+    "userOrder",
+    "orderGroupUpdates"
+  ],
+  "supplemental": []
+}
