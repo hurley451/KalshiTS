@@ -1,0 +1,1132 @@
+{
+  "sourceId": "kalshi-openapi-rest",
+  "url": "https://docs.kalshi.com/openapi.yaml",
+  "version": "3.34.0",
+  "sha256": "091f171718a0376b0c1a2e9348b02b1ce003d0786dd04d772dd11005ca414bf4",
+  "operationCount": 118,
+  "paginatedOperationCount": 28,
+  "operations": [
+    {
+      "operationId": "GetBlockTradeProposals",
+      "method": "GET",
+      "path": "/communications/block-trade-proposals",
+      "domain": "communications",
+      "pageMethod": "getBlockTradeProposalsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetBlockTradeProposalsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "block_trade_proposals",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/BlockTradeProposal"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetDeposits",
+      "method": "GET",
+      "path": "/portfolio/deposits",
+      "domain": "portfolioApi",
+      "pageMethod": "getDepositsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetDepositsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "deposits",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Deposit"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetEventFeeChanges",
+      "method": "GET",
+      "path": "/events/fee_changes",
+      "domain": "events",
+      "pageMethod": "getEventFeeChangesPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetEventFeeChangesResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "event_fee_changes",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/EventFeeChange"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetEvents",
+      "method": "GET",
+      "path": "/events",
+      "domain": "events",
+      "pageMethod": "getEventsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "description": "Parameter to specify the pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetEventsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "events",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/EventData"
+              }
+            },
+            {
+              "name": "milestones",
+              "required": false,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Milestone"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetFCMFills",
+      "method": "GET",
+      "path": "/fcm/fills",
+      "domain": "fcm",
+      "pageMethod": "getFCMFillsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetFcmFillsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "fills",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/FcmFill"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetFCMOrders",
+      "method": "GET",
+      "path": "/fcm/orders",
+      "domain": "fcm",
+      "pageMethod": "getFCMOrdersPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetOrdersResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "orders",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetFCMPositions",
+      "method": "GET",
+      "path": "/fcm/positions",
+      "domain": "fcm",
+      "pageMethod": "getFCMPositionsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "The Cursor represents a pointer to the next page of records in the pagination",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetPositionsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "market_positions",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/MarketPosition"
+              }
+            },
+            {
+              "name": "event_positions",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/EventPosition"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetFills",
+      "method": "GET",
+      "path": "/portfolio/fills",
+      "domain": "portfolioApi",
+      "pageMethod": "getFillsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetFillsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "fills",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Fill"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetFillsHistorical",
+      "method": "GET",
+      "path": "/historical/fills",
+      "domain": "historical",
+      "pageMethod": "getFillsHistoricalPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetFillsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "fills",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Fill"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetHistoricalMarkets",
+      "method": "GET",
+      "path": "/historical/markets",
+      "domain": "historical",
+      "pageMethod": "getHistoricalMarketsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetMarketsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "markets",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Market"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetHistoricalOrders",
+      "method": "GET",
+      "path": "/historical/orders",
+      "domain": "historical",
+      "pageMethod": "getHistoricalOrdersPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetOrdersResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "orders",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetHistoricalPositions",
+      "method": "GET",
+      "path": "/historical/positions",
+      "domain": "historical",
+      "pageMethod": "getHistoricalPositionsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetPositionsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "market_positions",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/MarketPosition"
+              }
+            },
+            {
+              "name": "event_positions",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/EventPosition"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetIncentivePrograms",
+      "method": "GET",
+      "path": "/incentive_programs",
+      "domain": "incentivePrograms",
+      "pageMethod": "getIncentiveProgramsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "description": "Cursor for pagination",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetIncentiveProgramsResponse",
+          "cursorField": "next_cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "incentive_programs",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/IncentiveProgram"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetIntraExchangeInstanceTransfers",
+      "method": "GET",
+      "path": "/portfolio/intra_exchange_instance_transfers",
+      "domain": "portfolioApi",
+      "pageMethod": "getIntraExchangeInstanceTransfersPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetIntraExchangeInstanceTransfersResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "transfers",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/IntraExchangeInstanceTransfer"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetMarkets",
+      "method": "GET",
+      "path": "/markets",
+      "domain": "markets",
+      "pageMethod": "getMarketsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetMarketsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "markets",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Market"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetMilestones",
+      "method": "GET",
+      "path": "/milestones",
+      "domain": "milestones",
+      "pageMethod": "getMilestonesPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [
+        {
+          "name": "limit",
+          "in": "query"
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetMilestonesResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "milestones",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Milestone"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetMultivariateEventCollections",
+      "method": "GET",
+      "path": "/multivariate_event_collections",
+      "domain": "multivariate",
+      "pageMethod": "getMultivariateEventCollectionsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "The Cursor represents a pointer to the next page of records in the pagination. This optional parameter, when filled, should be filled with the cursor string returned in a previous request to this end-point.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetMultivariateEventCollectionsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "multivariate_contracts",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/MultivariateEventCollection"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetMultivariateEvents",
+      "method": "GET",
+      "path": "/events/multivariate",
+      "domain": "events",
+      "pageMethod": "getMultivariateEventsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetMultivariateEventsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "events",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/EventData"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetOrders",
+      "method": "GET",
+      "path": "/portfolio/orders",
+      "domain": "orders",
+      "pageMethod": "getOrdersPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetOrdersResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "orders",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetPositions",
+      "method": "GET",
+      "path": "/portfolio/positions",
+      "domain": "portfolioApi",
+      "pageMethod": "getPositionsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "The Cursor represents a pointer to the next page of records in the pagination. Use the value returned from the previous response to get the next page.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetPositionsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "market_positions",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/MarketPosition"
+              }
+            },
+            {
+              "name": "event_positions",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/EventPosition"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetQuotes",
+      "method": "GET",
+      "path": "/communications/quotes",
+      "domain": "communications",
+      "pageMethod": "getQuotesPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetQuotesResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "quotes",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Quote"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetRFQs",
+      "method": "GET",
+      "path": "/communications/rfqs",
+      "domain": "communications",
+      "pageMethod": "getRFQsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetRFQsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "rfqs",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/RFQ"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetSettlements",
+      "method": "GET",
+      "path": "/portfolio/settlements",
+      "domain": "portfolioApi",
+      "pageMethod": "getSettlementsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetSettlementsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "settlements",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Settlement"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetStructuredTargets",
+      "method": "GET",
+      "path": "/structured_targets",
+      "domain": "structuredTargets",
+      "pageMethod": "getStructuredTargetsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetStructuredTargetsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "structured_targets",
+              "required": false,
+              "itemSchema": {
+                "$ref": "#/components/schemas/StructuredTarget"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetSubaccountTransfers",
+      "method": "GET",
+      "path": "/portfolio/subaccounts/transfers",
+      "domain": "portfolioApi",
+      "pageMethod": "getSubaccountTransfersPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetSubaccountTransfersResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "transfers",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/SubaccountTransfer"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetTrades",
+      "method": "GET",
+      "path": "/markets/trades",
+      "domain": "markets",
+      "pageMethod": "getTradesPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetTradesResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "trades",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Trade"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetTradesHistorical",
+      "method": "GET",
+      "path": "/historical/trades",
+      "domain": "historical",
+      "pageMethod": "getTradesHistoricalPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetTradesResponse",
+          "cursorField": "cursor",
+          "cursorRequired": true,
+          "arrayFields": [
+            {
+              "name": "trades",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Trade"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    },
+    {
+      "operationId": "GetWithdrawals",
+      "method": "GET",
+      "path": "/portfolio/withdrawals",
+      "domain": "portfolioApi",
+      "pageMethod": "getWithdrawalsPages",
+      "queryCursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+        "schema": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "requiredParameters": [],
+      "responses": [
+        {
+          "status": 200,
+          "schemaRef": "#/components/schemas/GetWithdrawalsResponse",
+          "cursorField": "cursor",
+          "cursorRequired": false,
+          "arrayFields": [
+            {
+              "name": "withdrawals",
+              "required": true,
+              "itemSchema": {
+                "$ref": "#/components/schemas/Withdrawal"
+              }
+            }
+          ]
+        }
+      ],
+      "proof": {
+        "runtime": "test/pagination.test.ts",
+        "types": "test/pagination-contracts.test.ts",
+        "externalConsumer": "test/pagination-package.test.mjs"
+      }
+    }
+  ]
+}

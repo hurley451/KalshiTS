@@ -31,6 +31,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 
 - 118 named REST methods across 17 domain facades, with typed inputs and responses.
 - 209 schema-derived models and runtime request/response contract validation.
+- Lazy async page iterators for all 28 cursor-paginated REST operations.
 - Promise-based HTTP requests using Node.js fetch, with production and demo environments.
 - Automatic RSA-PSS request signing using Node.js crypto.
 - Path substitution, query encoding, JSON bodies, and API error details.
@@ -69,8 +70,8 @@ The checked-in OpenAPI snapshot contains 118 REST operations. Named methods and
 contract tests cover each operation; this is not live exchange verification. See
 [API coverage and gaps](docs/API_COVERAGE.md) and [official API docs](https://docs.kalshi.com).
 
-WebSocket connections/reconnect, automatic pagination helpers and browser support
-are not implemented. Node.js crypto is required even for public requests.
+WebSocket connections/reconnect and browser support are not implemented.
+Node.js crypto is required even for public requests.
 
 ## Requirements
 
@@ -159,17 +160,21 @@ official wire names (`snake_case`); the typed fills helper uses camelCase.
 Named calls infer response types and validate the official schema.
 
 ```ts
-let cursor: string | undefined;
-do {
-  const page = await client.markets.getMarkets({
-    query: { limit: 100, status: "open", ...(cursor ? { cursor } : {}) }
-  });
+for await (const page of client.markets.getMarketsPages(
+  { query: { limit: 100, status: "open" } },
+  { signal: AbortSignal.timeout(30_000) },
+  { maxPages: 100 }
+)) {
   for (const market of page.markets) console.log(market.ticker, market.title);
-  cursor = page.cursor || undefined;
-} while (cursor);
+}
 ```
 
-There is no automatic paginator. Preserve filters when continuing a cursor.
+Every cursor endpoint has a corresponding `...Pages` method at the root and on
+its domain facade. Iterators preserve filters and full response shapes, request
+pages only as consumed, and detect repeated cursors. The default maximum is
+1,000 pages; a custom cap can intentionally stop before all available pages.
+Use `break` to stop without fetching another page. A request timeout applies to
+each page; a shared `signal` can bound the entire iteration.
 
 ### Get Market Details and an Order Book
 
@@ -220,6 +225,14 @@ and `action`, `createdTime`, and `ts` are optional; `subaccountNumber` can also 
 null. Fixed-point amounts remain strings. Pages require a string `cursor`;
 an empty cursor marks the final page. Known numeric filter constraints are
 checked before sending the request.
+
+For automatic pagination with official wire fields:
+
+```ts
+for await (const page of client.portfolio.getFillsPages({ query: { limit: 100 } })) {
+  for (const fill of page.fills) console.log(fill.ticker, fill.count_fp);
+}
+```
 
 ### Balance, Positions, and Historical Data
 

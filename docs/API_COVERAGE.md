@@ -10,6 +10,7 @@ with later API changes.
 | Surface | Current support |
 |---------|-----------------|
 | REST methods | 118 named root methods and 17 domain facades |
+| Pagination | 28 lazy typed page iterators, bounded pages and repeated-cursor detection |
 | Inputs | Typed path/query/header/cookie parameters and JSON bodies |
 | Models | Source enums, optionality, nullability, unions and fixed-point strings |
 | Responses | Declared success/error schemas; HTTP 204 returns undefined |
@@ -29,6 +30,8 @@ the official wire shape. Generic `request` type arguments remain caller assertio
 The [endpoint matrix](../src/generated/coverage.json) lists methods, parameters,
 bodies and status-specific responses. The
 [schema matrix](../src/generated/schema-coverage.json) records constraints.
+The [pagination matrix](../src/generated/pagination-coverage.json) lists every
+cursor endpoint, response cursor and complete page shape.
 
 Tests exercise every named operation with schema-derived fixtures, invalid inputs,
 declared response statuses and invalid declared payloads. Compiler assertions and
@@ -50,7 +53,7 @@ contents. These four fixtures supplement, rather than replace, endpoint tests.
 
 ## Remaining Gaps
 
-- Automatic pagination helpers.
+- Separate perps and clearing-member specifications, tracked in [Core #11](https://github.com/hurley451/KalshiCore/issues/11).
 - WebSocket transport, subscriptions, reconnect, and order-book state management.
 - Credentialed integration tests and independent live API validation.
 - Public registry release and published-package consumer verification.
