@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import test from "node:test";
 import { inspect } from "node:util";
-import { KalshiClient, KalshiApiError, KalshiInvalidResponseError, KalshiResponseParseError, isEndpointError } from "../src/index.js";
+import { KalshiClient, KalshiApiError, KalshiInvalidResponseError, KalshiResponseParseError, KalshiResponseReadError, KalshiTimeoutError, KalshiAbortError, isEndpointError } from "../src/index.js";
 
 const binary = Uint8Array.from([255, 254, 0, 65]);
 
@@ -97,4 +97,58 @@ test("real HTTP retains arbitrary binary and success headers", {timeout: 5000}, 
   assert.equal(result.response.headers.get("request-id"), "wire");
   assert.deepEqual(result.body, binary);
   assert.deepEqual(result.rawBody, binary);
+});
+
+test("media casing and charset labels cannot trigger lossy decoding", async () => {
+  const body = new TextEncoder().encode('{"exchange_active":true,"trading_active":true}');
+  for (const contentType of ["APPLICATION/JSON; Charset=UTF-8", "application/vendor+json; charset=utf-8"]) {
+    const client = new KalshiClient({fetch: async () => new Response(body, {headers: {"content-type": contentType}})});
+    const result = await client.rawRequest("GetExchangeStatus", {authenticated: false});
+    assert.deepEqual(result.body, {exchange_active: true, trading_active: true});
+    assert.deepEqual(result.rawBody, body);
+  }
+  const bytes = Uint8Array.from([169]);
+  const client = new KalshiClient({fetch: async () => new Response(bytes, {headers: {"content-type": "text/plain; charset=iso-8859-1"}})});
+  assert.deepEqual((await client.rawRequest("GetExchangeStatus", {authenticated: false})).body, bytes);
+});
+
+test("partial real HTTP bodies never masquerade as complete raw bytes", {timeout: 5000}, async t => {
+  let socket: import("node:net").Socket;
+  const server = createServer((request, response) => {
+    socket = request.socket;
+    response.writeHead(200, {"content-type": "application/json", "request-id": "partial"});
+    response.write('{"exchange_active":true,');
+  });
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  t.after(async () => {
+    server.closeAllConnections();
+    await new Promise<void>(resolve => server.close(() => resolve()));
+  });
+  const port = (server.address() as AddressInfo).port;
+  for (const mode of ["abort", "timeout", "disconnect"]) {
+    let seen!: () => void;
+    const headersSeen = new Promise<void>(resolve => {seen = resolve;});
+    const controller = new AbortController();
+    const client = new KalshiClient({environment: {name: "partial", restBaseUrl: `http://127.0.0.1:${port}/trade-api/v2`, websocketUrl: `ws://127.0.0.1:${port}`}, fetch: async (url, init) => {
+      const response = await fetch(url, init);
+      seen();
+      return response;
+    }});
+    const failed = assert.rejects(client.getExchangeStatus({}, {signal: controller.signal, timeoutMs: 1000}), error => {
+      if (mode === "abort") assert.ok(error instanceof KalshiAbortError);
+      else if (mode === "timeout") assert.ok(error instanceof KalshiTimeoutError);
+      else {
+        assert.ok(error instanceof KalshiResponseReadError);
+        assert.equal(error.status, 200);
+        assert.equal(error.headers.get("request-id"), "partial");
+        assert.equal(error.rawBody, undefined);
+      }
+      return true;
+    });
+    await headersSeen;
+    if (mode === "abort") controller.abort();
+    else if (mode === "disconnect") socket!.destroy();
+    await failed;
+  }
 });

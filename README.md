@@ -376,8 +376,9 @@ forward authentication headers to a redirect target.
 
 `rawBody` retains the exact response bytes, including whitespace and BOMs.
 JSON bodies are decoded as strict UTF-8. Unspecified non-UTF-8 bodies and
-`application/octet-stream` return `Uint8Array`, not replacement text. API and
-JSON parse errors also retain `rawBody` when the body was received completely.
+`application/octet-stream` return `Uint8Array`, not replacement text.
+Text decoding uses UTF-8; arbitrary declared charsets are not transcoded.
+API and JSON parse errors retain `rawBody` when the body was received completely.
 Default error inspection and JSON serialization omit headers and payloads;
 access `error.body`, `error.headers` or `error.rawBody` explicitly when needed.
 
