@@ -8,6 +8,7 @@ import test from "node:test";
 import {
   KalshiClient, KalshiApiError, KalshiContractError, KalshiPaginationError,
   KalshiResponseParseError, isEndpointError, officialOperationSource,
+  KalshiTransportError, KalshiAbortError, KalshiTimeoutError,
   type EndpointOptions, type PaginationOptions, type PaginatedOperationId
 } from "../src/index.js";
 import { operationContracts, contractComponents } from "../src/generated/contracts.js";
@@ -241,7 +242,7 @@ for (const entry of coverage.operations) {
       reset([{ body: makePage("error-next") }, reply]);
       const failed = named(client, entry)(input, options);
       await failed.next();
-      await assert.rejects(failed.next(), reply.body === 42 ? KalshiContractError : reply.raw ? KalshiResponseParseError : TypeError);
+      await assert.rejects(failed.next(), reply.body === 42 ? KalshiContractError : reply.raw ? KalshiResponseParseError : KalshiTransportError);
       assert.equal(requests.length, 2);
     }
     assert.deepEqual(input, before);
@@ -250,7 +251,7 @@ for (const entry of coverage.operations) {
   });
 }
 
-test("limits are validated, input snapshots preserve required paths and queries, and transport errors retain identity", async () => {
+test("limits and snapshots are preserved and pagination propagates client errors", async () => {
   const input = { pathParameters: { ticker: "A/B" }, query: { limit: 2, cursor: "start", tickers: ["A", "B"] } };
   const options = { authenticated: false, headers: { "X-Proof": "initial" } };
   const snapshots: unknown[] = [];
@@ -270,10 +271,54 @@ test("limits are validated, input snapshots preserve required paths and queries,
   }
   const failure = new Error("network identity");
   const failing = new KalshiClient({ fetch: async () => { throw failure; } });
-  await assert.rejects(failing.getMarketsPages({}, { authenticated: false }).next(), error => error === failure);
+  await assert.rejects(failing.getMarketsPages({}, { authenticated: false }).next(), KalshiTransportError);
+  await assert.rejects(paginatePages("failure", async () => {throw failure;}, {}, "cursor").next(), error => error === failure);
   await assert.rejects(client.getMilestonesPages({ query: {} } as never, { authenticated: false }).next(), KalshiContractError);
   await assert.rejects(client.getMarketsPages({}, { authenticated: true }).next(), /requires auth/);
   await assert.rejects(client.getMarketsPages(null as never, { authenticated: false }).next(), KalshiContractError);
+});
+
+test("every named pager forwards cancellation and timeouts through real HTTP", {timeout: 20000}, async t => {
+  let requestCount = 0;
+  let body: Record<string, unknown> = {};
+  let status = 200;
+  const server = createServer((_request, response) => {
+    requestCount++;
+    if (requestCount === 1) {
+      response.writeHead(status, {"content-type": "application/json"});
+      response.end(JSON.stringify(body));
+    }
+  });
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  t.after(async () => {
+    server.closeAllConnections();
+    await new Promise<void>(resolve => server.close(() => resolve()));
+  });
+  const port = (server.address() as AddressInfo).port;
+  const client = new KalshiClient({environment: {name: "pager-controls", restBaseUrl: `http://127.0.0.1:${port}/trade-api/v2`, websocketUrl: `ws://127.0.0.1:${port}`}});
+  for (const entry of coverage.operations) {
+    const fixture = fixtures.fixtures.find(f => f.operationId === entry.operationId)!;
+    const response = entry.responses[0]!;
+    for (const timeout of [false, true]) {
+      requestCount = 0;
+      status = response.status;
+      body = {...structuredClone(fixture.responses.find(r => r.status === status)!.body!), [response.cursorField]: "server-next"};
+      const controller = new AbortController();
+      const pages = named(client, entry)(fixture.input, {authenticated: false, signal: controller.signal, timeoutMs: timeout ? 100 : 1000});
+      assert.equal((await pages.next()).done, false);
+      const received = once(server, "request");
+      const failed = assert.rejects(pages.next(), timeout ? KalshiTimeoutError : KalshiAbortError);
+      const [request] = await received;
+      const closed = once((request as IncomingMessage).socket, "close");
+      if (!timeout) controller.abort("SECRET_ABORT_REASON");
+      await failed;
+      await closed;
+      assert.equal(requestCount, 2, entry.operationId);
+      assert.equal((await pages.next()).done, true);
+      assert.equal(requestCount, 2, "no dispatch after failure");
+    }
+  }
 });
 
 test("default page bound terminates unique cursors and iterator return performs no HTTP", async () => {
