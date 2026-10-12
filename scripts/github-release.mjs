@@ -6,14 +6,21 @@ import { pathToFileURL } from "node:url";
 function reportIdentity(bytes) {
   const report = JSON.parse(bytes.toString("utf8"));
   if (report.targetId !== "typescript.KalshiTS") throw new Error("Release report must belong to KalshiTS.");
-  if (!Array.isArray(report.checks) || report.checks.length === 0 || report.checks.some((check) => check.passed !== true)) {
-    throw new Error("Release conformance report must contain successful checks.");
+  // Every declared check group is authoritative release evidence.
+  const groups = Object.fromEntries(Object.entries(report).filter(([name]) => name === "checks" || name.endsWith("Checks")));
+  if (!Object.hasOwn(groups, "checks")) throw new Error("Release conformance report must contain successful checks.");
+  for (const checks of Object.values(groups)) {
+    if (!Array.isArray(checks) || checks.length === 0 || checks.some((check) => !check || typeof check.id !== "string" || !check.id || check.passed !== true)
+      || new Set(checks.map(check => check.id)).size !== checks.length) {
+      throw new Error("Release conformance report must contain successful checks.");
+    }
   }
   if (typeof report.suiteDigest !== "string" || !/^[a-f0-9]{64}$/.test(report.suiteDigest)) {
     throw new Error("Release conformance report must identify its suite.");
   }
   return JSON.stringify({ targetId: report.targetId, suiteDigest: report.suiteDigest,
-    checks: report.checks.map(({ id, passed }) => ({ id, passed })).sort((a, b) => a.id.localeCompare(b.id)) });
+    groups: Object.fromEntries(Object.keys(groups).sort().map(name => [name,
+      groups[name].map(({ id, passed }) => ({ id, passed })).sort((a, b) => a.id.localeCompare(b.id))])) });
 }
 
 export async function reconcileRelease({ repository, tag, files, prerelease, token,

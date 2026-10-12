@@ -37,6 +37,39 @@ test("release recovery creates absent releases and uploads only missing matching
   }
 });
 
+test("release evidence includes every declared conformance group before action and recovery", async t => {
+  const root = mkdtempSync(path.join(tmpdir(), "kalshits-release-groups-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const file = path.join(root, "report.json");
+  const report = { targetId: "typescript.KalshiTS", suiteDigest: "a".repeat(64),
+    checks: [{ id: "legacy", passed: true }], perpsChecks: [{ id: "perps-case", passed: true }] };
+  let actions = 0;
+  const options = { repository: "hurley451/KalshiTS", tag: "v0.1.0-alpha.1", files: [file],
+    prerelease: true, token: "test-only", run: () => { actions++; } };
+  for (const perpsChecks of [[{ id: "perps-case", passed: false }], [], null,
+    [{ id: "same", passed: true }, { id: "same", passed: true }], [{ passed: true }]]) {
+    writeFileSync(file, JSON.stringify({ ...report, perpsChecks }));
+    await assert.rejects(reconcileRelease({ ...options, fetchImplementation: async () => assert.fail("must not look up invalid evidence") }), /successful checks/);
+  }
+  writeFileSync(file, JSON.stringify({ ...report, cfChecks: [{ id: "cf-case", passed: false }] }));
+  await assert.rejects(reconcileRelease({ ...options, fetchImplementation: async () => assert.fail("must validate additional groups") }), /successful checks/);
+  writeFileSync(file, JSON.stringify(report));
+  const remote = evidence => async url => {
+    if (url.includes("/releases/tags/")) return Response.json({ id: 1, tag_name: options.tag, draft: false, prerelease: true });
+    if (url.includes("?per_page=")) return Response.json([{ id: 2, name: "report.json" }]);
+    return Response.json(evidence);
+  };
+  await assert.rejects(reconcileRelease({ ...options, fetchImplementation: remote({ ...report, perpsChecks: [{ id: "perps-case", passed: false }] }) }), /successful checks/);
+  await assert.rejects(reconcileRelease({ ...options, fetchImplementation: remote({ ...report, perpsChecks: [{ id: "different-case", passed: true }] }) }), /Refusing to overwrite/);
+  const { perpsChecks: omitted, ...legacy } = report;
+  void omitted;
+  await assert.rejects(reconcileRelease({ ...options, fetchImplementation: remote(legacy) }), /Refusing to overwrite/);
+  assert.equal(await reconcileRelease({ ...options, fetchImplementation: remote({ ...report, generatedAtUtc: "later" }) }), "verified");
+  assert.equal(actions, 0);
+  assert.equal(await reconcileRelease({ ...options, fetchImplementation: async () => new Response(null, { status: 404 }) }), "created");
+  assert.equal(actions, 1);
+});
+
 test("release recovery rejects wrong identity and failed conformance", async (t) => {
   const root = mkdtempSync(path.join(tmpdir(), "kalshits-github-release-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
