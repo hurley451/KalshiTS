@@ -13,7 +13,8 @@ test("packed consumer compiles and executes typed pagination for all 28 source o
     env: { ...process.env, npm_config_cache: path.join(root, "npm-cache") }
   });
   try {
-    const output = run("npm", ["pack", "--json", "--pack-destination", root], repository);
+    // npm test builds once; parallel consumers must not rebuild shared output.
+    const output = run("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", root], repository);
     const pack = JSON.parse(output.slice(output.indexOf("[")))[0];
     for (const file of ["dist/src/pagination.js", "dist/src/pagination.d.ts", "dist/src/generated/endpoints.d.ts", "src/generated/pagination-coverage.json"]) {
       assert.ok(pack.files.some(f => f.path === file), `missing packed ${file}`);

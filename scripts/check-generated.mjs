@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { readdir } from "node:fs/promises";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 export const generatedFiles = Object.freeze([
@@ -19,10 +20,14 @@ export const generatedFiles = Object.freeze([
   "src/generated/pagination-coverage.json",
   "test/pagination-contracts.test.ts"
 ]);
+export const perpsGeneratedFiles = Object.freeze([
+  ...["schema.ts", "source-schema.ts", "operations.ts", "contracts.ts", "models.ts", "endpoints.ts", "coverage.json", "schema-coverage.json", "pagination-coverage.json", "source-gaps.json", "temporal-coverage.json"].map(f => `src/generated/perps-rest/${f}`),
+  ...["fixtures.json", "contracts.test.ts", "pagination-contracts.test.ts"].map(f => `test/perps-rest/${f}`)
+]);
 
-export async function compareGenerated(repository, outputRoot) {
+export async function compareGenerated(repository, outputRoot, files = generatedFiles) {
   const failures = [];
-  for (const file of generatedFiles) {
+  for (const file of files) {
     const contents = [];
     for (const [label, root] of [["checked-in", repository], ["regenerated", outputRoot]]) {
       try {
@@ -38,6 +43,23 @@ export async function compareGenerated(repository, outputRoot) {
     }
   }
   if (failures.length) throw new Error(failures.join("\n"));
+}
+
+export async function checkPerpsGenerated({ coreRoot, repository = repositoryRoot }) {
+  const outputRoot = await mkdtemp(path.join(tmpdir(), "kalshits-perps-generated-"));
+  try {
+    const result = spawnSync(process.execPath,[path.join(repositoryRoot,"scripts/generate-client.mjs"),"--product","perps","--kalshicore-root",path.resolve(coreRoot),"--active-date","2026-10-12","--out-dir",outputRoot],{stdio:"inherit"});
+    if(result.error) throw result.error;
+    if(result.status!==0) throw new Error(`Perps generation failed (exit ${result.status}).`);
+    for(const directory of ["src/generated/perps-rest","test/perps-rest"]) {
+      for(const root of [repository,outputRoot]) {
+        const actual=(await readdir(path.join(root,directory))).map(f=>`${directory}/${f}`).sort();
+        const expected=perpsGeneratedFiles.filter(f=>f.startsWith(directory+"/")).sort();
+        if(JSON.stringify(actual)!==JSON.stringify(expected)) throw new Error(`Unexpected/missing Perps outputs in ${directory}`);
+      }
+    }
+    await compareGenerated(repository,outputRoot,perpsGeneratedFiles);
+  } finally { await rm(outputRoot,{recursive:true,force:true}); }
 }
 
 export async function checkGenerated({ source, repository = repositoryRoot }) {
@@ -68,5 +90,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     ?? (coreRoot ? path.join(coreRoot, "sources/official/openapi.yaml") : undefined);
   if (!source) throw new Error("Pass --source <official openapi.yaml> or --kalshicore-root <path>.");
   await checkGenerated({ source });
-  console.log(`All ${generatedFiles.length} generated outputs are byte-identical.`);
+  if(coreRoot) await checkPerpsGenerated({coreRoot});
+  console.log(`All ${generatedFiles.length} Predictions${coreRoot ? ` and ${perpsGeneratedFiles.length} Perps` : ""} generated outputs are byte-identical.`);
 }

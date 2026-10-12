@@ -10,7 +10,8 @@ test("packed consumers compile complete contracts and execute all named facades"
   const root = mkdtempSync(path.join(tmpdir(), "kalshi-typed-consumer-"));
   const run = (command,args,cwd=root) => execFileSync(command,args,{cwd,encoding:"utf8",stdio:["ignore","pipe","pipe"]});
   try {
-    const output = run("npm",["pack","--json","--pack-destination",root],repository);
+    // npm test builds once; parallel consumers must not rebuild shared output.
+    const output = run("npm",["pack","--ignore-scripts","--json","--pack-destination",root],repository);
     const pack = JSON.parse(output.slice(output.indexOf("[")))[0];
     assert.ok(pack.files.some(f=>f.path==="dist/src/generated/schema.d.ts"));
     writeFileSync(path.join(root,"package.json"),JSON.stringify({private:true,type:"module"}));

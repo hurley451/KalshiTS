@@ -1,0 +1,243 @@
+{
+  "sourceId": "perps_openapi",
+  "url": "https://docs.kalshi.com/perps_openapi.yaml",
+  "sha256": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+  "coreRef": "99abf30c3fc818815e99f015299e2f4bcbf62a00",
+  "activeDate": "2026-10-12",
+  "operationCount": 51,
+  "modelCount": 88,
+  "schemaRootCount": 213,
+  "referenceCount": 457,
+  "responseBindingCount": 236,
+  "domainCount": 11,
+  "paginatorCount": 3,
+  "operations": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/paths/~1margin~1fills/get"
+      },
+      "operationId": "GetMarginFills",
+      "pageMethod": "getMarginFillsPages",
+      "collection": "fills",
+      "query": [
+        {
+          "name": "subaccount",
+          "in": "query",
+          "required": false,
+          "description": "Subaccount number (0 for primary, 1-63 for subaccounts). If omitted, returns fills across all subaccounts for the authenticated user. Subaccount-restricted API keys must omit this or pass their locked subaccount, and read only that subaccount's fills.",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "description": "Number of results per page",
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 100
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false,
+          "description": "Pagination cursor from a previous response",
+          "schema": {
+            "type": "string"
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        {
+          "name": "min_ts",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "Filter fills after this Unix timestamp"
+        },
+        {
+          "name": "max_ts",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "Filter fills before this Unix timestamp"
+        }
+      ],
+      "response": {
+        "description": "Fills retrieved successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetMarginFillsResponse"
+            }
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/paths/~1margin~1orders/get"
+      },
+      "operationId": "GetMarginOrders",
+      "pageMethod": "getMarginOrdersPages",
+      "collection": "orders",
+      "query": [
+        {
+          "name": "ticker",
+          "in": "query",
+          "description": "Filter by market ticker",
+          "schema": {
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          }
+        },
+        {
+          "name": "min_ts",
+          "in": "query",
+          "description": "Filter items after this Unix timestamp",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "max_ts",
+          "in": "query",
+          "description": "Filter items before this Unix timestamp",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "description": "Filter by status. Possible values depend on the endpoint.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Number of margin orders per page. Defaults to 10000.",
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 10000,
+            "default": 10000,
+            "x-oapi-codegen-extra-tags": {
+              "validate": "omitempty,min=1,max=10000"
+            }
+          }
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "description": "Pagination cursor. Use the cursor value returned from the previous response to get the next page of results. Leave empty for the first page.",
+          "schema": {
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          }
+        },
+        {
+          "name": "subaccount",
+          "in": "query",
+          "required": false,
+          "description": "Subaccount number (0 for primary, 1-63 for subaccounts). If omitted, defaults to all subaccounts.",
+          "schema": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      ],
+      "response": {
+        "description": "Orders retrieved successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetMarginOrdersResponse"
+            }
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/paths/~1margin~1trades/get"
+      },
+      "operationId": "GetMarginTrades",
+      "pageMethod": "getMarginTradesPages",
+      "collection": "trades",
+      "query": [
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "description": "Number of results per page",
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 100
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false,
+          "description": "Pagination cursor from a previous response",
+          "schema": {
+            "type": "string"
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        {
+          "name": "min_ts",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "Filter trades after this Unix timestamp"
+        },
+        {
+          "name": "max_ts",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "Filter trades before this Unix timestamp"
+        }
+      ],
+      "response": {
+        "description": "Trades retrieved successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetMarginTradesResponse"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

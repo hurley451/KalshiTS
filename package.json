@@ -2,7 +2,7 @@
   "name": "@hurley451/kalshi-ts",
   "version": "0.1.0-alpha.1",
   "private": false,
-  "kalshiCoreRef": "da235871e8c55ca1f6bcc2020f5324e909f1998a",
+  "kalshiCoreRef": "99abf30c3fc818815e99f015299e2f4bcbf62a00",
   "description": "TypeScript and JavaScript SDK for Kalshi with named REST endpoints, typed models, contract validation, and RSA-PSS or Ed25519 signing.",
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "src/generated/coverage.json",
     "src/generated/schema-coverage.json",
     "src/generated/pagination-coverage.json",
+    "src/generated/perps-rest/*.json",
     "README.md",
     "LICENSE",
     "CONTRIBUTING.md",

@@ -1,0 +1,106 @@
+{
+  "sourceId": "perps_openapi",
+  "url": "https://docs.kalshi.com/perps_openapi.yaml",
+  "sha256": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+  "coreRef": "99abf30c3fc818815e99f015299e2f4bcbf62a00",
+  "activeDate": "2026-10-12",
+  "operationCount": 51,
+  "modelCount": 88,
+  "schemaRootCount": 213,
+  "referenceCount": 457,
+  "responseBindingCount": 236,
+  "domainCount": 11,
+  "paginatorCount": 3,
+  "gaps": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/paths/~1portfolio~1intra_exchange_instance_transfer/post"
+      },
+      "issue": "Transfer security declares three separate alternatives; signing scheme descriptions require combined headers. Preserved without correction.",
+      "status": "unreviewed",
+      "coreLedger": "sources/perps/perps_openapi-source.json#/gaps/0",
+      "sdkDisposition": "Preserve raw security alternatives; existing trading-key signer emits all three signing headers."
+    }
+  ],
+  "compatibility": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/leverage_estimate"
+      },
+      "precondition": {
+        "type": "number",
+        "format": "double",
+        "description": "Leverage estimate (1 / margin_rate) evaluated at a small retail-sized notional position. Actual leverage may be lower for larger positions as the liquidation margin rate grows with size. Null when margin config or price data is unavailable.\n"
+      },
+      "preconditionHash": "daf498d065f9dd82b741da96e79b0f7e6b33a5eba83630ce467e9cc31a9c1f12",
+      "effectiveDate": null,
+      "disposition": "approved source-prose null compatibility; map values remain nonnullable",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/leverage_estimates"
+      },
+      "precondition": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": "Leverage estimates (1 / margin_rate) keyed by notional position size in dollars (\"1000\", \"10000\", \"100000\", \"1000000\"). Leverage decreases at larger notionals as the liquidation margin rate grows with size. Null when margin config or price data is unavailable.\n"
+      },
+      "preconditionHash": "fe6880357c988f7552ac95afad64b1e3649f00cf3d031d13b72881290231e1d5",
+      "effectiveDate": null,
+      "disposition": "approved source-prose null compatibility; map values remain nonnullable",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    }
+  ],
+  "refinements": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/CreateMarginOrderRequest"
+      },
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "ticker or market_id; both allowed with ticker precedence",
+        "reduce_only true requires IOC/FOK"
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/DecreaseMarginOrderRequest"
+      },
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "rules": [
+        "exactly one non-null reduce_by/reduce_to"
+      ]
+    }
+  ]
+}

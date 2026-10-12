@@ -1,0 +1,291 @@
+{
+  "sourceId": "perps_openapi",
+  "url": "https://docs.kalshi.com/perps_openapi.yaml",
+  "sha256": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+  "coreRef": "99abf30c3fc818815e99f015299e2f4bcbf62a00",
+  "activeDate": "2026-10-12",
+  "operationCount": 51,
+  "modelCount": 88,
+  "schemaRootCount": 213,
+  "referenceCount": 457,
+  "responseBindingCount": 236,
+  "domainCount": 11,
+  "paginatorCount": 3,
+  "rules": [
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/funding_deadband"
+      },
+      "precondition": {
+        "type": "number",
+        "format": "double",
+        "minimum": 0,
+        "description": "Funding deadband configured at market creation, expressed in funding_limit_unit."
+      },
+      "preconditionHash": "b9365dbca185f95cfd859ac3a7a9664ce0c1f4c4fdcc08295c54d986cedfe382",
+      "effectiveDate": "2026-10-15",
+      "disposition": "excluded from active typed model",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/funding_cap"
+      },
+      "precondition": {
+        "type": "number",
+        "format": "double",
+        "minimum": 0,
+        "description": "Funding cap configured at market creation, expressed in funding_limit_unit."
+      },
+      "preconditionHash": "34dfb0a362bcd3971d2cfec261405ad881639878a7856940a6a1719cfa7807e2",
+      "effectiveDate": "2026-10-15",
+      "disposition": "excluded from active typed model",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/funding_limit_unit"
+      },
+      "precondition": {
+        "type": "string",
+        "enum": [
+          "percentage",
+          "dollar"
+        ],
+        "x-go-type-skip-optional-pointer": true,
+        "description": "Unit for the funding limits configured at market creation."
+      },
+      "preconditionHash": "a97dc5c920f2275822b734fde8991f4ca5c285cc13403aed01bb4c387e800167",
+      "effectiveDate": "2026-10-15",
+      "disposition": "excluded from active typed model",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/bid_size_fp"
+      },
+      "precondition": {
+        "$ref": "#/components/schemas/FixedPointCount",
+        "description": "Total number of contracts resting at the best bid price, as a fixed-point count string. Zero when there is no bid. Omitted when market stats are unavailable."
+      },
+      "preconditionHash": "aab5ba64f16139f22f0c6cd2036506da04aa59a5748035ae73d3e7e428e8491c",
+      "effectiveDate": "2026-10-15",
+      "disposition": "excluded from active typed model",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/ask_size_fp"
+      },
+      "precondition": {
+        "$ref": "#/components/schemas/FixedPointCount",
+        "description": "Total number of contracts resting at the best ask price, as a fixed-point count string. Zero when there is no ask. Omitted when market stats are unavailable."
+      },
+      "preconditionHash": "a014f8470d041710acdf4757364397f444d9d76e2e061347a3e43f10eb15689c",
+      "effectiveDate": "2026-10-15",
+      "disposition": "excluded from active typed model",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/required"
+      },
+      "precondition": [
+        "ticker",
+        "status",
+        "title",
+        "contract_size",
+        "underlying_multiplier",
+        "tick_size",
+        "fractional_trading_enabled",
+        "schedule",
+        "exchange_index",
+        "market_version",
+        "funding_deadband",
+        "funding_cap",
+        "funding_limit_unit"
+      ],
+      "preconditionHash": "c1b8a13c91cf9bfcc149094ebab2a9449a7a30874ccad8602c444f37a96a5c80",
+      "effectiveDate": "2026-10-15",
+      "disposition": "remove only funding_deadband, funding_cap, funding_limit_unit requirements alongside their future properties",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/IntraExchangeInstanceTransferRequest/properties/client_transfer_id"
+      },
+      "precondition": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Client ID for duplicate prevention. Reuse only for identical requests. Scoped to the user and both exchange instances and shards. Accepted transfers cannot be repeated with the same ID on the same route.\nOnly supported for primary accounts. Transfers involving numbered subaccounts reject this field. If omitted, each request creates a new transfer.\n"
+      },
+      "preconditionHash": "1c1308b0b0f30f3dc8b16ba7da5063d55afba32b0e680fc34cb2e4ec870858c0",
+      "effectiveDate": "2026-10-15",
+      "disposition": "reject future request field before dispatch",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1portfolio~1intra_exchange_instance_transfer/post"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/paths/~1margin~1trades/get/parameters/0"
+      },
+      "precondition": {
+        "name": "ticker",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "x-go-type-skip-optional-pointer": true,
+        "description": "Optional market ticker to filter trades. Omit to retrieve trades across all margin markets."
+      },
+      "preconditionHash": "693c59481f8803d91399acf30921a4f2af123bf5af70c8181be2ffb08c334791",
+      "effectiveDate": "2026-10-15",
+      "disposition": "reject future ticker filter",
+      "evidenceUrl": "https://docs.kalshi.com/changelog",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1trades/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/leverage_estimate"
+      },
+      "precondition": {
+        "type": "number",
+        "format": "double",
+        "description": "Leverage estimate (1 / margin_rate) evaluated at a small retail-sized notional position. Actual leverage may be lower for larger positions as the liquidation margin rate grows with size. Null when margin config or price data is unavailable.\n"
+      },
+      "preconditionHash": "daf498d065f9dd82b741da96e79b0f7e6b33a5eba83630ce467e9cc31a9c1f12",
+      "effectiveDate": null,
+      "disposition": "approved source-prose null compatibility; map values remain nonnullable",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "sourceId": "perps_openapi",
+        "pointer": "#/components/schemas/MarginMarket/properties/leverage_estimates"
+      },
+      "precondition": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": "Leverage estimates (1 / margin_rate) keyed by notional position size in dollars (\"1000\", \"10000\", \"100000\", \"1000000\"). Leverage decreases at larger notionals as the liquidation margin rate grows with size. Null when margin config or price data is unavailable.\n"
+      },
+      "preconditionHash": "fe6880357c988f7552ac95afad64b1e3649f00cf3d031d13b72881290231e1d5",
+      "effectiveDate": null,
+      "disposition": "approved source-prose null compatibility; map values remain nonnullable",
+      "evidenceUrl": "https://docs.kalshi.com/perps_openapi.yaml",
+      "sourceHash": "27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308",
+      "affectedOperations": [
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets~1{ticker}/get"
+        },
+        {
+          "sourceId": "perps_openapi",
+          "pointer": "#/paths/~1margin~1markets/get"
+        }
+      ]
+    }
+  ],
+  "restrictedKeyNotice": "Preserved source descriptions; no early access policy or OAuth implementation."
+}

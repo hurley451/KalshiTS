@@ -1,4 +1,4 @@
-import type { EndpointOptions } from "./generated/models.js";
+import type { EndpointOptions } from "./endpoint-options.js";
 
 export interface PaginationOptions {
   /** Maximum HTTP pages, default 1000. Zero produces an empty iterator. */

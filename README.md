@@ -20,6 +20,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - [Quick start](#quick-start)
 - [Authentication](#authentication)
 - [REST examples](#rest-examples)
+- [Perps REST](#perps-rest)
 - [WebSocket message parsing](#websocket-message-parsing)
 - [Error handling](#error-handling)
 - [Configuration](#configuration)
@@ -29,7 +30,8 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 
 ## Features
 
-- 118 named REST methods across 17 domain facades, with typed inputs and responses.
+- 118 named Predictions REST methods across 17 domain facades, with typed inputs and responses.
+- Separate Perps client with 51 named methods, 88 models and three async page iterators.
 - 209 schema-derived models and runtime request/response contract validation.
 - Lazy async page iterators for all 28 cursor-paginated REST operations.
 - Promise-based HTTP requests using Node.js fetch, with production and demo environments.
@@ -64,6 +66,7 @@ narrowing. HTTP 204 responses return `undefined`.
 | Live data | `getEventLiveData`, `getWeatherIndex`, `getWeatherIndexCalibrations` | Typed REST |
 | API keys | `getApiKeys`, `createApiKey`, `deleteApiKey` | Typed REST |
 | Communications and FCM | `getCommunicationsID`, `getRFQs`, `getQuotes`, `getFCMOrders` | Typed REST |
+| Perps | `getMarginMarkets`, `createMarginOrder`, `getMarginPositions`, `getMarginFills` | Separate typed REST client |
 | WebSocket | `parseWebSocketMessage` | Parsing only; no transport or subscriptions |
 
 The checked-in OpenAPI snapshot contains 118 REST operations. Named methods and
@@ -156,6 +159,39 @@ Encrypted PEM input must first be decrypted with `createPrivateKey` and supplied
 as a private `KeyObject`. Public, symmetric, EC, and restricted RSA-PSS keys are
 rejected. Invalid keys and signing failures produce `KalshiAuthError` without
 including private key material or underlying crypto errors.
+
+## Perps REST
+
+`KalshiPerpsClient` uses Perps environments and models separately from the
+Predictions client. It shares signing, cancellation, deadlines, rate limits and
+GET-only retry controls. Demo credentials and production access are environment
+specific; production availability depends on account eligibility.
+
+```ts
+import { KalshiPerpsClient, type KalshiAuthOptions } from "@hurley451/kalshi-ts";
+
+async function readPerps(auth: KalshiAuthOptions, ticker: string) {
+  const perps = new KalshiPerpsClient({ environment: "demo", auth });
+  const book = await perps.markets.getMarginMarketOrderbook({
+    pathParameters: { ticker }
+  });
+  console.log(book);
+
+  for await (const page of perps.orders.getMarginOrdersPages(
+    { query: { limit: 100 } },
+    { signal: AbortSignal.timeout(30_000) },
+    { maxPages: 10 }
+  )) {
+    console.log(page.orders);
+  }
+}
+```
+
+The [Perps endpoint matrix](src/generated/perps-rest/coverage.json) lists every
+method and response status. [Source compatibility](src/generated/perps-rest/source-gaps.json)
+and [effective-date coverage](src/generated/perps-rest/temporal-coverage.json)
+record the active contract profile. Clearing-member bearer clients and OAuth
+flows are not implemented; trading credentials are not reused for those realms.
 
 ## REST Examples
 
