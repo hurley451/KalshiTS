@@ -899,13 +899,17 @@ export interface components {
              * @description Specifies the maximum number of contracts that can be matched within this group over a rolling 15-second window. Whole contracts only. Provide contracts_limit or contracts_limit_fp; if both provided they must match.
              */
             contracts_limit?: number;
-            contracts_limit_fp?: components["schemas"]["FixedPointCount"] | null;
+            contracts_limit_fp?: (components["schemas"]["FixedPointCount"] & string) | null;
             /**
              * @description The market group this order group is bound to (default 0). All orders placed into this order group must be for markets whose exchange_index matches this value.
              * @default 0
              */
             exchange_index?: components["schemas"]["ExchangeIndex"];
-        };
+        } & ({
+            contracts_limit: number;
+        } | {
+            contracts_limit_fp: string;
+        });
         CreateOrderGroupResponse: {
             /** @description The unique identifier for the created order group */
             order_group_id: string;
@@ -1066,14 +1070,20 @@ export interface components {
         /** @description At least one leg is required and a leg you omit is cleared; cancel with `DELETE`. */
         UpdateExitTriggerRequest: {
             /** @description Mark price at which the stop-loss leg fires. Must be strictly positive when supplied. */
-            stop_loss_price?: components["schemas"]["FixedPointDollars"];
+            stop_loss_price?: components["schemas"]["FixedPointDollars"] & string;
             /** @description Mark price at which the take-profit leg fires. Must be strictly positive when supplied. */
-            take_profit_price?: components["schemas"]["FixedPointDollars"];
-        };
+            take_profit_price?: components["schemas"]["FixedPointDollars"] & string;
+        } & ({
+            /** @description Mark price at which the stop-loss leg fires. Must be strictly positive when supplied. */
+            stop_loss_price: components["schemas"]["FixedPointDollars"] & string;
+        } | {
+            /** @description Mark price at which the take-profit leg fires. Must be strictly positive when supplied. */
+            take_profit_price: components["schemas"]["FixedPointDollars"] & string;
+        });
         /** @description For `bracket`, supply `stop_loss_price` and/or `take_profit_price`. For `trailing`, supply exactly one of `trail_amount` or `trail_bps`. Fields belonging to the other kind are rejected, as is a body that sets neither — cancel with `DELETE`. A leg you omit is cleared. */
-        SetCrossExitTriggerRequest: {
+        SetCrossExitTriggerRequest: ({
             /** @description Contracts this trigger closes when it fires. Omit it to cover the whole position, which then requires that no partial or anchored trigger already covers part of it. If supplied, it must be a whole number of contracts. */
-            count?: components["schemas"]["FixedPointCount"];
+            count?: components["schemas"]["FixedPointCount"] & string;
             /** @description Ties the trigger to an order: its size follows that order's cumulative fill, and it stays pending until the order first fills. Bracket only; mutually exclusive with `count`. If the order cannot currently be validated, the request returns `409` with error code `anchor_order_unavailable` before writing anything, so retrying is safe. */
             anchor_order_id?: string;
             /** @description Your own identifier, required on a `count` or `anchor_order_id` create because those append a trigger rather than replace one; rejected on every other write. Replaying a key returns the trigger the first request made, in whatever state it has since reached. Keys are single-use per account and belong to the position they created on: reusing one returns the original even once it is `canceled`, and presenting it for another subaccount or ticker returns `409` with error code `idempotency_key_already_used`. */
@@ -1084,14 +1094,65 @@ export interface components {
              */
             kind?: components["schemas"]["ExitTriggerKind"];
             /** @description Mark price at which the stop-loss leg fires. Bracket only; must be strictly positive when supplied. */
-            stop_loss_price?: components["schemas"]["FixedPointDollars"];
+            stop_loss_price?: components["schemas"]["FixedPointDollars"] & string;
             /** @description Mark price at which the take-profit leg fires. Bracket only; must be strictly positive when supplied. */
-            take_profit_price?: components["schemas"]["FixedPointDollars"];
+            take_profit_price?: components["schemas"]["FixedPointDollars"] & string;
             /** @description Absolute trailing distance in dollars. Trailing only; mutually exclusive with `trail_bps`. */
             trail_amount?: components["schemas"]["FixedPointDollars"];
             /** @description Trailing distance in basis points of the tracked watermark (not the entry price). Trailing only; mutually exclusive with `trail_amount`. */
             trail_bps?: number;
-        };
+        } & (unknown & (({
+            client_trigger_id: string;
+        } & ({
+            /** @description Contracts this trigger closes when it fires. Omit it to cover the whole position, which then requires that no partial or anchored trigger already covers part of it. If supplied, it must be a whole number of contracts. */
+            count: components["schemas"]["FixedPointCount"] & string;
+            /** @enum {unknown} */
+            anchor_order_id?: null;
+        } | {
+            /** @description Ties the trigger to an order: its size follows that order's cumulative fill, and it stays pending until the order first fills. Bracket only; mutually exclusive with `count`. If the order cannot currently be validated, the request returns `409` with error code `anchor_order_unavailable` before writing anything, so retrying is safe. */
+            anchor_order_id: string;
+            /** @enum {unknown} */
+            count?: null;
+        })) | {
+            /** @enum {unknown} */
+            count?: null;
+            /** @enum {unknown} */
+            anchor_order_id?: null;
+            /** @enum {unknown} */
+            client_trigger_id?: null;
+        }))) & (({
+            /** @enum {unknown} */
+            kind?: "bracket";
+            /** @enum {unknown} */
+            trail_amount?: null;
+            /** @enum {unknown} */
+            trail_bps?: null;
+        } & (({
+            /** @description Mark price at which the stop-loss leg fires. Bracket only; must be strictly positive when supplied. */
+            stop_loss_price: components["schemas"]["FixedPointDollars"] & string;
+        } | {
+            /** @description Mark price at which the take-profit leg fires. Bracket only; must be strictly positive when supplied. */
+            take_profit_price: components["schemas"]["FixedPointDollars"] & string;
+        }) & unknown)) | ({
+            /** @enum {unknown} */
+            kind: "trailing";
+            /** @enum {unknown} */
+            stop_loss_price?: null;
+            /** @enum {unknown} */
+            take_profit_price?: null;
+            /** @enum {unknown} */
+            anchor_order_id?: null;
+        } & (({
+            /** @description Absolute trailing distance in dollars. Trailing only; mutually exclusive with `trail_bps`. */
+            trail_amount: components["schemas"]["FixedPointDollars"];
+            /** @enum {unknown} */
+            trail_bps?: null;
+        } | {
+            /** @description Trailing distance in basis points of the tracked watermark (not the entry price). Trailing only; mutually exclusive with `trail_amount`. */
+            trail_bps: number;
+            /** @enum {unknown} */
+            trail_amount?: null;
+        }) & unknown)));
         /** @description For `bracket`, supply `stop_loss_price` and/or `take_profit_price`. For `trailing`, supply exactly one of `trail_amount` or `trail_bps`. Fields belonging to the other kind are rejected, as is a body that sets neither — cancel with `DELETE`. A leg you omit is cleared. */
         SetIsolatedExitTriggerRequest: {
             /**
@@ -1100,14 +1161,44 @@ export interface components {
              */
             kind?: components["schemas"]["ExitTriggerKind"];
             /** @description Mark price at which the stop-loss leg fires. Bracket only; must be strictly positive when supplied. */
-            stop_loss_price?: components["schemas"]["FixedPointDollars"];
+            stop_loss_price?: components["schemas"]["FixedPointDollars"] & string;
             /** @description Mark price at which the take-profit leg fires. Bracket only; must be strictly positive when supplied. */
-            take_profit_price?: components["schemas"]["FixedPointDollars"];
+            take_profit_price?: components["schemas"]["FixedPointDollars"] & string;
             /** @description Absolute trailing distance in dollars. Trailing only; mutually exclusive with `trail_bps`. */
             trail_amount?: components["schemas"]["FixedPointDollars"];
             /** @description Trailing distance in basis points of the tracked watermark (not the entry price). Trailing only; mutually exclusive with `trail_amount`. */
             trail_bps?: number;
-        };
+        } & (({
+            /** @enum {unknown} */
+            kind?: "bracket";
+            /** @enum {unknown} */
+            trail_amount?: null;
+            /** @enum {unknown} */
+            trail_bps?: null;
+        } & (({
+            /** @description Mark price at which the stop-loss leg fires. Bracket only; must be strictly positive when supplied. */
+            stop_loss_price: components["schemas"]["FixedPointDollars"] & string;
+        } | {
+            /** @description Mark price at which the take-profit leg fires. Bracket only; must be strictly positive when supplied. */
+            take_profit_price: components["schemas"]["FixedPointDollars"] & string;
+        }) & unknown)) | ({
+            /** @enum {unknown} */
+            kind: "trailing";
+            /** @enum {unknown} */
+            stop_loss_price?: null;
+            /** @enum {unknown} */
+            take_profit_price?: null;
+        } & (({
+            /** @description Absolute trailing distance in dollars. Trailing only; mutually exclusive with `trail_bps`. */
+            trail_amount: components["schemas"]["FixedPointDollars"];
+            /** @enum {unknown} */
+            trail_bps?: null;
+        } | {
+            /** @description Trailing distance in basis points of the tracked watermark (not the entry price). Trailing only; mutually exclusive with `trail_amount`. */
+            trail_bps: number;
+            /** @enum {unknown} */
+            trail_amount?: null;
+        }) & unknown)));
         ExitTrigger: {
             /** @description Unique identifier for this trigger. */
             id: string;
@@ -1219,8 +1310,12 @@ export interface components {
              * @description New maximum number of contracts that can be matched within this group over a rolling 15-second window. Whole contracts only. Provide contracts_limit or contracts_limit_fp; if both provided they must match.
              */
             contracts_limit?: number;
-            contracts_limit_fp?: components["schemas"]["FixedPointCount"] | null;
-        };
+            contracts_limit_fp?: (components["schemas"]["FixedPointCount"] & string) | null;
+        } & ({
+            contracts_limit: number;
+        } | {
+            contracts_limit_fp: string;
+        });
         ExchangeStatus: {
             /** @description False if the exchange is no longer taking any state changes at all. True unless under maintenance. */
             exchange_active: boolean;
@@ -1247,7 +1342,7 @@ export interface components {
             /** @description Market ticker. Supply ticker or market_id; ticker takes precedence when both are provided. */
             ticker?: string;
             /** @description Stable exchange market UUID. May be supplied instead of ticker. */
-            market_id?: string;
+            market_id?: string | "";
             client_order_id: string;
             side: components["schemas"]["BookSide"];
             /** @description String representation of the order quantity in contracts. */
@@ -1277,6 +1372,7 @@ export interface components {
         } & (({
             ticker: string;
         } | {
+            /** Format: uuid */
             market_id: string;
         }) & ({
             /** @enum {unknown} */
@@ -1359,7 +1455,7 @@ export interface components {
             /** @description Market ticker. Supply ticker or market_id; ticker takes precedence when both are provided. */
             ticker?: string;
             /** @description Stable exchange market UUID. May be supplied instead of ticker. */
-            market_id?: string;
+            market_id?: string | "";
             /** @description Side of the order */
             side: components["schemas"]["BookSide"];
             /** @description Updated price for the order in fixed-point dollars. */
@@ -1375,7 +1471,12 @@ export interface components {
              * @description New Unix expiration timestamp in seconds. Omit to preserve the current expiry, or use 0 to remove it (good-till-canceled). A nonzero expiry must be in the future. Send the current price and total quantity for an expiry-only amendment; this preserves queue position.
              */
             expiration_time?: number;
-        };
+        } & ({
+            ticker: string;
+        } | {
+            /** Format: uuid */
+            market_id: string;
+        });
         AmendMarginOrderResponse: {
             order_id: string;
             client_order_id?: string;

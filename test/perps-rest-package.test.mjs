@@ -5,6 +5,7 @@ import { mkdtempSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import YAML from "yaml";
+import { requireCoreRoot } from "./helpers/core-root.mjs";
 
 test("installed NodeNext consumer: all 51 methods, 88 raw/active models, 185 errors, 3 pagers and full signed socket matrix",()=>{
  const repository=process.cwd();const root=mkdtempSync(path.join(tmpdir(),"kalshi-perps-consumer-"));
@@ -42,7 +43,7 @@ void op;
    run(process.execPath,args);run(process.execPath,[...args,"--exactOptionalPropertyTypes"]);
    writeFileSync(path.join(root,"wire.mjs"),readFileSync(path.join(repository,"test/helpers/perps-wire.mjs")));
    writeFileSync(path.join(root,"fixtures.json"),readFileSync(path.join(repository,"test/perps-rest/fixtures.json")));
-   const core=process.env.KALSHICORE_ROOT??"/private/tmp/kalshi-core-perps-pinned";
+   const core=requireCoreRoot();
    writeFileSync(path.join(root,"source.json"),JSON.stringify(YAML.parse(readFileSync(path.join(core,"sources/perps/perps_openapi.yaml"),"utf8"))));
    writeFileSync(path.join(root,"consumer.mjs"),`
 import * as sdk from "@hurley451/kalshi-ts";

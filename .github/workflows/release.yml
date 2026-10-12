@@ -18,6 +18,8 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      KALSHICORE_ROOT: ${{ github.workspace }}/KalshiCore
     permissions:
       contents: write
       id-token: write

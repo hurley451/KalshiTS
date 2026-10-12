@@ -4,8 +4,9 @@ import fs from "node:fs";
 import YAML from "yaml";
 import * as sdk from "../dist/src/index.js";
 import { runPerpsWireProof } from "./helpers/perps-wire.mjs";
+import { requireCoreRoot } from "./helpers/core-root.mjs";
 const data=JSON.parse(fs.readFileSync("test/perps-rest/fixtures.json"));
-const core=process.env.KALSHICORE_ROOT??"/private/tmp/kalshi-core-perps-pinned";
+const core=requireCoreRoot();
 const source=YAML.parse(fs.readFileSync(`${core}/sources/perps/perps_openapi.yaml`,"utf8"));
 test("51 named/domain methods, 236 bindings, RSA/Ed wire signatures, public calls, 24 no-replay mutations and 3 socket pagers",async()=>{
   assert.equal(data.fixtures.length,51);

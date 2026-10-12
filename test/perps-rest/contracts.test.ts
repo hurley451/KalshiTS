@@ -2,9 +2,9 @@
 // Source perps_openapi SHA-256: 27e4b0b76a686f797342f1526a08df5b8f60d8104a81b65c94073d3d89b54308; active 2026-10-12.
 import type {KalshiPerpsClient,PerpsModels,PerpsSourceModels,PerpsOperationError,PerpsOperationResponse} from "../../src/index.js";
 function proof(client:KalshiPerpsClient) {
- client.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"subaccount":0},"body":{"side":"bid","price":"0.5600","count":"10.00"}}); client.orders.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"subaccount":0},"body":{"side":"bid","price":"0.5600","count":"10.00"}});
+ client.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"subaccount":0},"body":{"side":"bid","price":"0.5600","count":"10.00","ticker":"string"}}); client.orders.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"subaccount":0},"body":{"side":"bid","price":"0.5600","count":"10.00","ticker":"string"}});
  // @ts-expect-error wrong query member
- client.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"__invalid":true},"body":{"side":"bid","price":"0.5600","count":"10.00"}});
+ client.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"__invalid":true},"body":{"side":"bid","price":"0.5600","count":"10.00","ticker":"string"}});
  const rAmendMarginOrder200:PerpsOperationResponse<"AmendMarginOrder">={"order_id":"string"};void rAmendMarginOrder200;
  const eAmendMarginOrder400:PerpsOperationError<"AmendMarginOrder">={status:400,body:{}};void eAmendMarginOrder400;
  const eAmendMarginOrder401:PerpsOperationError<"AmendMarginOrder">={status:401,body:{}};void eAmendMarginOrder401;
@@ -13,9 +13,9 @@ function proof(client:KalshiPerpsClient) {
  // @ts-expect-error undeclared status cannot narrow
  const badStatusAmendMarginOrder:PerpsOperationError<"AmendMarginOrder">={status:-1,body:undefined};void badStatusAmendMarginOrder;
  // @ts-expect-error wrong parameter primitive
- client.amendMarginOrder({"pathParameters":{"order_id":{"wrong":true}},"query":{"subaccount":0},"body":{"side":"bid","price":"0.5600","count":"10.00"}});
+ client.amendMarginOrder({"pathParameters":{"order_id":{"wrong":true}},"query":{"subaccount":0},"body":{"side":"bid","price":"0.5600","count":"10.00","ticker":"string"}});
  // @ts-expect-error wrong parameter primitive
- client.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{"side":"bid","price":"0.5600","count":"10.00"}});
+ client.amendMarginOrder({"pathParameters":{"order_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{"side":"bid","price":"0.5600","count":"10.00","ticker":"string"}});
  // @ts-expect-error required inputs
  client.amendMarginOrder();
  client.applyMarginSubaccountTransfer({"body":{"client_transfer_id":"778092c0-0f15-4c52-8c9e-65903f88fe9c","from_subaccount":0,"to_subaccount":0,"amount_cents":0}}); client.portfolio.applyMarginSubaccountTransfer({"body":{"client_transfer_id":"778092c0-0f15-4c52-8c9e-65903f88fe9c","from_subaccount":0,"to_subaccount":0,"amount_cents":0}});
@@ -81,9 +81,9 @@ function proof(client:KalshiPerpsClient) {
  const badStatusCreateMarginOrder:PerpsOperationError<"CreateMarginOrder">={status:-1,body:undefined};void badStatusCreateMarginOrder;
  // @ts-expect-error required inputs
  client.createMarginOrder();
- client.createMarginOrderGroup({"body":{}}); client.orderGroups.createMarginOrderGroup({"body":{}});
+ client.createMarginOrderGroup({"body":{"contracts_limit":1}}); client.orderGroups.createMarginOrderGroup({"body":{"contracts_limit":1}});
  // @ts-expect-error wrong query member
- client.createMarginOrderGroup({"body":{},"query":{"__invalid":true}});
+ client.createMarginOrderGroup({"body":{"contracts_limit":1},"query":{"__invalid":true}});
  const rCreateMarginOrderGroup201:PerpsOperationResponse<"CreateMarginOrderGroup">={"order_group_id":"string","subaccount":0};void rCreateMarginOrderGroup201;
  const eCreateMarginOrderGroup400:PerpsOperationError<"CreateMarginOrderGroup">={status:400,body:{}};void eCreateMarginOrderGroup400;
  const eCreateMarginOrderGroup401:PerpsOperationError<"CreateMarginOrderGroup">={status:401,body:{}};void eCreateMarginOrderGroup401;
@@ -611,9 +611,9 @@ function proof(client:KalshiPerpsClient) {
  client.resetMarginOrderGroup({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{}});
  // @ts-expect-error required inputs
  client.resetMarginOrderGroup();
- client.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"subaccount":0},"body":{}}); client.exitTriggers.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"subaccount":0},"body":{}});
+ client.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}}); client.exitTriggers.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error wrong query member
- client.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"__invalid":true},"body":{}});
+ client.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"__invalid":true},"body":{"stop_loss_price":"1.0000"}});
  const rSetCrossMarginExitTrigger200:PerpsOperationResponse<"SetCrossMarginExitTrigger">={"id":"string","ticker":"string","kind":"bracket","status":"pending_on_entry","count":"10.00","filled_count":"10.00","created_time":"2019-08-24T14:15:22Z","updated_time":"2019-08-24T14:15:22Z"};void rSetCrossMarginExitTrigger200;
  const eSetCrossMarginExitTrigger400:PerpsOperationError<"SetCrossMarginExitTrigger">={status:400,body:{}};void eSetCrossMarginExitTrigger400;
  const eSetCrossMarginExitTrigger401:PerpsOperationError<"SetCrossMarginExitTrigger">={status:401,body:{}};void eSetCrossMarginExitTrigger401;
@@ -625,14 +625,14 @@ function proof(client:KalshiPerpsClient) {
  // @ts-expect-error undeclared status cannot narrow
  const badStatusSetCrossMarginExitTrigger:PerpsOperationError<"SetCrossMarginExitTrigger">={status:-1,body:undefined};void badStatusSetCrossMarginExitTrigger;
  // @ts-expect-error wrong parameter primitive
- client.setCrossMarginExitTrigger({"pathParameters":{"ticker":{"wrong":true}},"query":{"subaccount":0},"body":{}});
+ client.setCrossMarginExitTrigger({"pathParameters":{"ticker":{"wrong":true}},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error wrong parameter primitive
- client.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"subaccount":{"wrong":true}},"body":{}});
+ client.setCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"query":{"subaccount":{"wrong":true}},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error required inputs
  client.setCrossMarginExitTrigger();
- client.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"body":{}}); client.exitTriggers.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"body":{}});
+ client.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"body":{"stop_loss_price":"1.0000"}}); client.exitTriggers.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error wrong query member
- client.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"body":{},"query":{"__invalid":true}});
+ client.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&"},"body":{"stop_loss_price":"1.0000"},"query":{"__invalid":true}});
  const rSetIsolatedMarginExitTrigger200:PerpsOperationResponse<"SetIsolatedMarginExitTrigger">={"id":"string","ticker":"string","kind":"bracket","status":"pending_on_entry","count":"10.00","filled_count":"10.00","created_time":"2019-08-24T14:15:22Z","updated_time":"2019-08-24T14:15:22Z"};void rSetIsolatedMarginExitTrigger200;
  const eSetIsolatedMarginExitTrigger400:PerpsOperationError<"SetIsolatedMarginExitTrigger">={status:400,body:{}};void eSetIsolatedMarginExitTrigger400;
  const eSetIsolatedMarginExitTrigger401:PerpsOperationError<"SetIsolatedMarginExitTrigger">={status:401,body:{}};void eSetIsolatedMarginExitTrigger401;
@@ -644,7 +644,7 @@ function proof(client:KalshiPerpsClient) {
  // @ts-expect-error undeclared status cannot narrow
  const badStatusSetIsolatedMarginExitTrigger:PerpsOperationError<"SetIsolatedMarginExitTrigger">={status:-1,body:undefined};void badStatusSetIsolatedMarginExitTrigger;
  // @ts-expect-error wrong parameter primitive
- client.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":{"wrong":true}},"body":{}});
+ client.setIsolatedMarginExitTrigger({"pathParameters":{"ticker":{"wrong":true}},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error required inputs
  client.setIsolatedMarginExitTrigger();
  client.triggerMarginOrderGroup({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":0},"body":{}}); client.orderGroups.triggerMarginOrderGroup({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":0},"body":{}});
@@ -662,9 +662,9 @@ function proof(client:KalshiPerpsClient) {
  client.triggerMarginOrderGroup({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{}});
  // @ts-expect-error required inputs
  client.triggerMarginOrderGroup();
- client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"subaccount":0},"body":{}}); client.exitTriggers.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"subaccount":0},"body":{}});
+ client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}}); client.exitTriggers.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error wrong query member
- client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"__invalid":true},"body":{}});
+ client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"__invalid":true},"body":{"stop_loss_price":"1.0000"}});
  const rUpdateCrossMarginExitTrigger200:PerpsOperationResponse<"UpdateCrossMarginExitTrigger">={"id":"string","ticker":"string","kind":"bracket","status":"pending_on_entry","count":"10.00","filled_count":"10.00","created_time":"2019-08-24T14:15:22Z","updated_time":"2019-08-24T14:15:22Z"};void rUpdateCrossMarginExitTrigger200;
  const eUpdateCrossMarginExitTrigger400:PerpsOperationError<"UpdateCrossMarginExitTrigger">={status:400,body:{}};void eUpdateCrossMarginExitTrigger400;
  const eUpdateCrossMarginExitTrigger401:PerpsOperationError<"UpdateCrossMarginExitTrigger">={status:401,body:{}};void eUpdateCrossMarginExitTrigger401;
@@ -675,11 +675,11 @@ function proof(client:KalshiPerpsClient) {
  // @ts-expect-error undeclared status cannot narrow
  const badStatusUpdateCrossMarginExitTrigger:PerpsOperationError<"UpdateCrossMarginExitTrigger">={status:-1,body:undefined};void badStatusUpdateCrossMarginExitTrigger;
  // @ts-expect-error wrong parameter primitive
- client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":{"wrong":true},"trigger_id":"string"},"query":{"subaccount":0},"body":{}});
+ client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":{"wrong":true},"trigger_id":"string"},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error wrong parameter primitive
- client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":{"wrong":true}},"query":{"subaccount":0},"body":{}});
+ client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":{"wrong":true}},"query":{"subaccount":0},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error wrong parameter primitive
- client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{}});
+ client.updateCrossMarginExitTrigger({"pathParameters":{"ticker":"BTC /?&","trigger_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{"stop_loss_price":"1.0000"}});
  // @ts-expect-error required inputs
  client.updateCrossMarginExitTrigger();
  client.updateFCMNotionalRiskLimit({"body":{"notional_value_risk_limit":"5000.0000"}}); client.fcm.updateFCMNotionalRiskLimit({"body":{"notional_value_risk_limit":"5000.0000"}});
@@ -707,9 +707,9 @@ function proof(client:KalshiPerpsClient) {
  const badStatusUpdateFCMSubtraderRiskControls:PerpsOperationError<"UpdateFCMSubtraderRiskControls">={status:-1,body:undefined};void badStatusUpdateFCMSubtraderRiskControls;
  // @ts-expect-error required inputs
  client.updateFCMSubtraderRiskControls();
- client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":0},"body":{}}); client.orderGroups.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":0},"body":{}});
+ client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":0},"body":{"contracts_limit":1}}); client.orderGroups.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":0},"body":{"contracts_limit":1}});
  // @ts-expect-error wrong query member
- client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"__invalid":true},"body":{}});
+ client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"__invalid":true},"body":{"contracts_limit":1}});
  const rUpdateMarginOrderGroupLimit200:PerpsOperationResponse<"UpdateMarginOrderGroupLimit">={};void rUpdateMarginOrderGroupLimit200;
  const eUpdateMarginOrderGroupLimit400:PerpsOperationError<"UpdateMarginOrderGroupLimit">={status:400,body:{}};void eUpdateMarginOrderGroupLimit400;
  const eUpdateMarginOrderGroupLimit401:PerpsOperationError<"UpdateMarginOrderGroupLimit">={status:401,body:{}};void eUpdateMarginOrderGroupLimit401;
@@ -718,9 +718,9 @@ function proof(client:KalshiPerpsClient) {
  // @ts-expect-error undeclared status cannot narrow
  const badStatusUpdateMarginOrderGroupLimit:PerpsOperationError<"UpdateMarginOrderGroupLimit">={status:-1,body:undefined};void badStatusUpdateMarginOrderGroupLimit;
  // @ts-expect-error wrong parameter primitive
- client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":{"wrong":true}},"query":{"subaccount":0},"body":{}});
+ client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":{"wrong":true}},"query":{"subaccount":0},"body":{"contracts_limit":1}});
  // @ts-expect-error wrong parameter primitive
- client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{}});
+ client.updateMarginOrderGroupLimit({"pathParameters":{"order_group_id":"string"},"query":{"subaccount":{"wrong":true}},"body":{"contracts_limit":1}});
  // @ts-expect-error required inputs
  client.updateMarginOrderGroupLimit();
  const mCreateMarginFCMSubtraderRequest:PerpsModels["CreateMarginFCMSubtraderRequest"]={"subtrader_suffix":"string","require_category_cap":true};void mCreateMarginFCMSubtraderRequest;
@@ -775,11 +775,11 @@ function proof(client:KalshiPerpsClient) {
  const badPerpsModelsApplySubaccountTransferResponse:PerpsModels["ApplySubaccountTransferResponse"]=42;void badPerpsModelsApplySubaccountTransferResponse;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsApplySubaccountTransferResponse:PerpsSourceModels["ApplySubaccountTransferResponse"]=42;void badPerpsSourceModelsApplySubaccountTransferResponse;
- const mCreateOrderGroupRequest:PerpsModels["CreateOrderGroupRequest"]={};void mCreateOrderGroupRequest;
+ const mCreateOrderGroupRequest:PerpsModels["CreateOrderGroupRequest"]={"contracts_limit":1};void mCreateOrderGroupRequest;
  const sCreateOrderGroupRequest:PerpsSourceModels["CreateOrderGroupRequest"]={};void sCreateOrderGroupRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsModelsCreateOrderGroupRequest:PerpsModels["CreateOrderGroupRequest"]=42;void badPerpsModelsCreateOrderGroupRequest;
- const nullPerpsModelsCreateOrderGroupRequestcontracts_limit_fp:PerpsModels["CreateOrderGroupRequest"]={"contracts_limit_fp":null};void nullPerpsModelsCreateOrderGroupRequestcontracts_limit_fp;
+ const nullPerpsModelsCreateOrderGroupRequestcontracts_limit_fp:PerpsModels["CreateOrderGroupRequest"]={"contracts_limit":1,"contracts_limit_fp":null};void nullPerpsModelsCreateOrderGroupRequestcontracts_limit_fp;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsCreateOrderGroupRequest:PerpsSourceModels["CreateOrderGroupRequest"]=42;void badPerpsSourceModelsCreateOrderGroupRequest;
  const nullPerpsSourceModelsCreateOrderGroupRequestcontracts_limit_fp:PerpsSourceModels["CreateOrderGroupRequest"]={"contracts_limit_fp":null};void nullPerpsSourceModelsCreateOrderGroupRequestcontracts_limit_fp;
@@ -1003,19 +1003,19 @@ function proof(client:KalshiPerpsClient) {
  const badPerpsModelsExitTriggerReason:PerpsModels["ExitTriggerReason"]=42;void badPerpsModelsExitTriggerReason;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsExitTriggerReason:PerpsSourceModels["ExitTriggerReason"]=42;void badPerpsSourceModelsExitTriggerReason;
- const mUpdateExitTriggerRequest:PerpsModels["UpdateExitTriggerRequest"]={};void mUpdateExitTriggerRequest;
+ const mUpdateExitTriggerRequest:PerpsModels["UpdateExitTriggerRequest"]={"stop_loss_price":"1.0000"};void mUpdateExitTriggerRequest;
  const sUpdateExitTriggerRequest:PerpsSourceModels["UpdateExitTriggerRequest"]={};void sUpdateExitTriggerRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsModelsUpdateExitTriggerRequest:PerpsModels["UpdateExitTriggerRequest"]=42;void badPerpsModelsUpdateExitTriggerRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsUpdateExitTriggerRequest:PerpsSourceModels["UpdateExitTriggerRequest"]=42;void badPerpsSourceModelsUpdateExitTriggerRequest;
- const mSetCrossExitTriggerRequest:PerpsModels["SetCrossExitTriggerRequest"]={};void mSetCrossExitTriggerRequest;
+ const mSetCrossExitTriggerRequest:PerpsModels["SetCrossExitTriggerRequest"]={"stop_loss_price":"1.0000"};void mSetCrossExitTriggerRequest;
  const sSetCrossExitTriggerRequest:PerpsSourceModels["SetCrossExitTriggerRequest"]={};void sSetCrossExitTriggerRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsModelsSetCrossExitTriggerRequest:PerpsModels["SetCrossExitTriggerRequest"]=42;void badPerpsModelsSetCrossExitTriggerRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsSetCrossExitTriggerRequest:PerpsSourceModels["SetCrossExitTriggerRequest"]=42;void badPerpsSourceModelsSetCrossExitTriggerRequest;
- const mSetIsolatedExitTriggerRequest:PerpsModels["SetIsolatedExitTriggerRequest"]={};void mSetIsolatedExitTriggerRequest;
+ const mSetIsolatedExitTriggerRequest:PerpsModels["SetIsolatedExitTriggerRequest"]={"stop_loss_price":"1.0000"};void mSetIsolatedExitTriggerRequest;
  const sSetIsolatedExitTriggerRequest:PerpsSourceModels["SetIsolatedExitTriggerRequest"]={};void sSetIsolatedExitTriggerRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsModelsSetIsolatedExitTriggerRequest:PerpsModels["SetIsolatedExitTriggerRequest"]=42;void badPerpsModelsSetIsolatedExitTriggerRequest;
@@ -1173,11 +1173,11 @@ function proof(client:KalshiPerpsClient) {
  const badPerpsModelsSelfTradePreventionType:PerpsModels["SelfTradePreventionType"]=42;void badPerpsModelsSelfTradePreventionType;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsSelfTradePreventionType:PerpsSourceModels["SelfTradePreventionType"]=42;void badPerpsSourceModelsSelfTradePreventionType;
- const mUpdateOrderGroupLimitRequest:PerpsModels["UpdateOrderGroupLimitRequest"]={};void mUpdateOrderGroupLimitRequest;
+ const mUpdateOrderGroupLimitRequest:PerpsModels["UpdateOrderGroupLimitRequest"]={"contracts_limit":1};void mUpdateOrderGroupLimitRequest;
  const sUpdateOrderGroupLimitRequest:PerpsSourceModels["UpdateOrderGroupLimitRequest"]={};void sUpdateOrderGroupLimitRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsModelsUpdateOrderGroupLimitRequest:PerpsModels["UpdateOrderGroupLimitRequest"]=42;void badPerpsModelsUpdateOrderGroupLimitRequest;
- const nullPerpsModelsUpdateOrderGroupLimitRequestcontracts_limit_fp:PerpsModels["UpdateOrderGroupLimitRequest"]={"contracts_limit_fp":null};void nullPerpsModelsUpdateOrderGroupLimitRequestcontracts_limit_fp;
+ const nullPerpsModelsUpdateOrderGroupLimitRequestcontracts_limit_fp:PerpsModels["UpdateOrderGroupLimitRequest"]={"contracts_limit":1,"contracts_limit_fp":null};void nullPerpsModelsUpdateOrderGroupLimitRequestcontracts_limit_fp;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsUpdateOrderGroupLimitRequest:PerpsSourceModels["UpdateOrderGroupLimitRequest"]=42;void badPerpsSourceModelsUpdateOrderGroupLimitRequest;
  const nullPerpsSourceModelsUpdateOrderGroupLimitRequestcontracts_limit_fp:PerpsSourceModels["UpdateOrderGroupLimitRequest"]={"contracts_limit_fp":null};void nullPerpsSourceModelsUpdateOrderGroupLimitRequestcontracts_limit_fp;
@@ -1401,18 +1401,18 @@ function proof(client:KalshiPerpsClient) {
  const missingPerpsSourceModelsDecreaseMarginOrderResponseorder_id:PerpsSourceModels["DecreaseMarginOrderResponse"]={"remaining_count":"10.00"};void missingPerpsSourceModelsDecreaseMarginOrderResponseorder_id;
  // @ts-expect-error required model member
  const missingPerpsSourceModelsDecreaseMarginOrderResponseremaining_count:PerpsSourceModels["DecreaseMarginOrderResponse"]={"order_id":"string"};void missingPerpsSourceModelsDecreaseMarginOrderResponseremaining_count;
- const mAmendMarginOrderRequest:PerpsModels["AmendMarginOrderRequest"]={"side":"bid","price":"0.5600","count":"10.00"};void mAmendMarginOrderRequest;
+ const mAmendMarginOrderRequest:PerpsModels["AmendMarginOrderRequest"]={"side":"bid","price":"0.5600","count":"10.00","ticker":"string"};void mAmendMarginOrderRequest;
  const sAmendMarginOrderRequest:PerpsSourceModels["AmendMarginOrderRequest"]={"side":"bid","price":"0.5600","count":"10.00"};void sAmendMarginOrderRequest;
  // @ts-expect-error incompatible model primitive
  const badPerpsModelsAmendMarginOrderRequest:PerpsModels["AmendMarginOrderRequest"]=42;void badPerpsModelsAmendMarginOrderRequest;
  // @ts-expect-error required model member
- const missingPerpsModelsAmendMarginOrderRequestside:PerpsModels["AmendMarginOrderRequest"]={"price":"0.5600","count":"10.00"};void missingPerpsModelsAmendMarginOrderRequestside;
+ const missingPerpsModelsAmendMarginOrderRequestside:PerpsModels["AmendMarginOrderRequest"]={"price":"0.5600","count":"10.00","ticker":"string"};void missingPerpsModelsAmendMarginOrderRequestside;
  // @ts-expect-error required model member
- const missingPerpsModelsAmendMarginOrderRequestprice:PerpsModels["AmendMarginOrderRequest"]={"side":"bid","count":"10.00"};void missingPerpsModelsAmendMarginOrderRequestprice;
+ const missingPerpsModelsAmendMarginOrderRequestprice:PerpsModels["AmendMarginOrderRequest"]={"side":"bid","count":"10.00","ticker":"string"};void missingPerpsModelsAmendMarginOrderRequestprice;
  // @ts-expect-error required model member
- const missingPerpsModelsAmendMarginOrderRequestcount:PerpsModels["AmendMarginOrderRequest"]={"side":"bid","price":"0.5600"};void missingPerpsModelsAmendMarginOrderRequestcount;
+ const missingPerpsModelsAmendMarginOrderRequestcount:PerpsModels["AmendMarginOrderRequest"]={"side":"bid","price":"0.5600","ticker":"string"};void missingPerpsModelsAmendMarginOrderRequestcount;
  // @ts-expect-error enum outlier
- const enumPerpsModelsAmendMarginOrderRequestside:PerpsModels["AmendMarginOrderRequest"]={"side":"__outside_enum__","price":"0.5600","count":"10.00"};void enumPerpsModelsAmendMarginOrderRequestside;
+ const enumPerpsModelsAmendMarginOrderRequestside:PerpsModels["AmendMarginOrderRequest"]={"side":"__outside_enum__","price":"0.5600","count":"10.00","ticker":"string"};void enumPerpsModelsAmendMarginOrderRequestside;
  // @ts-expect-error incompatible model primitive
  const badPerpsSourceModelsAmendMarginOrderRequest:PerpsSourceModels["AmendMarginOrderRequest"]=42;void badPerpsSourceModelsAmendMarginOrderRequest;
  // @ts-expect-error required model member

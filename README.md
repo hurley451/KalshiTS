@@ -84,6 +84,10 @@ Node.js crypto is required even for public requests.
 - Kalshi API credentials for private endpoints, separately issued for demo/production.
 - A KalshiCore checkout only when regenerating operations or running conformance.
 
+For development tests, set `KALSHICORE_ROOT` to a checkout of the immutable
+commit recorded in `package.json` as `kalshiCoreRef`. Tests and generation use
+that explicit input; no machine-specific source path is assumed.
+
 ## Installation
 
 Until the first npm release, build and pack a checkout:

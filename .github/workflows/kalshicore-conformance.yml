@@ -24,6 +24,7 @@ jobs:
 
     env:
       CONFORMANCE_REPORT: KalshiTS/artifacts/kalshicore-conformance/report.json
+      KALSHICORE_ROOT: ${{ github.workspace }}/KalshiCore
 
     steps:
       - name: Check out KalshiTS

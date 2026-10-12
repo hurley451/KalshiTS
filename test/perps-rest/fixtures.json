@@ -96,7 +96,8 @@
         "body": {
           "side": "bid",
           "price": "0.5600",
-          "count": "10.00"
+          "count": "10.00",
+          "ticker": "string"
         }
       }
     },
@@ -470,7 +471,9 @@
       "description": "Creates a new order group on the margin exchange with a contracts limit measured over a rolling window. When the limit is hit, all orders in the group are cancelled and no new orders can be placed until reset.",
       "authenticated": true,
       "input": {
-        "body": {}
+        "body": {
+          "contracts_limit": 1
+        }
       }
     },
     {
@@ -3313,7 +3316,9 @@
         "query": {
           "subaccount": 0
         },
-        "body": {}
+        "body": {
+          "stop_loss_price": "1.0000"
+        }
       }
     },
     {
@@ -3403,7 +3408,9 @@
         "pathParameters": {
           "ticker": "BTC /?&"
         },
-        "body": {}
+        "body": {
+          "stop_loss_price": "1.0000"
+        }
       }
     },
     {
@@ -3590,7 +3597,9 @@
         "query": {
           "subaccount": 0
         },
-        "body": {}
+        "body": {
+          "stop_loss_price": "1.0000"
+        }
       }
     },
     {
@@ -3793,7 +3802,9 @@
         "query": {
           "subaccount": 0
         },
-        "body": {}
+        "body": {
+          "contracts_limit": 1
+        }
       }
     }
   ],
@@ -3840,7 +3851,9 @@
     },
     {
       "name": "CreateOrderGroupRequest",
-      "value": {},
+      "value": {
+        "contracts_limit": 1
+      },
       "sourceValue": {}
     },
     {
@@ -4054,17 +4067,23 @@
     },
     {
       "name": "UpdateExitTriggerRequest",
-      "value": {},
+      "value": {
+        "stop_loss_price": "1.0000"
+      },
       "sourceValue": {}
     },
     {
       "name": "SetCrossExitTriggerRequest",
-      "value": {},
+      "value": {
+        "stop_loss_price": "1.0000"
+      },
       "sourceValue": {}
     },
     {
       "name": "SetIsolatedExitTriggerRequest",
-      "value": {},
+      "value": {
+        "stop_loss_price": "1.0000"
+      },
       "sourceValue": {}
     },
     {
@@ -4197,7 +4216,9 @@
     },
     {
       "name": "UpdateOrderGroupLimitRequest",
-      "value": {},
+      "value": {
+        "contracts_limit": 1
+      },
       "sourceValue": {}
     },
     {
@@ -4386,7 +4407,8 @@
       "value": {
         "side": "bid",
         "price": "0.5600",
-        "count": "10.00"
+        "count": "10.00",
+        "ticker": "string"
       },
       "sourceValue": {
         "side": "bid",

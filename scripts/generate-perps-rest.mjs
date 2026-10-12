@@ -29,6 +29,7 @@ assert.deepEqual(inventory.schemas.map(s=>s.pointer),bundle.sources.openapi.sche
 assert.deepEqual(inventory.references.map(r=>({at:r.at.pointer,target:r.target.pointer})),bundle.sources.openapi.references);
 const active = structuredClone(raw);
 const temporal = [];
+const semanticRefinements = [];
 const escape = value => value.replaceAll("~", "~0").replaceAll("/", "~1");
 const pointer = (root, p) => p.slice(2).split("/").map(s => s.replaceAll("~1", "/").replaceAll("~0", "~")).reduce((n,k) => n[k], root);
 function change(p, transform, effectiveDate, disposition) {
@@ -57,19 +58,102 @@ for (const field of ["leverage_estimate", "leverage_estimates"]) {
 }
 assert(active.components.schemas.ApplySubaccountTransferRequest.required.includes("client_transfer_id"));
 assert.equal(active.components.schemas.ApplySubaccountTransferRequest.properties.client_transfer_id.format, "uuid");
+function refine(name, rules, transform) {
+  const p = `#/components/schemas/${name}`;
+  const precondition = pointer(raw,p);
+  semanticRefinements.push({identity:{sourceId,pointer:p},precondition,
+    preconditionHash:createHash("sha256").update(JSON.stringify(precondition)).digest("hex"),
+    sourceHash:sha256,activeDate,evidenceUrl:ledger.url,rules});
+  transform(active.components.schemas[name]);
+}
+for (const name of ["CreateMarginOrderRequest","AmendMarginOrderRequest"]) {
+  const schema = raw.components.schemas[name];
+  assert.match(schema.properties.ticker.description,/ticker takes precedence when both are provided/);
+  assert.equal(schema.properties.ticker["x-oapi-codegen-extra-tags"].validate,"required_without=MarketId");
+  assert.equal(schema.properties.market_id["x-oapi-codegen-extra-tags"].validate,"omitempty,uuid");
+  refine(name,["nonempty ticker or market UUID; both permitted with ticker precedence","nonempty market_id must be a UUID; empty optional selector is omitted"],s=>{
+    s.properties.market_id.anyOf = [{enum:[""]},{type:"string",format:"uuid"}];
+    s.allOf = [...(s.allOf??[]),{anyOf:[
+      {required:["ticker"],properties:{ticker:{type:"string",minLength:1}}},
+      {required:["market_id"],properties:{market_id:{type:"string",format:"uuid"}}}
+    ]}];
+  });
+}
 const createOrder = active.components.schemas.CreateMarginOrderRequest;
-assert.match(createOrder.properties.ticker.description,/ticker takes precedence when both are provided/);
 assert.match(createOrder.properties.reduce_only.description,/immediate_or_cancel or fill_or_kill/);
-createOrder.allOf = [...(createOrder.allOf??[]),
-  {anyOf:[{required:["ticker"],properties:{ticker:{type:"string"}}},{required:["market_id"],properties:{market_id:{type:"string"}}}]},
-  {anyOf:[{properties:{reduce_only:{enum:[false]}}},{required:["time_in_force"],properties:{time_in_force:{enum:["immediate_or_cancel","fill_or_kill"]}}}]}
-];
+createOrder.allOf.push({anyOf:[{properties:{reduce_only:{enum:[false]}}},{required:["time_in_force"],properties:{time_in_force:{enum:["immediate_or_cancel","fill_or_kill"]}}}]});
+semanticRefinements.find(r=>r.identity.pointer.endsWith("/CreateMarginOrderRequest")).rules.push("reduce_only true requires IOC/FOK");
 const decreaseOrder = active.components.schemas.DecreaseMarginOrderRequest;
 assert.match(decreaseOrder.properties.reduce_by.description,/Exactly one/);
-decreaseOrder.oneOf = [
-  {required:["reduce_by"],properties:{reduce_by:{type:"string"},reduce_to:{enum:[null]}}},
-  {required:["reduce_to"],properties:{reduce_to:{type:"string"},reduce_by:{enum:[null]}}}
-];
+refine("DecreaseMarginOrderRequest",["exactly one non-null reduce_by/reduce_to"],s=>{
+  s.oneOf = [
+    {required:["reduce_by"],properties:{reduce_by:{type:"string"},reduce_to:{enum:[null]}}},
+    {required:["reduce_to"],properties:{reduce_to:{type:"string"},reduce_by:{enum:[null]}}}
+  ];
+});
+const wholeCount = "^[0-9]+(?:\\.0{1,2})?$";
+const positiveWholeCount = "^0*[1-9][0-9]*(?:\\.0{1,2})?$";
+const positiveDecimal = "^(?:0*[1-9][0-9]*(?:\\.[0-9]+)?|0*\\.[0-9]*[1-9][0-9]*)$";
+const restrictedString = (property,pattern) => ({description:property.description,allOf:[property,{type:"string",pattern}]});
+for (const name of ["CreateOrderGroupRequest","UpdateOrderGroupLimitRequest"]) {
+  const schema = raw.components.schemas[name];
+  assert.match(schema.properties.contracts_limit.description,/Whole contracts only/);
+  assert.match(schema.properties.contracts_limit_fp.description,/if both provided they must match/);
+  assert.equal(schema.properties.contracts_limit.minimum,1);
+  refine(name,["at least one non-null limit","fixed-point limit represents positive whole contracts with 0-2 decimal places","both limit representations must match exactly (runtime decimal comparison)"],s=>{
+    s.properties.contracts_limit_fp = {description:s.properties.contracts_limit_fp.description,
+      nullable:true,allOf:[{$ref:"#/components/schemas/FixedPointCount"},{type:"string",pattern:positiveWholeCount}]};
+    s.allOf = [...(s.allOf??[]),{anyOf:[
+      {required:["contracts_limit"],properties:{contracts_limit:{type:"integer"}}},
+      {required:["contracts_limit_fp"],properties:{contracts_limit_fp:{type:"string",pattern:positiveWholeCount}}}
+    ]}];
+  });
+}
+assert.match(raw.components.schemas.FixedPointCount.description,/Requests accept 0-2 decimal places/);
+for (const name of ["UpdateExitTriggerRequest","SetCrossExitTriggerRequest","SetIsolatedExitTriggerRequest"]) {
+  const schema = raw.components.schemas[name];
+  for(const field of ["stop_loss_price","take_profit_price"]) assert.match(schema.properties[field].description,/strictly positive when supplied/);
+  refine(name,["at least one bracket leg; supplied legs strictly positive","set requests select bracket (default) or trailing; reject the other family's fields","trailing requires exactly one distance"],s=>{
+    for(const field of ["stop_loss_price","take_profit_price"]) s.properties[field] = restrictedString(s.properties[field],positiveDecimal);
+    const legs = {anyOf:[
+      {required:["stop_loss_price"],properties:{stop_loss_price:s.properties.stop_loss_price}},
+      {required:["take_profit_price"],properties:{take_profit_price:s.properties.take_profit_price}}
+    ]};
+    if(name==="UpdateExitTriggerRequest") {
+      assert.match(schema.description,/At least one leg is required/);
+      s.allOf = [...(s.allOf??[]),legs];
+      semanticRefinements.at(-1).rules = ["at least one leg; supplied legs strictly positive; omitted leg cleared"];
+    } else {
+      assert.match(schema.description,/supply exactly one of `trail_amount` or `trail_bps`/);
+      assert.match(schema.description,/Fields belonging to the other kind are rejected/);
+      s.oneOf = [
+        {properties:{kind:{enum:["bracket"]},trail_amount:{enum:[null]},trail_bps:{enum:[null]}},allOf:[legs,{not:{anyOf:[{required:["trail_amount"]},{required:["trail_bps"]}]}}]},
+        {required:["kind"],properties:{kind:{enum:["trailing"]},stop_loss_price:{enum:[null]},take_profit_price:{enum:[null]},...(name==="SetCrossExitTriggerRequest"?{anchor_order_id:{enum:[null]}}:{})},allOf:[
+          {oneOf:[
+            {required:["trail_amount"],properties:{trail_amount:s.properties.trail_amount,trail_bps:{enum:[null]}}},
+            {required:["trail_bps"],properties:{trail_bps:s.properties.trail_bps,trail_amount:{enum:[null]}}}
+          ]},
+          {not:{anyOf:[{required:["stop_loss_price"]},{required:["take_profit_price"]},...(name==="SetCrossExitTriggerRequest"?[{required:["anchor_order_id"]}]:[])]}}
+        ]}
+      ];
+    }
+    if(name==="SetCrossExitTriggerRequest") {
+      assert.match(schema.properties.count.description,/must be a whole number of contracts/);
+      assert.match(schema.properties.anchor_order_id.description,/Bracket only; mutually exclusive with `count`/);
+      assert.match(schema.properties.client_trigger_id.description,/required on a `count` or `anchor_order_id` create/);
+      assert.match(schema.properties.client_trigger_id.description,/rejected on every other write/);
+      s.properties.count = restrictedString(s.properties.count,wholeCount);
+      s.allOf = [...(s.allOf??[]),{not:{required:["count","anchor_order_id"]}},{oneOf:[
+        {required:["client_trigger_id"],properties:{client_trigger_id:{type:"string",minLength:1}},oneOf:[
+          {required:["count"],properties:{count:s.properties.count,anchor_order_id:{enum:[null]}}},
+          {required:["anchor_order_id"],properties:{anchor_order_id:s.properties.anchor_order_id,count:{enum:[null]}}}
+        ]},
+        {properties:{count:{enum:[null]},anchor_order_id:{enum:[null]},client_trigger_id:{enum:[null]}},not:{anyOf:[{required:["count"]},{required:["anchor_order_id"]},{required:["client_trigger_id"]}]}}
+      ]}];
+      semanticRefinements.at(-1).rules.push("whole count; count and anchor mutually exclusive; anchor bracket-only","client_trigger_id required for count/anchor creates and rejected otherwise");
+    }
+  });
+}
 const resolve = value => value?.$ref ? resolve(pointer(active, value.$ref)) : value;
 const domain = tag => ({account:"account",portfolio:"portfolio",exit_triggers:"exitTriggers",exchange:"exchange",fcm:"fcm",fees:"fees",funding:"funding",market:"markets",markets:"markets",risk:"risk",order_groups:"orderGroups",orders:"orders"})[tag] ?? tag.replace(/[-_]([a-z])/g,(_,c)=>c.toUpperCase());
 const entries = [];
@@ -102,6 +186,7 @@ for (const e of pagers) {
   assert.equal(schema.properties[e.collection].type,"array");
 }
 const info = {sourceId,url:ledger.url,sha256,coreRef,activeDate,operationCount:51,modelCount:88,schemaRootCount:213,referenceCount:457,responseBindingCount:236,domainCount:11,paginatorCount:3};
+for(const rule of semanticRefinements) rule.affectedOperations = entries.filter(e=>e.requestBody?.content?.["application/json"]?.schema?.$ref===rule.identity.pointer).map(e=>e.identity);
 for(const rule of temporal) rule.affectedOperations = entries.filter(e=>
   rule.identity.pointer.includes("MarginMarket/") ? ["GetMarginMarkets","GetMarginMarket"].includes(e.operationId)
   : rule.identity.pointer.includes("IntraExchangeInstanceTransferRequest") ? e.operationId==="IntraExchangeInstanceTransfer"
@@ -149,14 +234,26 @@ for(const e of entries) endpoints+=` ${e.methodName}(...args:PerpsEndpointArgume
 for(const e of pagers) endpoints+=` ${e.methodName}Pages(...args:PerpsPaginationArguments<"${e.operationId}">):AsyncGenerator<PerpsOperationResponse<"${e.operationId}">,void,unknown> { return paginatePages("perps_openapi:${e.operationId}",(input:PerpsOperationInput<"${e.operationId}">,options)=>this.${e.methodName}(input,options),args[0]??{},"cursor",args[1],args[2]); }\n`;
 for(const d of new Set(entries.map(e=>e.domain))) {const names=entries.filter(e=>e.domain===d).flatMap(e=>[e.methodName,...(pagers.includes(e)?[e.methodName+"Pages"]:[])]);endpoints+=` readonly ${d}:Pick<PerpsTypedEndpoints,${names.map(JSON.stringify).join("|")}> = {${names.map(n=>`${n}:this.${n}.bind(this)`).join(",")}};\n`;}
 await write(`${root}/endpoints.ts`,endpoints+"}\n");
+// Material prose constraints need independent canonical inputs, not sampler guesses.
+const semanticModelFixtures = {
+  CreateOrderGroupRequest:{contracts_limit:1},
+  UpdateOrderGroupLimitRequest:{contracts_limit:1},
+  UpdateExitTriggerRequest:{stop_loss_price:"1.0000"},
+  SetCrossExitTriggerRequest:{stop_loss_price:"1.0000"},
+  SetIsolatedExitTriggerRequest:{stop_loss_price:"1.0000"}
+};
+function sampleActive(schema) {
+  const name = schema.$ref?.split("/").at(-1);
+  return name && semanticModelFixtures[name] ? structuredClone(semanticModelFixtures[name]) : sample(schema,{skipNonRequired:true},active);
+}
 const fixtures=entries.map(e=>{
  const input={};for(const p of e.parameters) (input[{path:"pathParameters",query:"query",header:"parameterHeaders",cookie:"cookies"}[p.in]]??={})[p.name]=p.in==="path"&&p.name==="ticker" ? "BTC /?&" : p.in==="query"&&p.name==="cursor" ? "next /?&" : sample(p.schema??{}, {},active);
- if(e.requestBody) input.body=sample(e.requestBody.content["application/json"].schema,{skipNonRequired:true},active);
+ if(e.requestBody) input.body=sampleActive(e.requestBody.content["application/json"].schema);
  if(e.operationId==="CreateMarginOrder") input.body.ticker="BTC";
  if(e.operationId==="DecreaseMarginOrder") {delete input.body.reduce_to;input.body.reduce_by="1.00";}
  return {...e,input,responses:Object.entries(e.responses).map(([status,r])=>({status:Number(status),...(r.content?.["application/json"]?.schema?{body:sample(r.content["application/json"].schema,{skipNonRequired:true},active)}:{})}))};
 });
-const schemaFixtures=Object.entries(active.components.schemas).map(([name,s])=>({name,value:sample(s,{skipNonRequired:true},active),sourceValue:sample(raw.components.schemas[name],{skipNonRequired:true},raw)}));
+const schemaFixtures=Object.entries(active.components.schemas).map(([name,s])=>({name,value:semanticModelFixtures[name]??sample(s,{skipNonRequired:true},active),sourceValue:sample(raw.components.schemas[name],{skipNonRequired:true},raw)}));
 await json("test/perps-rest/fixtures.json",{...info,fixtures,schemaFixtures});
 let proof=banner+`import type {KalshiPerpsClient,PerpsModels,PerpsSourceModels,PerpsOperationError,PerpsOperationResponse} from "../../src/index.js";\nfunction proof(client:KalshiPerpsClient) {\n`;
 for(const f of fixtures) {
@@ -201,6 +298,6 @@ visit(raw,"#");
 const responseBindings=bundle.rest.flatMap(e=>e.responses.map(r=>({identity:{sourceId,pointer:`${e.source}/responses/${escape(r.status)}`},operation:e.identity,operationId:e.id,status:r.status,bodyDeclaration:r.bodyDeclaration})));
 await json(`${root}/schema-coverage.json`,{...info,models:Object.keys(raw.components.schemas),schemas:inventory.schemas,references:inventory.references,nodes,responseBindings});
 await json(`${root}/pagination-coverage.json`,{...info,operations:pagers.map(e=>({identity:e.identity,operationId:e.operationId,pageMethod:e.methodName+"Pages",collection:e.collection,query:e.parameters,response:e.responses["200"]}))});
-await json(`${root}/source-gaps.json`,{...info,gaps:ledger.gaps.map((g,i)=>({...g,coreLedger:`sources/perps/perps_openapi-source.json#/gaps/${i}`,sdkDisposition:"Preserve raw security alternatives; existing trading-key signer emits all three signing headers."})),compatibility:temporal.filter(t=>t.effectiveDate===null),refinements:[{identity:{sourceId,pointer:"#/components/schemas/CreateMarginOrderRequest"},evidenceUrl:ledger.url,rules:["ticker or market_id; both allowed with ticker precedence","reduce_only true requires IOC/FOK"]},{identity:{sourceId,pointer:"#/components/schemas/DecreaseMarginOrderRequest"},evidenceUrl:ledger.url,rules:["exactly one non-null reduce_by/reduce_to"]}]});
+await json(`${root}/source-gaps.json`,{...info,gaps:ledger.gaps.map((g,i)=>({...g,coreLedger:`sources/perps/perps_openapi-source.json#/gaps/${i}`,sdkDisposition:"Preserve raw security alternatives; existing trading-key signer emits all three signing headers."})),compatibility:temporal.filter(t=>t.effectiveDate===null),refinements:semanticRefinements});
 await json(`${root}/temporal-coverage.json`,{...info,rules:temporal,restrictedKeyNotice:"Preserved source descriptions; no early access policy or OAuth implementation."});
 console.log(`Perps: 51 operations, 88 models, 236 response bindings, 3 pagers; ${sha256}.`);
