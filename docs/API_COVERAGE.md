@@ -22,7 +22,8 @@ with later API changes.
 | Transport | Configurable fetch, total deadlines, cancellation and local rate limits |
 | Retries | Opt-in, bounded GET-only retries; mutations never replay automatically |
 | Portfolio fills | Query helper and response parsing |
-| WebSocket | Envelope parsing and offline replay; no connection/subscription client |
+| WebSocket | Separate typed Predictions and Perps connection/subscription clients |
+| Book recovery | Exact decimal snapshots/deltas, sequence-gap invalidation and snapshot recovery |
 | Conformance | Four legacy fixtures plus ten source-qualified Perps cases |
 
 Named methods infer response types and validate the declared schema. The legacy
@@ -65,7 +66,6 @@ contents. These four fixtures supplement, rather than replace, endpoint tests.
 ## Remaining Gaps
 
 - Clearing-member runtime authentication and OAuth flows, tracked in [Core #11](https://github.com/hurley451/KalshiCore/issues/11).
-- WebSocket transport, subscriptions, reconnect, and order-book state management.
 - Credentialed integration tests and independent live API validation.
 - Public registry release and published-package consumer verification.
 

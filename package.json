@@ -34,6 +34,8 @@
     "src/generated/schema-coverage.json",
     "src/generated/pagination-coverage.json",
     "src/generated/perps-rest/*.json",
+    "src/generated/*-ws-coverage.json",
+    "src/generated/*-ws-source-gaps.json",
     "README.md",
     "LICENSE",
     "CONTRIBUTING.md",
@@ -43,8 +45,10 @@
   ],
   "scripts": {
     "generate:client": "node scripts/generate-client.mjs",
+    "generate:websocket": "node scripts/generate-websocket.mjs",
     "generate:operations": "node scripts/generate-operations.mjs",
     "check:generated": "node scripts/check-generated.mjs",
+    "check:generated:websocket": "node scripts/check-websocket-generated.mjs",
     "build": "tsc -p tsconfig.json",
     "prepack": "npm run build",
     "conformance": "node dist/scripts/conformance.js",
@@ -52,7 +56,9 @@
     "test": "npm run build && node --test dist/test/*.test.js test/*.test.mjs"
   },
   "devDependencies": {
+    "@types/big.js": "^7.0.0",
     "@types/node": "^24.7.2",
+    "@types/ws": "^8.18.2",
     "openapi-sampler": "^1.7.6",
     "openapi-typescript": "^7.13.0",
     "typescript": "^5.9.3",
@@ -67,6 +73,8 @@
   "license": "MIT",
   "dependencies": {
     "ajv-draft-04": "^1.0.0",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "big.js": "^7.0.1",
+    "ws": "^8.22.0"
   }
 }

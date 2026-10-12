@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readdir } from "node:fs/promises";
+import { checkWebsocketGenerated } from "./check-websocket-generated.mjs";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 export const generatedFiles = Object.freeze([
@@ -91,5 +92,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (!source) throw new Error("Pass --source <official openapi.yaml> or --kalshicore-root <path>.");
   await checkGenerated({ source });
   if(coreRoot) await checkPerpsGenerated({coreRoot});
-  console.log(`All ${generatedFiles.length} Predictions${coreRoot ? ` and ${perpsGeneratedFiles.length} Perps` : ""} generated outputs are byte-identical.`);
+  if (coreRoot) await checkWebsocketGenerated(coreRoot, undefined, option("--perps-core-root") ?? coreRoot);
+  console.log(`All ${generatedFiles.length} Predictions${coreRoot ? `, ${perpsGeneratedFiles.length} Perps REST and 14 WebSocket` : ""} generated outputs are byte-identical.`);
 }

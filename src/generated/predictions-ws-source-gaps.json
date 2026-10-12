@@ -1,0 +1,42 @@
+{
+  "product": "predictions",
+  "sourceFile": "asyncapi.yaml",
+  "sourceSnapshot": "sources/official/asyncapi.yaml",
+  "url": "https://docs.kalshi.com/asyncapi.yaml",
+  "sha256": "eaf754def77f36cd016f1e852a5ce76f11b635140e879bee7a3f9cad40716f9f",
+  "counts": {
+    "channels": 15,
+    "operations": 41,
+    "bindings": 44,
+    "components": 44,
+    "schemas": 50
+  },
+  "rules": [
+    {
+      "pointer": "#/components/schemas/marketTicker/pattern",
+      "raw": "^[A-Z0-9-]+$",
+      "effective": "^[A-Z0-9.-]+$",
+      "reason": "Raw pattern rejects the source's own decimal ticker examples.",
+      "evidence": "https://docs.kalshi.com/websockets/orderbook-updates",
+      "issue": "https://github.com/hurley451/KalshiCore/issues/12",
+      "liveEvidence": "/private/tmp/kalshi-full-delivery/public-decimal-markets.json"
+    },
+    {
+      "pointer": "#/components/messages/incomingPong/payload/const",
+      "raw": "",
+      "effective": "Contextual byte-identical echo of the received Ping; empty unsolicited Pong remains valid.",
+      "reason": "Empty-only Pong contradicts the source's heartbeat Ping and RFC 6455 section 5.5.3.",
+      "evidence": "https://www.rfc-editor.org/rfc/rfc6455#section-5.5.3",
+      "issue": "https://github.com/hurley451/KalshiCore/issues/12"
+    },
+    {
+      "pointer": "#/components/messages/outgoingPing/payload/const",
+      "raw": "heartbeat",
+      "effective": "Native empty Ping is also accepted; ws echoes its empty payload exactly once.",
+      "reason": "A heartbeat-only server Ping excludes the RFC-permitted empty Ping that the source accepts in the opposite direction.",
+      "evidence": "https://www.rfc-editor.org/rfc/rfc6455#section-5.5.2",
+      "echoEvidence": "https://www.rfc-editor.org/rfc/rfc6455#section-5.5.3",
+      "issue": "https://github.com/hurley451/KalshiCore/issues/12"
+    }
+  ]
+}
