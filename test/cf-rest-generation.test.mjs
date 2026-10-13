@@ -15,8 +15,10 @@ test("CF explicit portable generation is byte-identical and preserves old output
   const root = await mkdtemp(path.join(tmpdir(), "cf generation with spaces "));
   const core = path.join(root, "Core immutable input"); const output = path.join(root, "Output with spaces");
   try {
-    execFileSync("git", ["clone", "--quiet", "--no-hardlinks", requireCoreRoot(), core]);
+    execFileSync("git", ["clone", "--quiet", "--depth", "1", "--no-local", requireCoreRoot(), core]);
     execFileSync("git", ["-C", core, "checkout", "--quiet", "--detach", cfCorePin]);
+    assert.equal(execFileSync("git", ["-C", core, "rev-parse", "--is-shallow-repository"], { encoding: "utf8" }).trim(), "true");
+    assert.equal(execFileSync("git", ["-C", core, "rev-list", "--count", "HEAD"], { encoding: "utf8" }).trim(), "1");
     await generateCf(core, output); const before = await fingerprint(output);
     await checkCfGenerated(core, output); assert.deepEqual(await fingerprint(output), before);
     const mutations = [
@@ -40,9 +42,22 @@ test("CF explicit portable generation is byte-identical and preserves old output
       assert.deepEqual(await fingerprint(output), before); await writeFile(target, original);
     }
     await assert.rejects(generateCf(undefined, output), /KALSHICORE_ROOT/);
-    execFileSync("git", ["-C", core, "checkout", "--quiet", "--detach", "HEAD~1"]);
+    const hooks = path.join(root, "disabled fixture hooks"); await mkdir(hooks);
+    const fixtureName = "CF generation fixture", fixtureEmail = "cf-generation-fixture@example.invalid";
+    execFileSync("git", ["-C", core, "-c", `core.hooksPath=${hooks}`, "-c", "commit.gpgSign=false",
+      "-c", `user.name=${fixtureName}`, "-c", `user.email=${fixtureEmail}`,
+      "commit", "--quiet", "--allow-empty", "--no-gpg-sign", "-m", "CF wrong-pin test fixture"], {
+      env: { ...process.env, GIT_AUTHOR_NAME: fixtureName, GIT_AUTHOR_EMAIL: fixtureEmail,
+        GIT_COMMITTER_NAME: fixtureName, GIT_COMMITTER_EMAIL: fixtureEmail }
+    });
+    const revision = ref => execFileSync("git", ["-C", core, "rev-parse", ref], { encoding: "utf8" }).trim();
+    assert.notEqual(revision("HEAD"), cfCorePin);
+    assert.equal(revision("HEAD^{tree}"), revision(`${cfCorePin}^{tree}`));
     await assert.rejects(generateCf(core, output), /immutable Core pin/);
     assert.deepEqual(await fingerprint(output), before);
+    execFileSync("git", ["-C", core, "checkout", "--quiet", "--detach", cfCorePin]);
+    assert.equal(revision("HEAD"), cfCorePin);
+    await checkCfGenerated(core, output); assert.deepEqual(await fingerprint(output), before);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
