@@ -11,6 +11,7 @@ with later API changes.
 |---------|-----------------|
 | Predictions REST methods | 118 named root methods and 17 domain facades |
 | Perps REST methods | Separate client: 51 methods, 11 domain facades and 88 models |
+| CF Benchmarks REST | Values/history helpers and open provider-path GET passthrough |
 | Pagination | 28 lazy typed page iterators, bounded pages and repeated-cursor detection |
 | Perps pagination | Three typed page iterators with the same cancellation and continuation controls |
 | Inputs | Typed path/query/header/cookie parameters and JSON bodies |
@@ -24,7 +25,7 @@ with later API changes.
 | Portfolio fills | Query helper and response parsing |
 | WebSocket | Separate typed Predictions and Perps connection/subscription clients |
 | Book recovery | Exact decimal snapshots/deltas, sequence-gap invalidation and snapshot recovery |
-| Conformance | Four legacy fixtures plus ten source-qualified Perps cases |
+| Conformance | Four legacy fixtures, ten Perps cases and 74 separately classified CF obligations |
 
 Named methods infer response types and validate the declared schema. The legacy
 `portfolio.getFills` helper returns camelCase fills; `portfolio.getFillsRaw` returns
@@ -44,6 +45,12 @@ Raw source types are retained alongside the active profile. The
 two documented nullable leverage properties without relaxing other constraints;
 the [effective-date ledger](../src/generated/perps-rest/temporal-coverage.json)
 records future fields excluded from the active API.
+
+CF's three [manual entries](../src/generated/cf-rest/coverage.json) are conveniences
+over an open passthrough, not an exhaustive provider endpoint inventory. Data and
+error payloads remain open; relative paths, query pairs, signed headers, response
+bytes, cancellation and 50-unit admission have focused socket tests. The 74 shared
+obligations include 57 SDK cases and 17 mapping/metadata checks, not 74 wire calls.
 
 Tests exercise every named operation with schema-derived fixtures, invalid inputs,
 declared response statuses and invalid declared payloads. Compiler assertions and

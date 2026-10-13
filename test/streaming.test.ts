@@ -502,8 +502,9 @@ test("close on a reconnect acknowledgement cannot let stale restoration announce
 });
 
 test("heartbeat failures exhaust a bounded reconnect budget and close all waiters", { timeout: 5000 }, async t => {
-  const { client, peers } = await harness(t, { heartbeatTimeoutMs: 20, reconnect: { maxAttempts: 1, baseDelayMs: 1, maxDelayMs: 1 } });
+  const { client, peers } = await harness(t, { heartbeatTimeoutMs: 1000, reconnect: { maxAttempts: 1, baseDelayMs: 1, maxDelayMs: 1 } });
   await client.connect(); const handle = await client.subscribe("trade");
+  assert.equal(client.state, "open");
   const waiter = handle.messages().next(); const rejected = assert.rejects(waiter, /exhausted/);
   await until(() => client.state === "closed"); await rejected; assert.equal(peers.length, 2);
 });

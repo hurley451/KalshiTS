@@ -26,3 +26,6 @@ export type { PerpsSubscription, PerpsBook, PerpsEvent } from "./generated/perps
 export type { PerpsModels as PerpsWebSocketModels, PerpsMessageModels, PerpsChannel, PerpsDataChannel, PerpsMessage, PerpsSubscribeParams } from "./generated/perps-ws.js";
 export type { StreamingClientOptions, StreamingCommandOptions, StreamingLimits } from "./streaming/session.js";
 export * from "./streaming/errors.js";
+export { CfBenchmarksClient, type CfRequestOptions } from "./cfbenchmarks.js";
+export { cfContracts, cfReadTokenCost, cfOperationCost, isCfOperation } from "./cf-contracts.js";
+export type { CfEnvelope, CfOperationId, CfQueryPairs, CfValuesQuery, CfHistoryValuesQuery } from "./generated/cf-rest/models.js";

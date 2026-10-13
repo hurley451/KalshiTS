@@ -1,0 +1,118 @@
+{
+  "corePin": "d898aff6834ddd7862d99ba660da3b7d8bb7013c",
+  "source": {
+    "id": "cfbenchmarks-rest-manual",
+    "kind": "kalshi-docs-manual",
+    "url": "https://docs.kalshi.com/cfbenchmarks/rest-passthrough",
+    "observedAt": "2026-10-12T12:13:36.758Z",
+    "rawSha256": "bf0ef09aae3c97542090c17bce999e04441f830e6db390c6d392e67929996b51",
+    "factsPath": "sources/manual/cfbenchmarks-rest.json",
+    "factsSha256": "378168c12ee1d7374d225686e24e6ab56f95df3c914f9bfa08c1b7c687ff4ef4",
+    "hashScope": "derived-file-bytes",
+    "entryIds": [
+      "cfbenchmarks.values",
+      "cfbenchmarks.history-values",
+      "cfbenchmarks.passthrough"
+    ]
+  },
+  "facts": {
+    "$schema": "../schemas/manual-facts.schema.json",
+    "id": "cfbenchmarks-rest-manual",
+    "representation": "derived-facts",
+    "url": "https://docs.kalshi.com/cfbenchmarks/rest-passthrough",
+    "retrieval": {
+      "url": "https://docs.kalshi.com/cfbenchmarks/rest-passthrough.md",
+      "observedAt": "2026-10-12T12:13:36.758Z",
+      "contentType": "text/markdown; charset=utf-8",
+      "bytes": 5987,
+      "sha256": "bf0ef09aae3c97542090c17bce999e04441f830e6db390c6d392e67929996b51",
+      "hashScope": "raw-retrieved-bytes",
+      "rawStored": false
+    },
+    "facts": {
+      "method": "GET",
+      "prefix": "/trade-api/v2/cfbenchmarks/",
+      "auth": "api-key",
+      "entitlementRequired": true,
+      "providerCredentials": false,
+      "readTokens": 50,
+      "examplePaths": [
+        "values",
+        "history/values"
+      ],
+      "providerPaths": "open",
+      "queryKeys": "open",
+      "ignoredKey": "includeVerification",
+      "coinAllowlist": false,
+      "signing": "pathname-without-query",
+      "envelope": "required-data-unknown-json-open-object",
+      "errorSchema": "unknown",
+      "errorMappings": [
+        {
+          "condition": "not-found",
+          "status": 404,
+          "code": "not_found"
+        },
+        {
+          "condition": "rate-limit",
+          "status": 429,
+          "code": "too_many_requests"
+        },
+        {
+          "condition": "authorization",
+          "status": 503,
+          "code": "service_unavailable"
+        },
+        {
+          "condition": "server",
+          "status": 503,
+          "code": "service_unavailable"
+        },
+        {
+          "condition": "timeout",
+          "status": 503,
+          "code": "service_unavailable"
+        },
+        {
+          "condition": "client",
+          "status": 400,
+          "code": "bad_request",
+          "upstreamDetail": true
+        }
+      ]
+    },
+    "conventions": {
+      "provenance": "approved-sdk-convention",
+      "providerPath": "decoded-relative-segments-encoded-once",
+      "confinement": "configured-origin-and-fixed-prefix",
+      "reject": [
+        "empty-path-or-segment",
+        "leading-or-trailing-slash",
+        "dot-segments",
+        "backslash",
+        "percent",
+        "control",
+        "query",
+        "fragment",
+        "url-or-scheme"
+      ],
+      "queryPairs": "ordered-string-pairs-preserve-duplicates-order-decoded-values",
+      "ignoredKey": "remove-every-exact-includeVerification-pair",
+      "invalidInputDispatches": 0,
+      "providerRestriction": false
+    },
+    "gaps": [
+      "No upstream data or error-body schema imported.",
+      "No live entitlement, forwarding, signature, retry, rate admission or SDK wire execution demonstrated."
+    ]
+  },
+  "inputDigests": {
+    "sources/manual/index.json": "7fecc3c6383678e95a3635959e7bbde5d31ab687fb1a04bd39dd1e911dd0ff40",
+    "sources/manual/cfbenchmarks-rest.json": "378168c12ee1d7374d225686e24e6ab56f95df3c914f9bfa08c1b7c687ff4ef4",
+    "contracts/manual-coverage.json": "50b6eecfde3a1db03d68f9a86f544beab0fe75f238ffb2acb76904f841fd8ca1",
+    "fixtures/cfbenchmarks/rest-cases.json": "74045694405e1cf9cff1f3aae554e8d145b974ec51b63015d93e9cf0aac61798",
+    "contracts/endpoints/cfbenchmarks.values.json": "77cb0674d9da7a22abbea62123c2a8ef951c48443b2bc603e18f3c8229260607",
+    "contracts/endpoints/cfbenchmarks.history-values.json": "5974763176c00fe230391eabbc8c8f2ef9798b5735204cc1499b6bd720f3ccaf",
+    "contracts/endpoints/cfbenchmarks.passthrough.json": "8a850ef123a5711d2312bc8603f6bbc04199af136f5b0263eb17ab40e2c89c60"
+  }
+}
