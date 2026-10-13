@@ -21,6 +21,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 - [Authentication](#authentication)
 - [REST examples](#rest-examples)
 - [Perps REST](#perps-rest)
+- [CF Benchmarks REST](#cf-benchmarks-rest)
 - [WebSocket clients](#websocket-clients)
 - [Error handling](#error-handling)
 - [Configuration](#configuration)
@@ -32,6 +33,7 @@ The npm package is `@hurley451/kalshi-ts` and is not yet published. See the
 
 - 118 named Predictions REST methods across 17 domain facades, with typed inputs and responses.
 - Separate Perps client with 51 named methods, 88 models and three async page iterators.
+- CF Benchmarks values, history and provider-path passthrough using existing Kalshi credentials.
 - 209 schema-derived models and runtime request/response contract validation.
 - Lazy async page iterators for all 28 cursor-paginated REST operations.
 - Promise-based HTTP requests using Node.js fetch, with production and demo environments.
@@ -67,6 +69,7 @@ narrowing. HTTP 204 responses return `undefined`.
 | API keys | `getApiKeys`, `createApiKey`, `deleteApiKey` | Typed REST |
 | Communications and FCM | `getCommunicationsID`, `getRFQs`, `getQuotes`, `getFCMOrders` | Typed REST |
 | Perps | `getMarginMarkets`, `createMarginOrder`, `getMarginPositions`, `getMarginFills` | Separate typed REST client |
+| CF Benchmarks | `client.cf.values`, `historyValues`, `get` | Open data envelopes and raw response access |
 | WebSocket | `KalshiPredictionsWebSocketClient`, `KalshiPerpsWebSocketClient` | Typed connections, commands, subscriptions and book recovery |
 
 The checked-in OpenAPI snapshot contains 118 REST operations. Named methods and
@@ -345,6 +348,43 @@ async function demoOrder(auth: KalshiAuthOptions, ticker: string) {
 Cancellation does not undo fills. The read-only example runner below never calls
 this function or any mutation.
 
+## CF Benchmarks REST
+
+Use an authenticated client on an entitled account. The
+[Kalshi passthrough](https://docs.kalshi.com/cfbenchmarks/rest-passthrough)
+uses your existing trading keys, not a separate provider key. Provider payloads
+remain `unknown`; narrow `data` according to the provider's documentation.
+
+```ts
+const latest = await client.cf.values({ id: "BNBUSD_RTI" });
+console.log(latest.data);
+```
+
+```ts
+const history = await client.cf.historyValues({
+  id: "BRTI", timespan: "HOUR", timestamp: "2026-08-21T14:00:00.000Z"
+});
+console.log(history.data);
+```
+
+```ts
+const raw = await client.cf.getRaw("values", [
+  ["id", "BRTI"], ["includeVerification", "true"]
+]);
+console.log(raw.response.status, raw.rawBody.byteLength, raw.body.data);
+```
+
+Named helpers accept open string records or ordered string pairs. `get` and
+`getRaw` accept decoded relative provider paths and ordered pairs; URLs, dot
+segments and pre-encoded paths are rejected. Pairs retain duplicates and order.
+Every exact `includeVerification` pair is removed. There is no REST index
+allowlist, payload transformation or history paginator.
+
+CF requests cost 50 Read tokens. With a configured local limiter and no cost
+callback, the SDK charges 50 local units per physical CF attempt; its capacity
+must accommodate that cost. Explicit cost callbacks remain caller-owned. The
+SDK does not infer account budgets or install a limiter when none is configured.
+
 ## WebSocket Clients
 
 Use separate clients for Predictions and Perps. Subscriptions expose typed
@@ -487,7 +527,7 @@ console.log(page.markets);
 ```
 
 Rate limits are local settings, not inferred account limits. The default local
-cost is one token per attempt; configure `rateLimit.cost(operationId)` from your
+cost is one token per attempt, except CF passthrough's 50; configure `rateLimit.cost(operationId)` from your
 account's endpoint-cost data when appropriate. Concurrent requests queue in order.
 Retries apply to network failures and HTTP 408, 429, 500, 502, 503 and 504.
 `Retry-After` is honored; when it exceeds `maxDelayMs`, the HTTP error is returned

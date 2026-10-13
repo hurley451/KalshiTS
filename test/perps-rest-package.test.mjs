@@ -54,7 +54,7 @@ const data=JSON.parse(fs.readFileSync("fixtures.json"));
 const result=await runPerpsWireProof(sdk,data,JSON.parse(fs.readFileSync("source.json")));
 const coverage=JSON.parse(fs.readFileSync("node_modules/@hurley451/kalshi-ts/src/generated/perps-rest/coverage.json"));
 assert.equal(coverage.sha256,data.sha256);assert.equal(coverage.operationCount,51);assert.equal(coverage.modelCount,88);assert.equal(coverage.paginatorCount,3);
-assert.equal(JSON.parse(fs.readFileSync("node_modules/@hurley451/kalshi-ts/package.json")).kalshiCoreRef,"99abf30c3fc818815e99f015299e2f4bcbf62a00");
+assert.equal(JSON.parse(fs.readFileSync("node_modules/@hurley451/kalshi-ts/package.json")).kalshiCoreRef,"d898aff6834ddd7862d99ba660da3b7d8bb7013c");
 console.log(JSON.stringify(result));
 `);
    const result=JSON.parse(run(process.execPath,["consumer.mjs"]).trim());

@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readdir } from "node:fs/promises";
 import { checkWebsocketGenerated } from "./check-websocket-generated.mjs";
+import { checkCfGenerated } from "./check-cf-generated.mjs";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 export const generatedFiles = Object.freeze([
@@ -93,5 +94,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   await checkGenerated({ source });
   if(coreRoot) await checkPerpsGenerated({coreRoot});
   if (coreRoot) await checkWebsocketGenerated(coreRoot, undefined, option("--perps-core-root") ?? coreRoot);
-  console.log(`All ${generatedFiles.length} Predictions${coreRoot ? `, ${perpsGeneratedFiles.length} Perps REST and 14 WebSocket` : ""} generated outputs are byte-identical.`);
+  if (coreRoot) await checkCfGenerated(coreRoot);
+  console.log(`All ${generatedFiles.length} Predictions${coreRoot ? `, ${perpsGeneratedFiles.length} Perps REST, 14 WebSocket and 6 CF` : ""} generated outputs are byte-identical.`);
 }

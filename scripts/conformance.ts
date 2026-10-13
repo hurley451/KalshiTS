@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { runPerpsConformance } from "./perps-conformance.js";
+import { runCfConformance } from "./cf-conformance.js";
 import { createHash, constants, generateKeyPairSync, verify } from "node:crypto";
 import {
   buildPortfolioFillsPath,
@@ -24,6 +25,7 @@ interface Report {
   suiteDigest: string;
   checks: CheckResult[];
   perpsChecks: CheckResult[];
+  cfChecks: CheckResult[];
 }
 
 const kalshiCoreRoot = resolveOption("--kalshicore-root") ?? process.env.KALSHICORE_ROOT;
@@ -51,6 +53,13 @@ for (const fixtureId of fixtureIds) {
 }
 
 const perpsChecks = await runPerpsConformance(resolvedKalshiCoreRoot).catch(error=>[fail("perps_openapi:source-cases",error instanceof Error ? error.message : String(error))]);
+const cfChecks = await runCfConformance(resolvedKalshiCoreRoot).catch(error => [fail("cfbenchmarks-rest-manual:source-cases", error instanceof Error ? error.message : String(error))]);
+for (const file of ["fixtures/cfbenchmarks/rest-cases.json", "sources/manual/index.json", "sources/manual/cfbenchmarks-rest.json", "contracts/manual-coverage.json",
+  ...["values", "history-values", "passthrough"].map(id => `contracts/endpoints/cfbenchmarks.${id}.json`)]) {
+  try { digest.update(await readFile(path.join(resolvedKalshiCoreRoot, file))); }
+  catch { /* Missing inputs are reported in cfChecks; preserve the failure report. */ }
+}
+digest.update("d898aff6834ddd7862d99ba660da3b7d8bb7013c");
 try { digest.update(await readFile(path.join(resolvedKalshiCoreRoot,"fixtures/perps/perps_openapi-cases.json"))); } catch { /* Missing cases are reported above. */ }
 const report: Report = {
   targetId: readString(targetManifest, "id", "typescript.KalshiTS"),
@@ -58,7 +67,8 @@ const report: Report = {
   generatedAtUtc: new Date().toISOString(),
   suiteDigest: digest.digest("hex"),
   checks,
-  perpsChecks
+  perpsChecks,
+  cfChecks
 };
 
 const reportPath = path.resolve(resolveOption("--report") ?? "artifacts/kalshicore-conformance/report.json");
@@ -69,9 +79,10 @@ for (const check of checks) {
   console.log(`${check.passed ? "PASS" : "FAIL"} ${check.id}: ${check.message}`);
 }
 for (const check of report.perpsChecks) console.log(`${check.passed ? "PASS" : "FAIL"} ${check.id}: ${check.message}`);
+for (const check of report.cfChecks) console.log(`${check.passed ? "PASS" : "FAIL"} ${check.id}: ${check.message}`);
 console.log(`Report: ${reportPath}`);
 
-if ([...checks,...report.perpsChecks].some((check) => !check.passed)) {
+if ([...checks,...report.perpsChecks,...report.cfChecks].some((check) => !check.passed)) {
   process.exitCode = 1;
 }
 

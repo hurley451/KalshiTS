@@ -1,0 +1,1817 @@
+{
+  "$schema": "../schemas/cf-rest-cases.schema.json",
+  "id": "cfbenchmarks.rest-cases",
+  "kind": "cf-rest-contract-cases",
+  "description": "Synthetic contract oracle cases, not captured provider responses or SDK wire execution. Input rejects describe zero-dispatch SDK conventions; error bytes have no prescribed upstream schema.",
+  "input": {
+    "cases": [
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-0",
+        "name": "request-0",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "id",
+              "UNLISTED_INDEX"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/values",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/values?id=UNLISTED_INDEX",
+            "queryPairs": [
+              [
+                "id",
+                "UNLISTED_INDEX"
+              ]
+            ],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/values"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:signing-0",
+        "name": "signing-0",
+        "kind": "signing",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "pathname": "/trade-api/v2/cfbenchmarks/values",
+          "method": "GET",
+          "timestampMs": "1791806400000",
+          "query": "id=UNLISTED_INDEX",
+          "candidateMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/values"
+        },
+        "expected": {
+          "valid": true,
+          "signatureMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/values"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-1",
+        "name": "request-1",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "providerPath": "history/values",
+          "queryPairs": [
+            [
+              "id",
+              "UNLISTED_INDEX"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/history/values",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/history/values?id=UNLISTED_INDEX",
+            "queryPairs": [
+              [
+                "id",
+                "UNLISTED_INDEX"
+              ]
+            ],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/history/values"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:signing-1",
+        "name": "signing-1",
+        "kind": "signing",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "pathname": "/trade-api/v2/cfbenchmarks/history/values",
+          "method": "GET",
+          "timestampMs": "1791806400000",
+          "query": "id=UNLISTED_INDEX",
+          "candidateMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/history/values"
+        },
+        "expected": {
+          "valid": true,
+          "signatureMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/history/values"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-2",
+        "name": "request-2",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "arbitrary/next",
+          "queryPairs": [
+            [
+              "id",
+              "UNLISTED_INDEX"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/arbitrary/next",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/arbitrary/next?id=UNLISTED_INDEX",
+            "queryPairs": [
+              [
+                "id",
+                "UNLISTED_INDEX"
+              ]
+            ],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/arbitrary/next"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:signing-2",
+        "name": "signing-2",
+        "kind": "signing",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "pathname": "/trade-api/v2/cfbenchmarks/arbitrary/next",
+          "method": "GET",
+          "timestampMs": "1791806400000",
+          "query": "id=UNLISTED_INDEX",
+          "candidateMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/arbitrary/next"
+        },
+        "expected": {
+          "valid": true,
+          "signatureMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/arbitrary/next"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-unicode",
+        "name": "request-unicode",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "arbitrary/雪 &+",
+          "queryPairs": [
+            [
+              "other",
+              "雪 +%/&= "
+            ],
+            [
+              "empty",
+              ""
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/arbitrary/%E9%9B%AA%20%26%2B",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/arbitrary/%E9%9B%AA%20%26%2B?other=%E9%9B%AA+%2B%25%2F%26%3D+&empty=",
+            "queryPairs": [
+              [
+                "other",
+                "雪 +%/&= "
+              ],
+              [
+                "empty",
+                ""
+              ]
+            ],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/arbitrary/%E9%9B%AA%20%26%2B"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-pairs",
+        "name": "request-pairs",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "id",
+              "X"
+            ],
+            [
+              "id",
+              "Y"
+            ],
+            [
+              "custom",
+              ""
+            ],
+            [
+              "id",
+              "X"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/values",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/values?id=X&id=Y&custom=&id=X",
+            "queryPairs": [
+              [
+                "id",
+                "X"
+              ],
+              [
+                "id",
+                "Y"
+              ],
+              [
+                "custom",
+                ""
+              ],
+              [
+                "id",
+                "X"
+              ]
+            ],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/values"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-ignore",
+        "name": "request-ignore",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "includeVerification",
+              "true"
+            ],
+            [
+              "includeVerification",
+              "false"
+            ],
+            [
+              "includeVerification",
+              ""
+            ],
+            [
+              "includeVerification",
+              "anything"
+            ],
+            [
+              "IncludeVerification",
+              "true"
+            ],
+            [
+              "includeverification",
+              "false"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/values",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/values?IncludeVerification=true&includeverification=false",
+            "queryPairs": [
+              [
+                "IncludeVerification",
+                "true"
+              ],
+              [
+                "includeverification",
+                "false"
+              ]
+            ],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/values"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:request-empty-query",
+        "name": "request-empty-query",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": true,
+          "request": {
+            "method": "GET",
+            "origin": "https://external-api.kalshi.com",
+            "pathname": "/trade-api/v2/cfbenchmarks/values",
+            "pathAndQuery": "/trade-api/v2/cfbenchmarks/values",
+            "queryPairs": [],
+            "body": null,
+            "auth": "api-key",
+            "rateCost": {
+              "bucket": "Read",
+              "tokens": 50
+            },
+            "signingPath": "/trade-api/v2/cfbenchmarks/values"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-0",
+        "name": "path-0",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-1",
+        "name": "path-1",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "/values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-2",
+        "name": "path-2",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values/",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-3",
+        "name": "path-3",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a//b",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-4",
+        "name": "path-4",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": ".",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-5",
+        "name": "path-5",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "..",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-6",
+        "name": "path-6",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a/../b",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-7",
+        "name": "path-7",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a/./b",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-8",
+        "name": "path-8",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "https://evil.test/values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-9",
+        "name": "path-9",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "//evil.test/values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-10",
+        "name": "path-10",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "http:values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-11",
+        "name": "path-11",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a\\b",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-12",
+        "name": "path-12",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a?x=1",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-13",
+        "name": "path-13",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a#x",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-14",
+        "name": "path-14",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "%2fvalues",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-15",
+        "name": "path-15",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "%2e%2e/values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-16",
+        "name": "path-16",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "%252e%252e/values",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-17",
+        "name": "path-17",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a\u0000b",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-18",
+        "name": "path-18",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "a\nb",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:path-19",
+        "name": "path-19",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "ab",
+          "queryPairs": [],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "provider-path"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:query-0",
+        "name": "query-0",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": {
+            "id": "X"
+          },
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "query-pairs"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:query-1",
+        "name": "query-1",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "id"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "query-pairs"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:query-2",
+        "name": "query-2",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "id",
+              1
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "query-pairs"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:query-3",
+        "name": "query-3",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "id",
+              "X",
+              "extra"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "query-pairs"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:query-4",
+        "name": "query-4",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            "id=X"
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "query-pairs"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:missing-credentials",
+        "name": "missing-credentials",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [],
+          "credentialsProvided": false
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "credentials"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:signing-query-in-preimage",
+        "name": "signing-query-in-preimage",
+        "kind": "signing",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "pathname": "/trade-api/v2/cfbenchmarks/values",
+          "method": "GET",
+          "timestampMs": "1791806400000",
+          "query": "id=X",
+          "candidateMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/values?id=X"
+        },
+        "expected": {
+          "valid": false,
+          "signatureMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/values"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:signing-wrong-method",
+        "name": "signing-wrong-method",
+        "kind": "signing",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "pathname": "/trade-api/v2/cfbenchmarks/values",
+          "method": "GET",
+          "timestampMs": "1791806400000",
+          "query": "id=X",
+          "candidateMessage": "1791806400000POST/trade-api/v2/cfbenchmarks/values"
+        },
+        "expected": {
+          "valid": false,
+          "signatureMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/values"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:signing-wrong-path",
+        "name": "signing-wrong-path",
+        "kind": "signing",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "pathname": "/trade-api/v2/cfbenchmarks/values",
+          "method": "GET",
+          "timestampMs": "1791806400000",
+          "query": "id=X",
+          "candidateMessage": "1791806400000GET/trade-api/v2/values"
+        },
+        "expected": {
+          "valid": false,
+          "signatureMessage": "1791806400000GET/trade-api/v2/cfbenchmarks/values"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-object",
+        "name": "envelope-object",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "data": {
+              "arbitrary": "opaque"
+            },
+            "extra": {
+              "retained": true
+            }
+          }
+        },
+        "expected": {
+          "valid": true,
+          "body": {
+            "data": {
+              "arbitrary": "opaque"
+            },
+            "extra": {
+              "retained": true
+            }
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-array",
+        "name": "envelope-array",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "data": [
+              1,
+              {
+                "arbitrary": true
+              }
+            ],
+            "extra": {
+              "retained": true
+            }
+          }
+        },
+        "expected": {
+          "valid": true,
+          "body": {
+            "data": [
+              1,
+              {
+                "arbitrary": true
+              }
+            ],
+            "extra": {
+              "retained": true
+            }
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-string",
+        "name": "envelope-string",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "data": "1.0000000000000000001",
+            "extra": {
+              "retained": true
+            }
+          }
+        },
+        "expected": {
+          "valid": true,
+          "body": {
+            "data": "1.0000000000000000001",
+            "extra": {
+              "retained": true
+            }
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-number",
+        "name": "envelope-number",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "data": 123,
+            "extra": {
+              "retained": true
+            }
+          }
+        },
+        "expected": {
+          "valid": true,
+          "body": {
+            "data": 123,
+            "extra": {
+              "retained": true
+            }
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-boolean",
+        "name": "envelope-boolean",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "data": false,
+            "extra": {
+              "retained": true
+            }
+          }
+        },
+        "expected": {
+          "valid": true,
+          "body": {
+            "data": false,
+            "extra": {
+              "retained": true
+            }
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-null",
+        "name": "envelope-null",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "data": null,
+            "extra": {
+              "retained": true
+            }
+          }
+        },
+        "expected": {
+          "valid": true,
+          "body": {
+            "data": null,
+            "extra": {
+              "retained": true
+            }
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-missing-data",
+        "name": "envelope-missing-data",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": {
+            "extra": 1
+          }
+        },
+        "expected": {
+          "valid": false
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-array-root",
+        "name": "envelope-array-root",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": []
+        },
+        "expected": {
+          "valid": false
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:envelope-null-root",
+        "name": "envelope-null-root",
+        "kind": "envelope",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.history-values"
+        },
+        "input": {
+          "body": null
+        },
+        "expected": {
+          "valid": false
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-not-found-true",
+        "name": "mapping-not-found-true",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "not-found",
+          "status": 404,
+          "code": "not_found",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": true,
+          "mapping": {
+            "status": 404,
+            "code": "not_found",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-not-found-false",
+        "name": "mapping-not-found-false",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "not-found",
+          "status": 418,
+          "code": "not_found",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": false,
+          "mapping": {
+            "status": 404,
+            "code": "not_found",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-rate-limit-true",
+        "name": "mapping-rate-limit-true",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "rate-limit",
+          "status": 429,
+          "code": "too_many_requests",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": true,
+          "mapping": {
+            "status": 429,
+            "code": "too_many_requests",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-rate-limit-false",
+        "name": "mapping-rate-limit-false",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "rate-limit",
+          "status": 418,
+          "code": "too_many_requests",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": false,
+          "mapping": {
+            "status": 429,
+            "code": "too_many_requests",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-authorization-true",
+        "name": "mapping-authorization-true",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "authorization",
+          "status": 503,
+          "code": "service_unavailable",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": true,
+          "mapping": {
+            "status": 503,
+            "code": "service_unavailable",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-authorization-false",
+        "name": "mapping-authorization-false",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "authorization",
+          "status": 418,
+          "code": "service_unavailable",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": false,
+          "mapping": {
+            "status": 503,
+            "code": "service_unavailable",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-server-true",
+        "name": "mapping-server-true",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "server",
+          "status": 503,
+          "code": "service_unavailable",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": true,
+          "mapping": {
+            "status": 503,
+            "code": "service_unavailable",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-server-false",
+        "name": "mapping-server-false",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "server",
+          "status": 418,
+          "code": "service_unavailable",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": false,
+          "mapping": {
+            "status": 503,
+            "code": "service_unavailable",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-timeout-true",
+        "name": "mapping-timeout-true",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "timeout",
+          "status": 503,
+          "code": "service_unavailable",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": true,
+          "mapping": {
+            "status": 503,
+            "code": "service_unavailable",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-timeout-false",
+        "name": "mapping-timeout-false",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "timeout",
+          "status": 418,
+          "code": "service_unavailable",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": false,
+          "mapping": {
+            "status": 503,
+            "code": "service_unavailable",
+            "upstreamDetail": false
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-client-true",
+        "name": "mapping-client-true",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "client",
+          "status": 400,
+          "code": "bad_request",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": true,
+          "mapping": {
+            "status": 400,
+            "code": "bad_request",
+            "upstreamDetail": true
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:mapping-client-false",
+        "name": "mapping-client-false",
+        "kind": "mapping",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "condition": "client",
+          "status": 418,
+          "code": "bad_request",
+          "upstreamDetail": "opaque upstream detail"
+        },
+        "expected": {
+          "valid": false,
+          "mapping": {
+            "status": 400,
+            "code": "bad_request",
+            "upstreamDetail": true
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-json",
+        "name": "error-json",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 401,
+          "format": "json",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": "eyJhbnkiOiJzaGFwZSJ9"
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 401,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": "eyJhbnkiOiJzaGFwZSJ9"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-text",
+        "name": "error-text",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 403,
+          "format": "text",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": "b3BhcXVl"
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 403,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": "b3BhcXVl"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-binary",
+        "name": "error-binary",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 599,
+          "format": "binary",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": "AP+A"
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 599,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": "AP+A"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-empty",
+        "name": "error-empty",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 502,
+          "format": "empty",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": ""
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 502,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": ""
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:query-5",
+        "name": "query-5",
+        "kind": "request",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "providerPath": "values",
+          "queryPairs": [
+            [
+              "id",
+              "\ud800"
+            ]
+          ],
+          "credentialsProvided": true
+        },
+        "expected": {
+          "valid": false,
+          "dispatches": 0,
+          "reason": "query-pairs"
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-not-found",
+        "name": "error-not-found",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 404,
+          "format": "json",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": "eyJhbnkiOiJzaGFwZSJ9"
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 404,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": "eyJhbnkiOiJzaGFwZSJ9"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-rate-limit",
+        "name": "error-rate-limit",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 429,
+          "format": "text",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": "b3BhcXVl"
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 429,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": "b3BhcXVl"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-unavailable",
+        "name": "error-unavailable",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 503,
+          "format": "binary",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": "AP+A"
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 503,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": "AP+A"
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:error-bad-request",
+        "name": "error-bad-request",
+        "kind": "error",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.passthrough"
+        },
+        "input": {
+          "status": 400,
+          "format": "empty",
+          "headers": {
+            "x-synthetic": "retained"
+          },
+          "rawBase64": ""
+        },
+        "expected": {
+          "valid": true,
+          "preservedResponse": {
+            "status": 400,
+            "headers": {
+              "x-synthetic": "retained"
+            },
+            "rawBase64": ""
+          }
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:metadata-positive",
+        "name": "metadata-positive",
+        "kind": "metadata",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "method": "GET",
+          "auth": "api-key",
+          "prefix": "/trade-api/v2/cfbenchmarks/",
+          "rateCost": {
+            "bucket": "Read",
+            "tokens": 50
+          }
+        },
+        "expected": {
+          "valid": true
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:metadata-wrong-cost",
+        "name": "metadata-wrong-cost",
+        "kind": "metadata",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "method": "GET",
+          "auth": "api-key",
+          "prefix": "/trade-api/v2/cfbenchmarks/",
+          "rateCost": {
+            "bucket": "Read",
+            "tokens": 10
+          }
+        },
+        "expected": {
+          "valid": false
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:metadata-wrong-method",
+        "name": "metadata-wrong-method",
+        "kind": "metadata",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "method": "POST",
+          "auth": "api-key",
+          "prefix": "/trade-api/v2/cfbenchmarks/",
+          "rateCost": {
+            "bucket": "Read",
+            "tokens": 50
+          }
+        },
+        "expected": {
+          "valid": false
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:metadata-wrong-auth",
+        "name": "metadata-wrong-auth",
+        "kind": "metadata",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "method": "GET",
+          "auth": "none",
+          "prefix": "/trade-api/v2/cfbenchmarks/",
+          "rateCost": {
+            "bucket": "Read",
+            "tokens": 50
+          }
+        },
+        "expected": {
+          "valid": false
+        }
+      },
+      {
+        "caseId": "cfbenchmarks-rest-manual:metadata-wrong-prefix",
+        "name": "metadata-wrong-prefix",
+        "kind": "metadata",
+        "identity": {
+          "sourceId": "cfbenchmarks-rest-manual",
+          "manualEntryId": "cfbenchmarks.values"
+        },
+        "input": {
+          "method": "GET",
+          "auth": "api-key",
+          "prefix": "/trade-api/v2/",
+          "rateCost": {
+            "bucket": "Read",
+            "tokens": 50
+          }
+        },
+        "expected": {
+          "valid": false
+        }
+      }
+    ]
+  },
+  "expected": {
+    "allCasesMatch": true
+  }
+}

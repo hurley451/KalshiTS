@@ -11,6 +11,9 @@ import type { OperationId } from "./generated/operations.js";
 import type { JsonValue, PathParameters, QueryParameters } from "./types.js";
 import type { RetryPolicy, RateLimitPolicy } from "./transport.js";
 import { HttpExecutor } from "./http-executor.js";
+import { CfBenchmarksClient, type CfRequestOptions } from "./cfbenchmarks.js";
+import { isCfOperation, cfOperationCost } from "./cf-contracts.js";
+import type { CfEnvelope, CfOperationId } from "./generated/cf-rest/models.js";
 
 export type FetchImplementation = (input: string | URL, init?: RequestInit) => Promise<Response>;
 
@@ -49,28 +52,37 @@ export class KalshiClient extends TypedEndpoints {
   readonly environment: KalshiEnvironment;
   readonly #auth: KalshiAuthOptions | undefined;
   private readonly executor: HttpExecutor;
+  readonly cf: CfBenchmarksClient;
 
   constructor(options: KalshiClientOptions = {}) {
     super();
     this.environment = resolveEnvironment(options.environment);
     this.#auth = options.auth;
-    this.executor = new HttpExecutor({ ...options, restBaseUrl: this.environment.restBaseUrl });
+    const rateLimit = options.rateLimit && options.rateLimit.cost === undefined ? { ...options.rateLimit, cost: cfOperationCost } : options.rateLimit;
+    this.executor = new HttpExecutor({ ...options, rateLimit, restBaseUrl: this.environment.restBaseUrl });
+    this.cf = new CfBenchmarksClient((method, path, request, id) => this.executor.send(method, path, request, id), this.environment.restBaseUrl);
   }
 
+  request(operationId: CfOperationId, options?: CfRequestOptions): Promise<CfEnvelope>;
+  request<TBody = unknown>(operationId: OperationId | string, options?: KalshiRequestOptions): Promise<TBody>;
   async request<TBody = unknown>(
     operationId: OperationId | string,
-    options: KalshiRequestOptions = {}
+    options: KalshiRequestOptions | CfRequestOptions = {}
   ): Promise<TBody> {
-    const { body } = await this.rawRequest<TBody>(operationId, options);
+    const { body } = await this.rawRequest<TBody>(operationId, options as KalshiRequestOptions);
     return body;
   }
 
+  rawRequest(operationId: CfOperationId, options?: CfRequestOptions): Promise<KalshiRawResponse<CfEnvelope>>;
+  rawRequest<TBody = unknown>(operationId: OperationId | string, options?: KalshiRequestOptions): Promise<KalshiRawResponse<TBody>>;
   async rawRequest<TBody = unknown>(
     operationId: OperationId | string,
-    options: KalshiRequestOptions = {}
+    options: KalshiRequestOptions | CfRequestOptions = {}
   ): Promise<KalshiRawResponse<TBody>> {
+    if (isCfOperation(operationId)) return await this.cf.execute(operationId, options as CfRequestOptions) as KalshiRawResponse<TBody>;
     const operation = getOperation(operationId);
-    const pathAndQuery = buildOperationPath(operation, options.pathParameters, options.query);
+    const requestOptions = options as KalshiRequestOptions;
+    const pathAndQuery = buildOperationPath(operation, requestOptions.pathParameters, requestOptions.query);
     return this.executor.send<TBody>(operation.method, pathAndQuery, options, operation.operationId);
   }
 
